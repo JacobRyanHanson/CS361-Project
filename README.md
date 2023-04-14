@@ -1,1 +1,1 @@
-# cs-361-project
+# TA Scheduling Project
