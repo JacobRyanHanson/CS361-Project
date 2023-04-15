@@ -21,4 +21,16 @@ from TA_Scheduling_App.views.Home import Home
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', Home.as_view()),
+    # Temporarily using Home instead of their own template.
+    path('account-settings/', Home.as_view(), name='account_settings'),
+    path('search-contact-information/', Home.as_view(), name='search_contact_information'),
+    path('send-notifications/', Home.as_view(), name='send_notifications'),
+    path('ta-dashboard/', Home.as_view(), name='ta_dashboard'),
+    path('instructor-dashboard/', Home.as_view(), name='instructor_dashboard'),
+    path('admin-dashboard/', Home.as_view(), name='admin_dashboard'),
+    path('ta-assignments/', Home.as_view(), name='ta_assignments'),
+    path('user-creation/', Home.as_view(), name='user_creation'),
+    path('section-creation/', Home.as_view(), name='section_creation'),
+    path('course-creation/', Home.as_view(), name='course_creation'),
+    path('user-management/', Home.as_view(), name='user_management'),
 ]
