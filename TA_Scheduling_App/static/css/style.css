@@ -1,0 +1,95 @@
+/* Add this to your 'style.css' */
+:root {
+  --header-height: 6rem;
+  --footer-height: 3rem;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header, footer {
+  display: flex;
+  align-items: center;
+}
+
+header {
+  height: var(--header-height);
+}
+
+footer {
+  height: var(--footer-height);
+}
+
+.h-container, .f-container {
+  width: 100%;
+}
+
+.f-container {
+  text-align: center;
+}
+
+.navbar {
+  justify-content: space-between;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.navbar-brand {
+  margin: 0px;
+  width: 100%;
+}
+
+.navbar-nav {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.nav-item {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.app-name {
+  margin-right: 30px;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  gap: 1rem; /* Add a gap between buttons */
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.nav-btn {
+  width: 100%;
+  max-width: 200px;
+  flex: 1;
+  display: flex; /* Add display flex */
+  align-items: center; /* Center the text vertically */
+  justify-content: center; /* Center the text horizontally */
+  white-space: normal; /* Allow the text to wrap if needed */
+  text-align: center; /* Center the text within the button */
+}
+
+@media (max-width: 400px) {
+  .navbar {
+    flex-direction: column;
+    align-content: center;
+  }
+
+  .app-name {
+    margin-right: 0px;
+  }
+}
+
+
+
