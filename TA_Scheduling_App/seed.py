@@ -49,6 +49,39 @@ def insert_data():
         BIRTH_DATE=date(1985, 6, 15)
     )
 
+    user3 = User.objects.create(
+        USER_TYPE='ADMIN',
+        FIRST_NAME='Emma',
+        LAST_NAME='Johnson',
+        EMAIL='emma.johnson@example.com',
+        PASSWORD_HASH='<hashed_password>',
+        PHONE_NUMBER='555-123-4587',
+        ADDRESS='789 Oak St',
+        BIRTH_DATE=date(1992, 3, 12)
+    )
+
+    user4 = User.objects.create(
+        USER_TYPE='INSTRUCTOR',
+        FIRST_NAME='Michael',
+        LAST_NAME='Brown',
+        EMAIL='michael.brown@example.com',
+        PASSWORD_HASH='<hashed_password>',
+        PHONE_NUMBER='555-987-6578',
+        ADDRESS='321 Pine St',
+        BIRTH_DATE=date(1988, 10, 20)
+    )
+
+    user5 = User.objects.create(
+        USER_TYPE='TA',
+        FIRST_NAME='Sophia',
+        LAST_NAME='Williams',
+        EMAIL='sophia.williams@example.com',
+        PASSWORD_HASH='<hashed_password>',
+        PHONE_NUMBER='555-123-4599',
+        ADDRESS='147 Maple St',
+        BIRTH_DATE=date(1994, 7, 25)
+    )
+
     # Insert courses
     course1 = Course.objects.create(
         COURSE_NUMBER=101,
@@ -67,6 +100,26 @@ def insert_data():
         COURSE_DESCRIPTION='A course on fundamental data structures in computer science.',
         SEMESTER='Spring 2023',
         PREREQUISITES='Introduction to Computer Science',
+        DEPARTMENT='Computer Science'
+    )
+
+    course3 = Course.objects.create(
+        COURSE_NUMBER=103,
+        INSTRUCTOR=user4,
+        COURSE_NAME='Algorithms',
+        COURSE_DESCRIPTION='A course on fundamental algorithms in computer science.',
+        SEMESTER='Fall 2023',
+        PREREQUISITES='Data Structures',
+        DEPARTMENT='Computer Science'
+    )
+
+    course4 = Course.objects.create(
+        COURSE_NUMBER=104,
+        INSTRUCTOR=user4,
+        COURSE_NAME='Operating Systems',
+        COURSE_DESCRIPTION='A course on the principles of operating systems.',
+        SEMESTER='Spring 2023',
+        PREREQUISITES='Data Structures',
         DEPARTMENT='Computer Science'
     )
 
@@ -91,18 +144,39 @@ def insert_data():
         SECTION_END=time(11, 45)
     )
 
+    section3 = Section.objects.create(
+        SECTION_NUMBER=1,
+        COURSE=course3,
+        SECTION_TYPE='LECTURE',
+        BUILDING='Tech Building',
+        ROOM_NUMBER='103',
+        SECTION_START=time(12, 0),
+        SECTION_END=time(13, 15)
+    )
+
+    section4 = Section.objects.create(
+        SECTION_NUMBER=2,
+        COURSE=course4,
+        SECTION_TYPE='LECTURE',
+        BUILDING='Tech Building',
+        ROOM_NUMBER='104',
+        SECTION_START=time(14, 0),
+        SECTION_END=time(15, 15)
+    )
+
     # Insert TA assignments
+
     TAAssignment.objects.create(
         COURSE=course1,
         SECTION=section1,
-        TA=user1,
+        TA=user5,
         IS_GRADER=False
     )
 
     TAAssignment.objects.create(
-        COURSE=course2,
-        SECTION=section2,
-        TA=user1,
+        COURSE=course3,
+        SECTION=section3,
+        TA=user5,
         IS_GRADER=True
     )
 
