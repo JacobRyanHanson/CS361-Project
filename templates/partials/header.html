@@ -1,5 +1,28 @@
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
 <header class="bg-primary text-white py-3">
-    <div class="container">
-        <h2 class="mb-0">TA Scheduling App</h2>
+    <div class="h-container">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="app-name">
+                <a class="navbar-brand" href="#">TA Scheduling App</a>
+            </div>
+
+            <div id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
     </div>
 </header>
+
