@@ -165,7 +165,6 @@ def insert_data():
     )
 
     # Insert TA assignments
-
     TAAssignment.objects.create(
         COURSE=course1,
         SECTION=section1,
