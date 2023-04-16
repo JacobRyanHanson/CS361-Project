@@ -1,4 +1,5 @@
 /* Add this to your 'style.css' */
+/* ------------------------ Home Page ------------------------*/
 :root {
   --header-height: 6rem;
   --footer-height: 3rem;
@@ -87,6 +88,20 @@ footer {
   white-space: normal; /* Allow the text to wrap if needed */
   text-align: center; /* Center the text within the button */
 }
+
+@media (max-width: 400px) {
+  .navbar {
+    flex-direction: column;
+    align-content: center;
+  }
+
+  .app-name {
+    margin-right: 0;
+  }
+}
+
+/* ------------------------ Login Page ------------------------*/
+
 .login-container {
   background-color: #ffffff;
   border-radius: 10px;
@@ -107,13 +122,6 @@ footer {
   justify-content: center;
 }
 
-.assign-btn {
-  font-family: 'Roboto', sans-serif;
-  font-size: 20px;
-  font-weight: 300;
-  padding: 20px 24px;
-}
-
 h1 {
   font-family: 'Roboto', sans-serif;
   text-align: center;
@@ -122,16 +130,11 @@ h1 {
   font-size: 24px;
 }
 
-@media (max-width: 400px) {
-  .navbar {
-    flex-direction: column;
-    align-content: center;
-  }
+/* ------------------------ Dashboard Page ------------------------*/
 
-  .app-name {
-    margin-right: 0;
-  }
+.assign-btn {
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+  padding: 20px 24px;
 }
-
-
-
