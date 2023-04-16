@@ -70,13 +70,6 @@ footer {
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
-.centered {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: calc(100vh - var(--header-height) - var(--footer-height));
-}
 
 .nav-btn {
   width: 100%;
@@ -101,6 +94,13 @@ footer {
 }
 
 /* ------------------------ Login Page ------------------------*/
+.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+}
 
 .login-container {
   background-color: #ffffff;
