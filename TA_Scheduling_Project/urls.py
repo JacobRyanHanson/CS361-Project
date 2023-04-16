@@ -21,4 +21,5 @@ from TA_Scheduling_App.views.Home import Home
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', Home.as_view()),
+    path('profile/', AccountSettings.as_view(), name="account_settings"),
 ]
