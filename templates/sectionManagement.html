@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Section Management</title>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TA Scheduling App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 16px;
+            color: #333;
+            background-color: #f7f7f7;
+        }
+
+        h1, h2 {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input, select, textarea {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        input[type="text"]:hover, input[type="number"]:hover, textarea:hover, select:hover {
+            background-color: #e6e6e6;
+        }
+
+        input[type="text"], input[type="number"], textarea, select {
+            background-color: #f2f2f2;
+            border: none;
+            padding: 8px;
+            width: 100%;
+        }
+
+
+        button[type="submit"] {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #555;
+        }
+
+        @media screen and (max-width: 600px) {
+            form {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+	<h1>Section Management</h1>
+
+	<!-- Section Creation Form -->
+	<h2>Create a Section</h2>
+	<form>
+		<label for="section-id">Section ID:</label>
+		<input type="number" id="section-id" name="section-id" required>
+
+		<label for="section-number">Section Number:</label>
+		<input type="number" id="section-number" name="section-number" required>
+
+		<label for="course-associated">Course:</label>
+		<input type="text" id="course-associated" name="course-associated" required>
+
+		<label for="section-type">Section Type:</label>
+		<select id="section-type" name="section-type" required>
+			<option value="lab">Lab</option>
+			<option value="lecture">Lecture</option>
+		</select>
+
+		<label for="building">Building:</label>
+		<input type="text" id="building" name="building" required>
+
+		<label for="room-number">Room Number:</label>
+		<input type="number" id="room-number" name="room-number" required>
+
+		<label for="start-time">Start Time:</label>
+		<input type="time" id="start-time" name="start-time" required>
+
+		<label for="end-time">End Time:</label>
+		<input type="time" id="end-time" name="end-time" required>
+
+		<button type="submit">Create Section</button>
+	</form>
+
+	<!-- Section Deletion Form -->
+	<h2>Delete a Section</h2>
+	<form>
+		<label for="delete-section-id">Section ID:</label>
+		<input type="number" id="delete-section-id" name="delete-section-id" required>
+
+		<button type="submit">Delete Section</button>
+	</form>
+</body>
+</html>

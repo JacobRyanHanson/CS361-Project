@@ -1,6 +1,7 @@
 from django.db import models
 from .Course import Course
 
+
 class Section(models.Model):
     SECTION_ID = models.AutoField(primary_key=True)
     SECTION_NUMBER = models.IntegerField()
