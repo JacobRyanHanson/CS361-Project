@@ -17,8 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from TA_Scheduling_App.views.Home import Home
+from TA_Scheduling_App.views.User_Creation import User_Creation
+from TA_Scheduling_App.views.Admin_Dashboard import Admin_Dashboard
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', Home.as_view()),
+    path('dashboardAdmin/', Admin_Dashboard.as_view()),
+    path('createUser/', User_Creation.as_view()),
 ]
