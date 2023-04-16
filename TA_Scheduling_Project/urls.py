@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from TA_Scheduling_App.views.Home import Home
+from TA_Scheduling_App.views.TA_Assignments import TAAssignments
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,7 +29,7 @@ urlpatterns = [
     path('ta-dashboard/', Home.as_view(), name='ta_dashboard'),
     path('instructor-dashboard/', Home.as_view(), name='instructor_dashboard'),
     path('admin-dashboard/', Home.as_view(), name='admin_dashboard'),
-    path('ta-assignments/', Home.as_view(), name='ta_assignments'),
+    path('ta-assignments/', TAAssignments.as_view(), name='ta_assignments'),
     path('user-creation/', Home.as_view(), name='user_creation'),
     path('section-creation/', Home.as_view(), name='section_creation'),
     path('course-creation/', Home.as_view(), name='course_creation'),
