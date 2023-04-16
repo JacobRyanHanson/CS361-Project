@@ -6,6 +6,7 @@
 
 body {
   display: flex;
+  background-color: #d3e7fc;
   flex-direction: column;
   min-height: 100vh;
 }
@@ -38,7 +39,7 @@ footer {
 }
 
 .navbar-brand {
-  margin: 0px;
+  margin: 0;
   width: 100%;
 }
 
@@ -68,6 +69,13 @@ footer {
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
+.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+}
 
 .nav-btn {
   width: 100%;
@@ -79,6 +87,40 @@ footer {
   white-space: normal; /* Allow the text to wrap if needed */
   text-align: center; /* Center the text within the button */
 }
+.login-container {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  height: 300px;
+  padding: 20px;
+}
+
+.form-element {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 25px;
+}
+
+.center-btn {
+  display: flex;
+  justify-content: center;
+}
+
+.assign-btn {
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  font-weight: 300;
+  padding: 20px 24px;
+}
+
+h1 {
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  margin-bottom: 24px;
+  font-weight: 400;
+  font-size: 24px;
+}
 
 @media (max-width: 400px) {
   .navbar {
@@ -87,7 +129,7 @@ footer {
   }
 
   .app-name {
-    margin-right: 0px;
+    margin-right: 0;
   }
 }
 
