@@ -17,9 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from TA_Scheduling_App.views.Home import Home
+from TA_Scheduling_App.views.account_settings import AccountSettings
+from TA_Scheduling_App.views.user_management import UserManagement
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', Home.as_view()),
     path('profile/', AccountSettings.as_view(), name="account_settings"),
+    path('manage/', UserManagement.as_view(), name="user_management"),
 ]
