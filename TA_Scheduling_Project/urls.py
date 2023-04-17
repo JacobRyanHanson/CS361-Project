@@ -17,6 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from TA_Scheduling_App.views.Home import Home
+from TA_Scheduling_App.views.TA_Assignments import TAAssignments
 from TA_Scheduling_App.views.User_Creation import User_Creation
 from TA_Scheduling_App.views.Admin_Dashboard import Admin_Dashboard
 from TA_Scheduling_App.views.Login import Login
@@ -25,10 +26,19 @@ from TA_Scheduling_App.views.Dashboard_Instructor import Dashboard_Instructor
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', Login.as_view(), name="Login"),
-    path('home/', Home.as_view(), name="Home"),
+    path('', Login.as_view(), name="login"),
+    path('home/', Home.as_view(), name="home"),
     path('dashboardTA/', Dashboard_TA.as_view(), name="Dashboard_TA"),
     path('dashboardInstructor/', Dashboard_Instructor.as_view(), name="Dashboard_Instructor"),
     path('dashboardAdmin/', Admin_Dashboard.as_view()),
     path('createUser/', User_Creation.as_view()),
+    path('ta-assignments/', TAAssignments.as_view(), name='ta_assignments'),
+    
+    # Temporarily using Home instead of their own template.
+    path('account-settings/', Home.as_view(), name='account_settings'),
+    path('search-contact-information/', Home.as_view(), name='search_contact_information'),
+    path('send-notifications/', Home.as_view(), name='send_notifications'),
+    path('section-creation/', Home.as_view(), name='section_creation'),
+    path('course-creation/', Home.as_view(), name='course_creation'),
+    path('user-management/', Home.as_view(), name='user_management'),
 ]
