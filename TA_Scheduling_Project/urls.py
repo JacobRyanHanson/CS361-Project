@@ -19,10 +19,16 @@ from django.urls import path
 from TA_Scheduling_App.views.Home import Home
 from TA_Scheduling_App.views.User_Creation import User_Creation
 from TA_Scheduling_App.views.Admin_Dashboard import Admin_Dashboard
+from TA_Scheduling_App.views.Login import Login
+from TA_Scheduling_App.views.Dashboard_TA import Dashboard_TA
+from TA_Scheduling_App.views.Dashboard_Instructor import Dashboard_Instructor
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', Home.as_view()),
+    path('', Login.as_view(), name="Login"),
+    path('home/', Home.as_view(), name="Home"),
+    path('dashboardTA/', Dashboard_TA.as_view(), name="Dashboard_TA"),
+    path('dashboardInstructor/', Dashboard_Instructor.as_view(), name="Dashboard_Instructor"),
     path('dashboardAdmin/', Admin_Dashboard.as_view()),
     path('createUser/', User_Creation.as_view()),
 ]
