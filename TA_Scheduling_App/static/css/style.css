@@ -181,6 +181,75 @@ footer {
   flex-wrap: nowrap;
 }
 
+/* BEGIN Account Settings/profile page */
+
+.profile-form {
+  text-align: center;
+  display: block;
+  padding: 20px;
+  border: solid 2px;
+  width: 15%;
+}
+
+/* display form elements as block */
+.profile-form input {
+  display: block;
+  padding: 6px 4px;
+  border: solid 1px cornflowerblue;
+  width: 100%;
+  margin-bottom: 10px; /* between input and next element */
+}
+
+.profile-form label {
+  margin-bottom: 5px; /* between label and input */
+}
+
+/* profile form submission button */
+#profile-submit {
+  margin-top: 25px; /* extra spacing for submit button */
+}
+
+/* text above contact information submission form */
+#profile-header {
+  font-size: 24pt;
+}
+
+/* END account settings/profile page */
+
+/* BEGIN User Management page  */
+
+#user-management-header {
+  font-size: 24pt;
+}
+
+/* message included on page when an account has been successfully deleted */
+#user-deleted-message {
+
+}
+
+/* Container with all user list tables inside */
+#user-management-user-list {
+  display: flex;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+}
+
+/* Styling on each table representing a user */
+.user-management-user-table {
+
+}
+
+.user-management-user-table td {
+  vertical-align: middle;
+}
+
+#user-delete-form {
+  float: right;
+}
+
+/* END User Management page */
 
 /* ------------------------ Login Page ------------------------*/
 .centered {
