@@ -1,3 +1,5 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,13 +68,15 @@
             display: block;
             margin-left: auto;
             margin-right: auto;
-            padding: 10px 20px;
+            margin-bottom: 20px;
+            padding: 15px 20px;
             border-radius: 5px;
             border: none;
             background-color: #333;
             color: #fff;
             cursor: pointer;
             transition: background-color 0.3s ease;
+
         }
 
         button[type="submit"]:hover {
@@ -90,9 +94,12 @@
 <body>
 	<h1>Course Management</h1>
 
+    <button type="submit" id="create-button">Create a Course</button>
+    <div id="create-container" style="display: none;">
 	<!-- Course Creation Form -->
 	<h2>Create a Course</h2>
 	<form>
+        {% csrf_token %}
 		<label for="course-id">Course ID:</label>
 		<input type="number" id="course-id" name="course-id" required>
 
@@ -117,21 +124,60 @@
 		</select>
 
 		<label for="prerequisites">Prerequisites:</label>
-		<input type="text" id="prerequisites" name="prerequisites">
+		<input type="text" id="prerequisites" name="prerequisites" required>
 
 		<label for="department">Department:</label>
 		<input type="text" id="department" name="department" required>
 
 		<button type="submit">Create Course</button>
 	</form>
+    </div>
 
 	<!-- Course Deletion Form -->
+    <button type="submit" id="delete-button">Delete a Course</button>
+    <div id="delete-container" style="display: none;">
 	<h2>Delete a Course</h2>
 	<form>
+        {% csrf_token %}
 		<label for="delete-course-id">Course ID:</label>
 		<input type="number" id="delete-course-id" name="delete-course-id" required>
 
 		<button type="submit">Delete Course</button>
 	</form>
+    </div>
+
+    <!-- Course Add TA/Instructor Form -->
+    <button type="submit" id="add-button">Add a TA or Instructor</button>
+    <div id="delete-container" style="display: none;">
+        <form>
+            {% csrf_token %}
+            <label for="course_id">Course ID:</label>
+            <input type="text" id="course_id" name="course_id" required><br>
+            <label for="account_id">Account ID:</label>
+            <input type="text" id="account_id" name="account_id" required><br>
+            <label for="role">Role:</label>
+            <select id="role" name="role" required>
+                <option value="TA">TA</option>
+                <option value="Instructor">Instructor</option>
+            </select><br>
+            <button type="submit" name="add">Add Ta/Instructor</button>
+        </form>
+    </div>
+
+    <!-- Course Remove TA/Instructor Form -->
+    <button type="submit" id="deleteTA-button">Remove a TA or Instructor</button>
+    <div id="delete-container" style="display: none;">
+        <h2>Remove a TA or Instructor</h2>
+	<form>
+        {% csrf_token %}
+		<label for="delete-course-id">Course ID:</label>
+		<input type="number" id="delete-course-id" name="delete-course-id" required>
+        <label for="account_id">Account ID:</label>
+        <input type="text" id="account_id" name="account_id" required><br>
+
+		<button type="submit">Remove from Course</button>
+	</form>
+    </div>
+<script src="{% static 'js/toggleForm.js' %}"></script>
 </body>
 </html>
