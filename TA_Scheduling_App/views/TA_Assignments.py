@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views import View
 
-
-class Home(View):
+class TAAssignments(View):
     def get(self, request):
-        return render(request, "home.html", {})
+        return render(request, "ta-assignments.html", {})

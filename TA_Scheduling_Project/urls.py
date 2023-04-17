@@ -16,9 +16,31 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from TA_Scheduling_App.views.Course import Course
+from TA_Scheduling_App.views.Home import Home
+from TA_Scheduling_App.views.account_settings import AccountSettings
+from TA_Scheduling_App.views.user_management import UserManagement
+from TA_Scheduling_App.views.TA_Assignments import TAAssignments
+from TA_Scheduling_App.views.User_Creation import User_Creation
+from TA_Scheduling_App.views.Admin_Dashboard import Admin_Dashboard
+from TA_Scheduling_App.views.Login import Login
+from TA_Scheduling_App.views.Dashboard_TA import Dashboard_TA
+from TA_Scheduling_App.views.Dashboard_Instructor import Dashboard_Instructor
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', Course.as_view()),  # used to debug feel free to change
+    path('', Login.as_view(), name="Login"),
+    path('home/', Home.as_view(), name="Home"),
+    path('profile/', AccountSettings.as_view(), name="account_settings"),
+    path('manage/', UserManagement.as_view(), name="user_management"),
+    path('createUser/', User_Creation.as_view()),
+    path('dashboardTA/', Dashboard_TA.as_view(), name="Dashboard_TA"),
+    path('dashboardInstructor/', Dashboard_Instructor.as_view(), name="Dashboard_Instructor"),
+    path('dashboardAdmin/', Admin_Dashboard.as_view()),
+    path('ta-assignments/', TAAssignments.as_view(), name='ta_assignments'),
+    
+    # Temporarily using Home in place of missing templates.
+    path('search-contact-information/', Home.as_view(), name='search_contact_information'),
+    path('send-notifications/', Home.as_view(), name='send_notifications'),
+    path('section-creation/', Home.as_view(), name='section_creation'),
+    path('course-creation/', Home.as_view(), name='course_creation'),
 ]
