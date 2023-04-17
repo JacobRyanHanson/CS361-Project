@@ -1,5 +1,5 @@
-/* Add this to your 'style.css' */
-/* ------------------------ Home Page ------------------------*/
+/* ------------------------ Global CSS ------------------------*/
+
 :root {
   --header-height: 6rem;
   --footer-height: 3rem;
@@ -11,6 +11,31 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
+
+h1 {
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  margin-bottom: 24px;
+  font-weight: 400;
+  font-size: 24px;
+}
+
+.table {
+  margin: 0px;
+}
+
+/* Hide Bootstrap's bottom border on the last row. */
+tbody > tr:last-child > td {
+  border-bottom: 0;
+}
+
+/* Change Bootstrap's table hover color. */
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+  background-color: #adb5bd;
+}
+
+
+/* ------------------------ Header/Footer ------------------------*/
 
 header, footer {
   display: flex;
@@ -55,8 +80,19 @@ footer {
   padding-right: 5px;
 }
 
-.app-name {
+.app-name-container {
   margin-right: 30px;
+}
+
+@media (max-width: 520px) {
+  .navbar {
+    flex-direction: column;
+    align-content: center;
+  }
+  
+  .app-name-container {
+    margin-right: 0px;
+  }
 }
 
 .main-container {
@@ -66,12 +102,14 @@ footer {
   justify-content: center;
   flex-grow: 1;
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
-  gap: 1rem; /* Add a gap between buttons */
+  gap: 3rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
 
-.nav-btn {
+/* ------------------------ Home Page ------------------------*/
+
+.page-btn {
   width: 100%;
   max-width: 200px;
   flex: 1;
@@ -82,15 +120,65 @@ footer {
   text-align: center; /* Center the text within the button */
 }
 
-@media (max-width: 400px) {
-  .navbar {
-    flex-direction: column;
-    align-content: center;
-  }
+/* ------------------------ TA Assignments Page ------------------------*/
 
-  .app-name {
-    margin-right: 0;
-  }
+.table-container {
+  width: 70%;
+  border: solid 1px #dee2e6;
+  box-shadow: 2px 2px 6px 4px #ccc;
+}
+
+.table-header {
+  margin: 10px;
+}
+
+.sub-wrapper {
+  padding: 20px;
+}
+
+.nested-table-container {
+  margin: 0px;
+  border: solid 1px #dee2e6;
+  background-color: #ffffff;
+  box-shadow: 2px 2px 6px 4px #ccc;
+}
+
+/* Add bottom row back to outer table when tables are nested*/
+.table-container [data-rn="6"],  .table-container [data-rn="8"] {
+   border-bottom: solid 1px #dee2e6;
+}
+
+.form-btn {
+  margin-left: 10px;
+  width: 80px;
+}
+
+.multi-row-container {
+  border-bottom: solid 1px #dee2e6;
+}
+
+.multi-row-container table {
+  width: 100%;
+}
+
+.multi-row-container table td{
+  padding-right: 96px;
+}
+
+.multi-row-btn-container {
+  height: 0px;
+  position: relative;
+}
+
+.multi-row-btn {
+  position: absolute;
+  top: -100px;
+  right: 8px;
+  height: 92px;
+}
+
+.input-group {
+  flex-wrap: nowrap;
 }
 
 /* BEGIN Account Settings/profile page */
@@ -190,14 +278,6 @@ footer {
 .center-btn {
   display: flex;
   justify-content: center;
-}
-
-h1 {
-  font-family: 'Roboto', sans-serif;
-  text-align: center;
-  margin-bottom: 24px;
-  font-weight: 400;
-  font-size: 24px;
 }
 
 /* ------------------------ Dashboard Page ------------------------*/

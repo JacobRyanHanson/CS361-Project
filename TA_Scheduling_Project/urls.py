@@ -19,6 +19,7 @@ from django.urls import path
 from TA_Scheduling_App.views.Home import Home
 from TA_Scheduling_App.views.account_settings import AccountSettings
 from TA_Scheduling_App.views.user_management import UserManagement
+from TA_Scheduling_App.views.TA_Assignments import TAAssignments
 from TA_Scheduling_App.views.User_Creation import User_Creation
 from TA_Scheduling_App.views.Admin_Dashboard import Admin_Dashboard
 from TA_Scheduling_App.views.Login import Login
@@ -35,4 +36,11 @@ urlpatterns = [
     path('dashboardTA/', Dashboard_TA.as_view(), name="Dashboard_TA"),
     path('dashboardInstructor/', Dashboard_Instructor.as_view(), name="Dashboard_Instructor"),
     path('dashboardAdmin/', Admin_Dashboard.as_view()),
+    path('ta-assignments/', TAAssignments.as_view(), name='ta_assignments'),
+    
+    # Temporarily using Home in place of missing templates.
+    path('search-contact-information/', Home.as_view(), name='search_contact_information'),
+    path('send-notifications/', Home.as_view(), name='send_notifications'),
+    path('section-creation/', Home.as_view(), name='section_creation'),
+    path('course-creation/', Home.as_view(), name='course_creation'),
 ]
