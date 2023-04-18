@@ -11,7 +11,7 @@
 <body>
 {% include 'partials/header.html' %}
 <div class="main-container">
-    <span id="user-deleted-message">{{ deleted_message }}</span>
+    <span id="user-management-header">All Users (Management)</span>
     <p id="user-management-header">All Users (Management)</p>
     <div id="user-management-user-list">
         {# Table for each user in context #}
@@ -22,30 +22,29 @@
                         <td>ID</td>
                         <td>
                             {{ user.id }}
-                            <form id="user-delete-form" action="" method="post">
+                            <form id="user-delete-form" name="userDeleteForm" action="" method="post">
                                 {% csrf_token %}
-                                <input type="hidden" name="delete-user-id" value="{{ user.id }}">
-                                <input name="delete-user-submit" type="submit" value="Delete">
+                                <button class="btn btn-outline-danger" type="submit" name="deleteUserId" value="{{ user.id }}">Delete</button>
                             </form>
                         </td>
                     </tr>
                     <tr>
-                        <td>First Name</td><td>{{ user.fname }}</td>
+                        <td>First Name</td><td>{{ user.firstName }}</td>
                     </tr>
                     <tr>
-                        <td>Last Name</td><td>{{ user.lname }}</td>
+                        <td>Last Name</td><td>{{ user.lastName }}</td>
                     </tr>
                     <tr>
                         <td>Email</td><td>{{ user.email }}</td>
                     </tr>
                     <tr>
-                        <td>Phone#</td><td>{{ user.pnumber }}</td>
+                        <td>Phone#</td><td>{{ user.phoneNumber }}</td>
                     </tr>
                     <tr>
                         <td>Address</td><td>{{ user.address }}</td>
                     </tr>
                     <tr>
-                        <td>Date of Birth</td><td>{{ user.dob }}</td>
+                        <td>Date of Birth</td><td>{{ user.dateOfBirth }}</td>
                     </tr>
                 </table>
             </div>

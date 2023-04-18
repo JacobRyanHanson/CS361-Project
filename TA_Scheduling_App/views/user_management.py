@@ -7,12 +7,12 @@ from dataclasses import dataclass
 class User:
     id: int
     type: str
-    fname: str
-    lname: str
+    firstName: str
+    lastName: str
     email: str
-    pnumber: str
+    phoneNumber: str
     address: str
-    dob: str
+    dateOfBirth: str
 
 
 class UserManagement(View):
