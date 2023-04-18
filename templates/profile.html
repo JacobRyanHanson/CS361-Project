@@ -14,7 +14,7 @@
 <div class="main-container">
     <p id="profile-header">Profile/Contact Information</p>
     <div class="profile-form">
-        <form action="" method="post">
+        <span id="status-message">{{ status }}</span>
         <form name="updateProfileForm" action="" method="post">
             {% csrf_token %}
             <label for="firstName">First Name</label>
@@ -45,7 +45,6 @@
         </form>
     </div>
 </div>
-{{ response }}
 {% include 'partials/footer.html' %}
 </body>
 </html>

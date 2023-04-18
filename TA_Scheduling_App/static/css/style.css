@@ -34,6 +34,11 @@ tbody > tr:last-child > td {
   background-color: #adb5bd;
 }
 
+/* For status message context variables above forms */
+.status-message {
+
+}
+
 
 /* ------------------------ Header/Footer ------------------------*/
 
@@ -221,11 +226,6 @@ footer {
 
 #user-management-header {
   font-size: 24pt;
-}
-
-/* message included on page when an account has been successfully deleted */
-#user-deleted-message {
-
 }
 
 /* Container with all user list tables inside */
