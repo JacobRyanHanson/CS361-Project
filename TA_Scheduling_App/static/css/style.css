@@ -14,7 +14,6 @@ body {
 }
 
 h1 {
-  font-family: 'Roboto', sans-serif;
   text-align: center;
   margin-bottom: 24px;
   font-weight: 400;
@@ -64,6 +63,11 @@ header {
   height: var(--header-height);
 }
 
+.h-element {
+  height: min-content;
+  margin: 0px;
+}
+
 footer {
   height: var(--footer-height);
 }
@@ -96,6 +100,7 @@ footer {
 .nav-item {
   padding-left: 5px;
   padding-right: 5px;
+  height: min-content;
 }
 
 .app-name-container {
@@ -283,7 +288,6 @@ footer {
 /* ------------------------ Dashboard Page ------------------------*/
 
 .assign-btn {
-  font-family: 'Roboto', sans-serif;
   font-size: 20px;
   font-weight: 300;
   padding: 20px 24px;
