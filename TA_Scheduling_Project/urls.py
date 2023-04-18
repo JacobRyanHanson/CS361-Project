@@ -12,11 +12,11 @@ urlpatterns = [
     path('home/', Home.as_view(), name="home"),
 
     path('profile/', AccountSettings.as_view(), name="account_settings"),
-    path('manage/', UserManagement.as_view(), name="user_management"),
+    path('courses/', CourseManagement.as_view(), name="course_management"),
     path('dashboard-admin/', DashboardAdmin.as_view(), name="dashboard_admin"),
     path('dashboard-instructor/', DashboardInstructor.as_view(), name="dashboard_instructor"),
     path('dashboard-ta/', DashboardTA.as_view(), name="dashboard_ta"),
-    path('dashboardAdmin/', Admin_Dashboard.as_view()),
+    path('sections/', SectionManagement.as_view(), name="section_management"),
     path('ta-assignments/', TAAssignments.as_view(), name="ta_assignments"),
     path('user-creation/', UserCreation.as_view(), name="user_creation"),
     path('user-management/', UserManagement.as_view(), name="user_management"),
