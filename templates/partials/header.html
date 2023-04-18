@@ -1,5 +1,7 @@
 {% load static %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+<link href="https://fonts.googleapis.com/css?family=Helvetica" rel="stylesheet">
+
 
 <header class="bg-primary text-white py-3">
     <div class="h-container">
@@ -11,10 +13,10 @@
             <div id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                        <a class="nav-link" href="{% url 'home' %}"><h5>Home<h5></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-link" href="{% url 'login' %}"><h5>Login<h5></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#"><h5>Logout</h5></a>

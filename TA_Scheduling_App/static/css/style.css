@@ -10,6 +10,7 @@ body {
   background-color: #d3e7fc;
   flex-direction: column;
   min-height: 100vh;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 h1 {
@@ -20,6 +21,18 @@ h1 {
   font-size: 24px;
 }
 
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  min-height: calc(100vh - var(--header-height) - var(--footer-height));
+  gap: 3rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
 .table {
   margin: 0px;
 }
@@ -28,12 +41,6 @@ h1 {
 tbody > tr:last-child > td {
   border-bottom: 0;
 }
-
-/* Change Bootstrap's table hover color. */
-.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-  background-color: #adb5bd;
-}
-
 
 /* ------------------------ Header/Footer ------------------------*/
 
@@ -95,18 +102,6 @@ footer {
   }
 }
 
-.main-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex-grow: 1;
-  min-height: calc(100vh - var(--header-height) - var(--footer-height));
-  gap: 3rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
-
 /* ------------------------ Home Page ------------------------*/
 
 .page-btn {
@@ -122,10 +117,14 @@ footer {
 
 /* ------------------------ TA Assignments Page ------------------------*/
 
-.table-container {
-  width: 70%;
+.table-container, .nested-table-container {
   border: solid 1px #dee2e6;
   box-shadow: 2px 2px 6px 4px #ccc;
+  background-color: #ffffff;
+}
+
+.table-container {
+  width: 70%;
 }
 
 .table-header {
@@ -138,9 +137,6 @@ footer {
 
 .nested-table-container {
   margin: 0px;
-  border: solid 1px #dee2e6;
-  background-color: #ffffff;
-  box-shadow: 2px 2px 6px 4px #ccc;
 }
 
 /* Add bottom row back to outer table when tables are nested*/
@@ -181,7 +177,7 @@ footer {
   flex-wrap: nowrap;
 }
 
-/* BEGIN Account Settings/profile page */
+/* ------------------------ Account Settings/Profile Page ------------------------*/
 
 .profile-form {
   text-align: center;
@@ -214,9 +210,7 @@ footer {
   font-size: 24pt;
 }
 
-/* END account settings/profile page */
-
-/* BEGIN User Management page  */
+/* ------------------------ Account User Management Page ------------------------*/
 
 #user-management-header {
   font-size: 24pt;
@@ -249,9 +243,8 @@ footer {
   float: right;
 }
 
-/* END User Management page */
-
 /* ------------------------ Login Page ------------------------*/
+
 .centered {
   display: flex;
   align-items: center;
