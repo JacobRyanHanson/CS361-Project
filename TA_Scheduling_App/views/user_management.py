@@ -19,5 +19,5 @@ class UserManagement(View):
     def get(self, request):
         sample = User(1, "ADMIN", "Example", "User", "example@example.com", "000-000-0000", "null street", "00-00-0000")
         users = [sample, sample, sample]
-        return render(request, "usermanage.html", {'users': users})
+        return render(request, "user-management.html", {'users': users})
 
