@@ -12,7 +12,7 @@
 {% include 'partials/header.html' %}
 <div class="main-container">
     <span id="user-management-header">All Users (Management)</span>
-    <span class="status-message">{{ status }}</span>
+    <div class="status-message">{{ status }}</div>
     <div id="user-management-user-list">
         {# Table for each user in context #}
         {% for user in users %}

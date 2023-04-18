@@ -14,32 +14,32 @@
 <div class="main-container">
     <p id="profile-header">Profile/Contact Information</p>
     <div class="profile-form">
-        <span id="status-message">{{ status }}</span>
+        <div class="status-message">{{ status }}</div>
         <form name="updateProfileForm" action="" method="post">
             {% csrf_token %}
             <label for="firstName">First Name</label>
             <br />
-            <input type="text" name="firstName" required>
+            <input type="text" name="firstName" id="firstName" required>
 
             <label for="lastName">Last Name</label>
             <br />
-            <input type="text" name="lastName" required>
+            <input type="text" name="lastName" id="lastName" required>
 
             <label for="email">Email</label>
             <br />
-            <input type="email" name="email" required>
+            <input type="email" name="email" id="email" required>
 
             <label for="phoneNumber">Phone Number</label>
             <br />
-            <input type="tel" name="phoneNumber" required>
+            <input type="tel" name="phoneNumber" id="phoneNumber" required>
 
             <label for="address">Address</label>
             <br />
-            <input type="text" name="address" required>
+            <input type="text" name="address" id="address" required>
 
             <label for="dateOfBirth">Date of Birth</label>
             <br />
-            <input type="date" name="dateOfBirth" required>
+            <input type="date" name="dateOfBirth" id="dateOfBirth" required>
 
             <button id="profile-submit" class="btn btn-primary" type="submit">Update Information</button>
         </form>
