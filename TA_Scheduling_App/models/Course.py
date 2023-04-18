@@ -1,5 +1,7 @@
 from django.db import models
 from .User import User
+
+
 class Course(models.Model):
     COURSE_ID = models.AutoField(primary_key=True)
     COURSE_NUMBER = models.IntegerField()
