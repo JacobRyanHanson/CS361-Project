@@ -34,6 +34,11 @@ tbody > tr:last-child > td {
   background-color: #adb5bd;
 }
 
+/* For status message context variables above forms */
+.status-message {
+
+}
+
 
 /* ------------------------ Header/Footer ------------------------*/
 
@@ -188,7 +193,7 @@ footer {
   display: block;
   padding: 20px;
   border: solid 2px;
-  width: 15%;
+  width: 20%;
 }
 
 /* display form elements as block */
@@ -206,7 +211,8 @@ footer {
 
 /* profile form submission button */
 #profile-submit {
-  margin-top: 25px; /* extra spacing for submit button */
+  margin-top: 20px; /* extra spacing for submit button */
+  justify-content: center;
 }
 
 /* text above contact information submission form */
@@ -220,11 +226,6 @@ footer {
 
 #user-management-header {
   font-size: 24pt;
-}
-
-/* message included on page when an account has been successfully deleted */
-#user-deleted-message {
-
 }
 
 /* Container with all user list tables inside */
