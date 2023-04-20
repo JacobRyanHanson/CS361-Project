@@ -52,6 +52,9 @@ class TestSetFirstName(unittest.TestCase):
     def test_setFirstName_valid_one_letter(self):
         self.assertTrue(self.user.setFirstName("J"))
 
+    def test_setFirstName_invalid_null(self):
+        self.assertFalse(self.user.setFirstName(None))
+
 class TestSetLastName(unittest.TestCase):
     def setUp(self):
         self.user = User(userID=1, userType='TA', firstName='Jane', lastName='Doe', email='jane.doe@example.com',
@@ -101,6 +104,9 @@ class TestSetLastName(unittest.TestCase):
 
     def test_setLastName_valid_one_letter(self):
         self.assertTrue(self.user.setLastName("S"))
+
+    def test_setLastName_invalid_null(self):
+        self.assertFalse(self.user.setLastName(None))
 
 class TestSetEmail(unittest.TestCase):
     def setUp(self):
@@ -166,6 +172,9 @@ class TestSetEmail(unittest.TestCase):
     def test_setEmail_unique_emails(self):
         self.assertTrue(self.user1.setEmail("new.email@example.com"))
         self.assertFalse(self.user2.setEmail("new.email@example.com"))
+
+    def test_setEmail_invalid_null(self):
+        self.assertFalse(self.user.setEmail(None))
 
 class TestSetPhoneNumber(unittest.TestCase):
     def setUp(self):
@@ -235,6 +244,9 @@ class TestSetPhoneNumber(unittest.TestCase):
     def test_setPhoneNumber_valid_max_length(self):
         self.assertTrue(self.user.setPhoneNumber("+123 (456) 789-0123"))
 
+    def test_setPhoneNumber_invalid_null(self):
+        self.assertFalse(self.user.setPhoneNumber(None))
+
 class TestSetAddress(unittest.TestCase):
     def setUp(self):
         self.user = User(userID=1, userType='TA', firstName='Jane', lastName='Doe', email='jane.doe@example.com',
@@ -284,6 +296,9 @@ class TestSetAddress(unittest.TestCase):
 
     def test_setAddress_valid_with_po_box(self):
         self.assertTrue(self.user.setAddress("PO Box 123"))
+
+    def test_setAddress_invalid_null(self):
+        self.assertFalse(self.user.setAddress(None))
 
 class TestSetBirthDate(unittest.TestCase):
     def setUp(self):
@@ -335,3 +350,6 @@ class TestSetBirthDate(unittest.TestCase):
 
     def test_setBirthDate_valid_datetime_object(self):
         self.assertTrue(self.user.setBirthDate(datetime.datetime(2000, 1, 1)))
+
+    def test_setBirthDate_invalid_null(self):
+        self.assertFalse(self.user.setBirthDate(None))
