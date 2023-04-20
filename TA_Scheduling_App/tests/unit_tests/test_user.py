@@ -106,3 +106,58 @@ class TestSetEmail(unittest.TestCase):
         self.user = User(userID=1, userType='TA', firstName='Jane', lastName='Doe', email='jane.doe@example.com',
                           phoneNumber='555-123-4567', address='1234 Elm St', birthDate='1995-08-30')
 
+    def test_setEmail_valid(self):
+        self.assertTrue(self.user.setEmail("john.smith@example.com"))
+
+    def test_setEmail_invalid_empty_string(self):
+        self.assertFalse(self.user.setEmail(""))
+
+    def test_setEmail_invalid_no_at_symbol(self):
+        self.assertFalse(self.user.setEmail("john.smithexample.com"))
+
+    def test_setEmail_invalid_no_domain(self):
+        self.assertFalse(self.user.setEmail("john.smith@"))
+
+    def test_setEmail_invalid_no_username(self):
+        self.assertFalse(self.user.setEmail("@example.com"))
+
+    def test_setEmail_invalid_multiple_at_symbols(self):
+        self.assertFalse(self.user.setEmail("john@smith@example.com"))
+
+    def test_setEmail_invalid_whitespace(self):
+        self.assertFalse(self.user.setEmail("john.smith @example.com"))
+
+    def test_setEmail_invalid_missing_tld(self):
+        self.assertFalse(self.user.setEmail("john.smith@example"))
+
+    def test_setEmail_invalid_domain_start_with_period(self):
+        self.assertFalse(self.user.setEmail("john.smith@.example.com"))
+
+    def test_setEmail_invalid_domain_end_with_period(self):
+        self.assertFalse(self.user.setEmail("john.smith@example.com."))
+
+    def test_setEmail_invalid_domain_multiple_periods(self):
+        self.assertFalse(self.user.setEmail("john.smith@example..com"))
+
+    def test_setEmail_valid_mixed_case(self):
+        self.assertTrue(self.user.setEmail("JOHN.Smith@example.com"))
+
+    def test_setEmail_valid_unicode(self):
+        self.assertTrue(self.user.setEmail("jane.åström@example.com"))
+
+    def test_setEmail_valid_subdomain(self):
+        self.assertTrue(self.user.setEmail("jane.doe@subdomain.example.com"))
+
+    def test_setEmail_invalid_long_string(self):
+        self.assertFalse(self.user.setEmail("a" * 256 + "@example.com"))
+
+    def test_setEmail_valid_underscore(self):
+        self.assertTrue(self.user.setEmail("john_smith@example.com"))
+
+    def test_setEmail_valid_dash(self):
+        self.assertTrue(self.user.setEmail("john-smith@example.com"))
+
+    def test_setEmail_invalid_username_start_with_period(self):
+        self.assertFalse(self.user.setEmail(".john.smith@example.com"))
+
+
