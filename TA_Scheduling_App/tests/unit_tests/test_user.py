@@ -1,6 +1,7 @@
 import sys
 from TA_Scheduling_App.classes.user import User
 import unittest
+import datetime
 
 class TestSetFirstName(unittest.TestCase):
     def setUp(self):
@@ -283,3 +284,54 @@ class TestSetAddress(unittest.TestCase):
 
     def test_setAddress_valid_with_po_box(self):
         self.assertTrue(self.user.setAddress("PO Box 123"))
+
+class TestSetBirthDate(unittest.TestCase):
+    def setUp(self):
+        self.user = User(userID=1, userType='TA', firstName='Jane', lastName='Doe', email='jane.doe@example.com',
+                          phoneNumber='555-123-4567', address='1234 Elm St', birthDate='1995-08-30')
+
+    def test_setBirthDate_valid(self):
+        self.assertTrue(self.user.setBirthDate(datetime.date(2000, 1, 1)))
+
+    def test_setBirthDate_valid_leap_year(self):
+        self.assertTrue(self.user.setBirthDate(datetime.date(2000, 2, 29)))
+
+    def test_setBirthDate_invalid_leap_year(self):
+        self.assertFalse(self.user.setBirthDate(datetime.date(1900, 2, 29)))
+
+    def test_setBirthDate_valid_first_day_of_year(self):
+        self.assertTrue(self.user.setBirthDate(datetime.date(2000, 1, 1)))
+
+    def test_setBirthDate_valid_last_day_of_year(self):
+        self.assertTrue(self.user.setBirthDate(datetime.date(2000, 12, 31)))
+
+    def test_setBirthDate_valid_min_date(self):
+        self.assertTrue(self.user.setBirthDate(datetime.date(1, 1, 1)))
+
+    def test_setBirthDate_valid_max_date(self):
+        self.assertTrue(self.user.setBirthDate(datetime.date(9999, 12, 31)))
+
+    def test_setBirthDate_invalid_future_date(self):
+        future_date = datetime.date.today() + datetime.timedelta(days=1)
+        self.assertFalse(self.user.setBirthDate(future_date))
+
+    def test_setBirthDate_invalid_null_date(self):
+        self.assertFalse(self.user.setBirthDate(None))
+
+    def test_setBirthDate_invalid_negative_year(self):
+        with self.assertRaises(ValueError):
+            self.user.setBirthDate(datetime.date(-1, 1, 1))
+
+    def test_setBirthDate_invalid_month_out_of_range(self):
+        with self.assertRaises(ValueError):
+            self.user.setBirthDate(datetime.date(2000, 13, 1))
+
+    def test_setBirthDate_invalid_day_out_of_range(self):
+        with self.assertRaises(ValueError):
+            self.user.setBirthDate(datetime.date(2000, 1, 32))
+
+    def test_setBirthDate_invalid_date_string(self):
+        self.assertFalse(self.user.setBirthDate("1995-08-30"))
+
+    def test_setBirthDate_valid_datetime_object(self):
+        self.assertTrue(self.user.setBirthDate(datetime.datetime(2000, 1, 1)))
