@@ -1,4 +1,4 @@
-from TA_Scheduling_App.classes.course import Course
+from TA_Scheduling_App.models.Course import Course
 import unittest
 
 class test_getInfo(unittest.TestCase):
