@@ -7,7 +7,8 @@ django.setup()
 from TA_Scheduling_App.models.User import User
 from TA_Scheduling_App.models.Course import Course
 from TA_Scheduling_App.models.Section import Section
-from TA_Scheduling_App.models.TA_Assignment import TAAssignment
+from TA_Scheduling_App.models.Course_Assignment import CourseAssignment
+from TA_Scheduling_App.models.Section_Assignment import SectionAssignment
 from datetime import date, time
 from django.core.management import call_command
 from django.db import connection
@@ -28,7 +29,7 @@ def reset_app(app_name):
 def insert_data():
     # Insert users
     user1 = User.objects.create(
-        USER_TYPE='ADMIN',
+        ROLL='ADMIN',
         FIRST_NAME='John',
         LAST_NAME='Doe',
         EMAIL='john.doe@example.com',
@@ -39,7 +40,7 @@ def insert_data():
     )
 
     user2 = User.objects.create(
-        USER_TYPE='INSTRUCTOR',
+        ROLL='INSTRUCTOR',
         FIRST_NAME='Alice',
         LAST_NAME='Smith',
         EMAIL='alice.smith@example.com',
@@ -50,7 +51,7 @@ def insert_data():
     )
 
     user3 = User.objects.create(
-        USER_TYPE='ADMIN',
+        ROLL='TA',
         FIRST_NAME='Emma',
         LAST_NAME='Johnson',
         EMAIL='emma.johnson@example.com',
@@ -61,7 +62,7 @@ def insert_data():
     )
 
     user4 = User.objects.create(
-        USER_TYPE='INSTRUCTOR',
+        ROLL='INSTRUCTOR',
         FIRST_NAME='Michael',
         LAST_NAME='Brown',
         EMAIL='michael.brown@example.com',
@@ -72,7 +73,7 @@ def insert_data():
     )
 
     user5 = User.objects.create(
-        USER_TYPE='TA',
+        ROLL='TA',
         FIRST_NAME='Sophia',
         LAST_NAME='Williams',
         EMAIL='sophia.williams@example.com',
@@ -127,7 +128,6 @@ def insert_data():
     section1 = Section.objects.create(
         SECTION_NUMBER=1,
         COURSE=course1,
-        SECTION_TYPE='LECTURE',
         BUILDING='Tech Building',
         ROOM_NUMBER='101',
         SECTION_START=time(9, 0),
@@ -137,7 +137,6 @@ def insert_data():
     section2 = Section.objects.create(
         SECTION_NUMBER=2,
         COURSE=course2,
-        SECTION_TYPE='LECTURE',
         BUILDING='Tech Building',
         ROOM_NUMBER='102',
         SECTION_START=time(10, 30),
@@ -147,7 +146,6 @@ def insert_data():
     section3 = Section.objects.create(
         SECTION_NUMBER=1,
         COURSE=course3,
-        SECTION_TYPE='LECTURE',
         BUILDING='Tech Building',
         ROOM_NUMBER='103',
         SECTION_START=time(12, 0),
@@ -157,39 +155,60 @@ def insert_data():
     section4 = Section.objects.create(
         SECTION_NUMBER=2,
         COURSE=course4,
-        SECTION_TYPE='LECTURE',
         BUILDING='Tech Building',
         ROOM_NUMBER='104',
         SECTION_START=time(14, 0),
         SECTION_END=time(15, 15)
     )
 
-    # Insert TA assignments
-    TAAssignment.objects.create(
+    # Insert course assignments
+    course_assignment1 = CourseAssignment.objects.create(
         COURSE=course1,
-        SECTION=section1,
-        TA=user5,
-        IS_GRADER=False
-    )
-
-    TAAssignment.objects.create(
-        COURSE=course3,
-        SECTION=section3,
         TA=user5,
         IS_GRADER=True
     )
 
+    course_assignment2 = CourseAssignment.objects.create(
+        COURSE=course2,
+        TA=user5,
+        IS_GRADER=False
+    )
 
-def delete_instructor(first_name, last_name):
+    course_assignment3 = CourseAssignment.objects.create(
+        COURSE=course3,
+        TA=user3,
+        IS_GRADER=False
+    )
+
+    # Insert section assignments
+    section_assignment1 = SectionAssignment.objects.create(
+        COURSE_ASSIGNMENT=course_assignment1,
+        SECTION=section1
+    )
+
+    section_assignment2 = SectionAssignment.objects.create(
+        COURSE_ASSIGNMENT=course_assignment2,
+        SECTION=section2
+    )
+
+    section_assignment3 = SectionAssignment.objects.create(
+        COURSE_ASSIGNMENT=course_assignment3,
+        SECTION=section3
+    )
+
+
+def delete_user(first_name, last_name):
     # Find the instructor you want to delete
-    instructor = User.objects.filter(FIRST_NAME=first_name, LAST_NAME=last_name).first()
+    user = User.objects.filter(FIRST_NAME=first_name, LAST_NAME=last_name).first()
 
-    if instructor:
+    if user:
         # Delete the instructor
-        instructor.delete()
+        user.delete()
 
 
 if __name__ == '__main__':
     reset_app('TA_Scheduling_App')
     insert_data()
-    delete_instructor('Alice', 'Smith')
+    # For testing
+    delete_user('Alice', 'Smith')
+    # delete_user('Sophia', 'Williams')

@@ -1,4 +1,5 @@
 from .User import User
 from .Course import Course
 from .Section import Section
-from .TA_Assignment import TAAssignment
+from .Course_Assignment import CourseAssignment
+from .Section_Assignment import SectionAssignment

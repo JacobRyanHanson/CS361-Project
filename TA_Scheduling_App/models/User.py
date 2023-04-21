@@ -3,8 +3,7 @@ from django.db import models
 
 class User(models.Model):
     USER_ID = models.AutoField(primary_key=True)
-    USER_CHOICES = (('ADMIN', 'Admin'), ('INSTRUCTOR', 'Instructor'), ('TA', 'Teaching Assistant'))
-    USER_TYPE = models.CharField(max_length=10, choices=USER_CHOICES)
+    ROLL = models.CharField(max_length=10, choices=(('ADMIN', 'Admin'), ('INSTRUCTOR', 'Instructor'), ('TA', 'Teaching Assistant')))
     FIRST_NAME = models.CharField(max_length=255)
     LAST_NAME = models.CharField(max_length=255)
     EMAIL = models.EmailField(unique=True)
