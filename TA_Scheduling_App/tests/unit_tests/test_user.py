@@ -116,9 +116,9 @@ class TestSetFirstName(unittest.TestCase):
     def test_setFirstName_valid_mixed_case(self):
         self.assertTrue(self.user.setFirstName("jOhN"), "Valid first name with mixed case failed to be set.")
 
-    def test_setFirstName_valid_spaces_before_after(self):
-        self.assertTrue(self.user.setFirstName("  John  "),
-                        "Valid first name with spaces before and after failed to be set.")
+    def test_setFirstName_invalid_spaces_before_after(self):
+        self.assertFalse(self.user.setFirstName("  John  "),
+                        "Invalid first name with spaces before and after set.")
 
     def test_setFirstName_invalid_only_numbers(self):
         self.assertFalse(self.user.setFirstName("1234"), "First name with only numbers was incorrectly set.")
@@ -171,9 +171,9 @@ class TestSetLastName(unittest.TestCase):
     def test_setLastName_valid_mixed_case(self):
         self.assertTrue(self.user.setLastName("sMitH"), "Valid last name with mixed case failed to be set.")
 
-    def test_setLastName_valid_spaces_before_after(self):
-        self.assertTrue(self.user.setLastName("  Smith  "),
-                        "Valid last name with spaces before and after failed to be set.")
+    def test_setLastName_invalid_spaces_before_after(self):
+        self.assertFalse(self.user.setLastName("  Smith  "),
+                        "Invalid last name with spaces before and after set.")
 
     def test_setLastName_invalid_only_numbers(self):
         self.assertFalse(self.user.setLastName("1234"), "Last name with only numbers was incorrectly set.")

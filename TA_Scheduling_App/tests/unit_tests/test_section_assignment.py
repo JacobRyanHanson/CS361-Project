@@ -55,15 +55,15 @@ class TestSectionAssignmentInit(unittest.TestCase):
         except ValueError:
             self.fail("SectionAssignment init failed with valid input values.")
 
-    def test_init_invalid_course_assignment_id(self):
+    def test_init_invalid_course_assignment(self):
         with self.assertRaises(ValueError,
-                               msg="SectionAssignment init did not raise ValueError for invalid COURSE_ASSIGNMENT_ID"):
-            SectionAssignment(COURSE_ASSIGNMENT_ID=-1, SECTION_ID=self.section.pk)
+                               msg="SectionAssignment init did not raise ValueError for invalid COURSE_ASSIGNMENT"):
+            SectionAssignment(COURSE_ASSIGNMENT=None, SECTION_ID=self.section.pk)
 
-    def test_init_invalid_section_id(self):
+    def test_init_invalid_section(self):
         with self.assertRaises(ValueError,
-                               msg="SectionAssignment init did not raise ValueError for invalid SECTION_ID"):
-            SectionAssignment(COURSE_ASSIGNMENT_ID=self.course_assignment.pk, SECTION_ID=-1)
+                               msg="SectionAssignment init did not raise ValueError for invalid SECTION"):
+            SectionAssignment(COURSE_ASSIGNMENT_ID=self.course_assignment.pk, SECTION=None)
 
     def test_init_course_assignment_section_mismatch_1(self):
         with self.assertRaises(ValueError,
