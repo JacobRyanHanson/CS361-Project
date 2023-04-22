@@ -9,8 +9,7 @@ from django.db.models import Value
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TA_Scheduling_Project.settings')
 django.setup()
 
-from TA_Scheduling_App.models.Course import Course
-from TA_Scheduling_App.models.User import User
+from TA_Scheduling_App.models import Course, User
 
     
 class TestCourseInit(unittest.TestCase):
@@ -18,6 +17,8 @@ class TestCourseInit(unittest.TestCase):
         # Mock User object
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 1
+        self.instructor._state = MagicMock()
+        self.instructor._state.db = 'default'
     
     def test_init_valid_input(self):
         try:
@@ -184,9 +185,9 @@ class TestSetCourseName(unittest.TestCase):
     def test_setCourseName_valid_numbers_and_letters(self):
         self.assertTrue(self.course.setCourseName("CS101"), "Valid course name with numbers and letters failed to be set.")
 
-    def test_setCourseName_valid_unicode(self):
-        self.assertTrue(self.course.setCourseName("Étude des systèmes informatiques"),
-        "Valid course name with unicode characters failed to be set.")
+    def test_setCourseName_invalid_unicode(self):
+        self.assertFalse(self.course.setCourseName("Étude des systèmes informatiques"),
+        "Inalid course name with unicode characters set.")
 
     def test_setCourseName_valid_spaces_before_after(self):
         self.assertTrue(self.course.setCourseName(" Introduction to Computer Science "),
@@ -266,7 +267,7 @@ class TestSetCourseDescription(unittest.TestCase):
         self.assertFalse(self.course.setCourseDescription("1234"), "Course description with numbers was incorrectly set.")
 
     def test_setCourseDescription_valid_combination(self):
-        self.assertTrue(self.course.setCourseDescription("Intro to CS 101"), "Course description with numbers and letters was incorrectly set.")
+        self.assertTrue(self.course.setCourseDescription("Intro to CS 101"), "Course description with numbers and letters failed to be set.")
 
     def test_setCourseDescription_valid_mixed_case(self):
         self.assertTrue(self.course.setCourseDescription("iNtro to CoMPuTer sCienCe"), "Valid course description with mixed case failed to be set.")

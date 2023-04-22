@@ -13,6 +13,16 @@ class Course(models.Model):
     PREREQUISITES = models.CharField(max_length=255)
     DEPARTMENT = models.CharField(max_length=255)
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.setCourseNumber(kwargs.get('COURSE_NUMBER', None))
+        self.setInstructor(kwargs.get('INSTRUCTOR', None))
+        self.setCourseName(kwargs.get('COURSE_NAME', None))
+        self.setCourseDescription(kwargs.get('COURSE_DESCRIPTION', None))
+        self.setSemester(kwargs.get('SEMESTER', None))
+        self.setPrerequisites(kwargs.get('PREREQUISITES', None))
+        self.setDepartment(kwargs.get('DEPARTMENT', None))
+
     def setCourseNumber(self, number):
         # Check if the input is an integer
         if not isinstance(number, int):
@@ -113,8 +123,12 @@ class Course(models.Model):
         if len(value) > 255:
             return False
 
+        # Ensure the string is not completely numeric
+        if value.isdigit():
+            return False
+
         # Check that string contains only alphanumeric characters, spaces, and certain punctuation marks
-        allowed_chars = set(string.ascii_letters + ("-'.:, " if allow_numeric else ""))
+        allowed_chars = set(string.ascii_letters + string.digits * allow_numeric + ("-'.:, " if allow_numeric else ""))
         if not all(c in allowed_chars for c in value):
             return False
 
