@@ -20,58 +20,58 @@ class TestUserInit(unittest.TestCase):
 #     Please note setters will handle all additional checking on initialization.
 
 
-class TestSetRoll(unittest.TestCase):
+class TestSetRole(unittest.TestCase):
     def setUp(self):
         self.user = User(ROLL='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
                          PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
 
-    def test_setRoll_valid_admin(self):
-        self.assertTrue(self.user.setRoll("ADMIN"), "Valid roll 'ADMIN' failed to be set.")
+    def test_setRole_valid_admin(self):
+        self.assertTrue(self.user.setRole("ADMIN"), "Valid role 'ADMIN' failed to be set.")
 
-    def test_setRoll_valid_instructor(self):
-        self.assertTrue(self.user.setRoll("INSTRUCTOR"), "Valid roll 'INSTRUCTOR' failed to be set.")
+    def test_setRole_valid_instructor(self):
+        self.assertTrue(self.user.setRole("INSTRUCTOR"), "Valid role 'INSTRUCTOR' failed to be set.")
 
-    def test_setRoll_valid_ta(self):
-        self.assertTrue(self.user.setRoll("TA"), "Valid roll 'TA' failed to be set.")
+    def test_setRole_valid_ta(self):
+        self.assertTrue(self.user.setRole("TA"), "Valid role 'TA' failed to be set.")
 
-    def test_setRoll_invalid_empty_string(self):
-        self.assertFalse(self.user.setRoll(""), "Empty roll string was incorrectly set.")
+    def test_setRole_invalid_empty_string(self):
+        self.assertFalse(self.user.setRole(""), "Empty role string was incorrectly set.")
 
-    def test_setRoll_invalid_whitespace(self):
-        self.assertFalse(self.user.setRoll("   "), "Roll with only whitespace was incorrectly set.")
+    def test_setRole_invalid_whitespace(self):
+        self.assertFalse(self.user.setRole("   "), "Role with only whitespace was incorrectly set.")
 
-    def test_setRoll_invalid_lowercase(self):
-        self.assertFalse(self.user.setRoll("admin"), "Lowercase roll string was incorrectly set.")
+    def test_setRole_invalid_lowercase(self):
+        self.assertFalse(self.user.setRole("admin"), "Lowercase role string was incorrectly set.")
 
-    def test_setRoll_invalid_mixed_case(self):
-        self.assertFalse(self.user.setRoll("AdMiN"), "Mixed case roll string was incorrectly set.")
+    def test_setRole_invalid_mixed_case(self):
+        self.assertFalse(self.user.setRole("AdMiN"), "Mixed case role string was incorrectly set.")
 
-    def test_setRoll_invalid_numbers(self):
-        self.assertFalse(self.user.setRoll("1234"), "Roll with numbers was incorrectly set.")
+    def test_setRole_invalid_numbers(self):
+        self.assertFalse(self.user.setRole("1234"), "Role with numbers was incorrectly set.")
 
-    def test_setRoll_invalid_special_characters(self):
-        self.assertFalse(self.user.setRoll("#$%@"), "Roll with special characters was incorrectly set.")
+    def test_setRole_invalid_special_characters(self):
+        self.assertFalse(self.user.setRole("#$%@"), "Role with special characters was incorrectly set.")
 
-    def test_setRoll_invalid_other_string(self):
-        self.assertFalse(self.user.setRoll("STUDENT"), "Invalid roll string was incorrectly set.")
+    def test_setRole_invalid_other_string(self):
+        self.assertFalse(self.user.setRole("STUDENT"), "Invalid role string was incorrectly set.")
 
-    def test_setRoll_invalid_spaces_before_after(self):
-        self.assertFalse(self.user.setRoll("  ADMIN  "), "Roll with spaces before and after was incorrectly set.")
+    def test_setRole_invalid_spaces_before_after(self):
+        self.assertFalse(self.user.setRole("  ADMIN  "), "Role with spaces before and after was incorrectly set.")
 
-    def test_setRoll_invalid_combination(self):
-        self.assertFalse(self.user.setRoll("ADMIN123"), "Roll with letters and numbers was incorrectly set.")
+    def test_setRole_invalid_combination(self):
+        self.assertFalse(self.user.setRole("ADMIN123"), "Role with letters and numbers was incorrectly set.")
 
-    def test_setRoll_invalid_unicode(self):
-        self.assertFalse(self.user.setRoll("ÄDMIN"), "Roll with unicode characters was incorrectly set.")
+    def test_setRole_invalid_unicode(self):
+        self.assertFalse(self.user.setRole("ÄDMIN"), "Role with unicode characters was incorrectly set.")
 
-    def test_setRoll_invalid_long_string(self):
-        self.assertFalse(self.user.setRoll("A" * 256), "Roll with too long string was incorrectly set.")
+    def test_setRole_invalid_long_string(self):
+        self.assertFalse(self.user.setRole("A" * 256), "Role with too long string was incorrectly set.")
 
-    def test_setRoll_invalid_one_letter(self):
-        self.assertFalse(self.user.setRoll("A"), "Roll with only one letter was incorrectly set.")
+    def test_setRole_invalid_one_letter(self):
+        self.assertFalse(self.user.setRole("A"), "Role with only one letter was incorrectly set.")
 
-    def test_setRoll_invalid_null(self):
-        self.assertFalse(self.user.setRoll(None), "Null roll was incorrectly set.")
+    def test_setRole_invalid_null(self):
+        self.assertFalse(self.user.setRole(None), "Null role was incorrectly set.")
 
 
 class TestSetFirstName(unittest.TestCase):

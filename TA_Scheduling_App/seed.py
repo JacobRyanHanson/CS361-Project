@@ -29,7 +29,7 @@ def reset_app(app_name):
 def insert_data():
     # Insert users
     user1 = User.objects.create(
-        ROLL='ADMIN',
+        ROLE='ADMIN',
         FIRST_NAME='John',
         LAST_NAME='Doe',
         EMAIL='john.doe@example.com',

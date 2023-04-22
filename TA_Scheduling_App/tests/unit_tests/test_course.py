@@ -1,7 +1,7 @@
 import os
 import django
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, Mock, patch
 
 # Set up the Django settings module for testing
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TA_Scheduling_Project.settings')
@@ -34,6 +34,9 @@ class TestSetCourseNumber(unittest.TestCase):
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 1
 
+        self.instructor._state = Mock()
+        self.instructor._state.db = 'default'
+
         # Create Course object with mocked User
         self.course_1 = Course(
             COURSE_NUMBER=101,
@@ -55,7 +58,6 @@ class TestSetCourseNumber(unittest.TestCase):
             DEPARTMENT='Computer Science'
         )
 
-    
     def test_setCourseNumber_valid(self):
         self.assertTrue(self.course_1.setCourseNumber(801), "Valid course number failed to be set ")
 
@@ -78,10 +80,17 @@ class TestSetCourseNumber(unittest.TestCase):
     def test_setCourseNumber_invalid_null(self):
         self.assertFalse(self.course_1.setCourseNumber(None), "Null course number was incorrectly set ")
 
+
     def test_setCourseNumber_existing_course(self):
-        self.assertTrue(self.course_1.setCourseNumber(301), "Valid course number failed to be set ")
-        self.assertFalse(self.course_2.setCourseNumber(301), "Course number was incorrectly set, the number "
-                                                             "is already in use within the same department")
+        with patch.object(Course.objects, 'filter') as mock_filter:
+            # Mock the course_exists method
+            mock_filter.return_value.exists.return_value = False
+            self.assertTrue(self.course_1.setCourseNumber(301), "Valid course number failed to be set ")
+
+            # Mock the course_exists method to return True
+            mock_filter.return_value.exists.return_value = True
+            self.assertFalse(self.course_2.setCourseNumber(301), "Course number was incorrectly set, the number "
+                                                                 "is already in use within the same department")
     def test_setCourseNumber_valid_zero(self):
         self.assertTrue(self.course_1.setCourseNumber(0), "Valid course number (0) failed to be set")
 
@@ -131,11 +140,11 @@ class TestSetInstructor(unittest.TestCase):
         self.assertFalse(self.course.setInstructor(non_user_object),
         "Non-User object was incorrectly set as instructor.")
     
-    def test_wrong_roll_ta(self):
+    def test_wrong_role_ta(self):
         self.assertFalse(self.course.setInstructor(self.ta),
         "User was incorrectly set as instructor.")
 
-    def test_wrong_roll_admin(self):
+    def test_wrong_role_admin(self):
         self.assertFalse(self.course.setInstructor(self.admin),
         "User was incorrectly set as instructor.")
 

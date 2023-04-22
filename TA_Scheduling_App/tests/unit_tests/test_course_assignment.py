@@ -53,11 +53,11 @@ class TestCourseAssignmentInit(unittest.TestCase):
         with self.assertRaises(ValueError, msg="CourseAssignment created with duplicate assignment"):
             CourseAssignment(COURSE=self.course, TA=self.ta, IS_GRADER=False)
 
-    def test_wrong_roll_instructor(self):
+    def test_wrong_role_instructor(self):
         with self.assertRaises(ValueError, msg="CourseAssignment created with invalid user"):
             CourseAssignment(COURSE=self.course, TA=self.instructor, IS_GRADER=False)
 
-    def test_wrong_roll_admin(self):
+    def test_wrong_role_admin(self):
         with self.assertRaises(ValueError, msg="CourseAssignment created with invalid user"):
             CourseAssignment(COURSE=self.course, TA=self.admin, IS_GRADER=False)
 
