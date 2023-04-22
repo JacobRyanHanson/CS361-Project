@@ -1,7 +1,6 @@
 import os
 import django
 import unittest
-import datetime
 from unittest.mock import MagicMock
 
 # Set up the Django settings module for testing
@@ -66,12 +65,12 @@ class TestSectionAssignmentInit(unittest.TestCase):
                                msg="SectionAssignment init did not raise ValueError for invalid SECTION_ID"):
             SectionAssignment(COURSE_ASSIGNMENT_ID=self.course_assignment.pk, SECTION_ID=-1)
 
-    def test_ta_not_assigned_to_course(self):
+    def test_init_course_assignment_section_mismatch_1(self):
         with self.assertRaises(ValueError,
-                               msg="SectionAssignment init did not raise ValueError when TA is not assigned to the course"):
+                               msg="SectionAssignment init did not raise ValueError for mismatched COURSE_ASSIGNMENT and SECTION"):
             SectionAssignment(COURSE_ASSIGNMENT=self.other_course_assignment, SECTION=self.section)
 
-    def test_init_course_assignment_section_mismatch(self):
+    def test_init_course_assignment_section_mismatch_2(self):
         # Mock Section object for the different course
         different_section = MagicMock(spec=Section)
         different_section.pk = 2
