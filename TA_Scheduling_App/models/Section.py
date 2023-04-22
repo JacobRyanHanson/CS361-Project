@@ -10,3 +10,4 @@ class Section(models.Model):
     ROOM_NUMBER = models.CharField(max_length=10)
     SECTION_START = models.TimeField()
     SECTION_END = models.TimeField()
+
