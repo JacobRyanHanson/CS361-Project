@@ -10,10 +10,6 @@ django.setup()
 from TA_Scheduling_App.models.User import User
 
 class TestUserInit(unittest.TestCase):
-    def setUp(self):
-        self.valid_user = User(ROLL='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
-                               PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
-
     def test_init_valid_input(self):
         try:
             User(ROLL='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',

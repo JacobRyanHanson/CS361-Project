@@ -45,10 +45,6 @@ class TestSectionAssignmentInit(unittest.TestCase):
         self.other_course_assignment.COURSE = self.other_course
         self.other_course_assignment.TA = self.other_ta
 
-        # Create valid SectionAssignment object
-        self.valid_section_assignment = SectionAssignment(COURSE_ASSIGNMENT=self.course_assignment,
-                                                          SECTION=self.section)
-
     def test_init_valid_input(self):
         try:
             SectionAssignment(COURSE_ASSIGNMENT=self.course_assignment, SECTION=self.section)

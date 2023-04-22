@@ -20,12 +20,6 @@ class TestCourseAssignmentInit(unittest.TestCase):
         self.ta = MagicMock(spec=User)
         self.ta.pk = 1
 
-        # Create CourseAssignment object with mocked Course and User
-        self.course_assignment_1 = CourseAssignment(COURSE=self.course, TA=self.ta, IS_GRADER=False)
-
-        # Create CourseAssignment object with mocked Course and User
-        self.course_assignment_2 = CourseAssignment(COURSE=self.course, TA=self.ta, IS_GRADER=True)
-
     def test_init_valid_input(self):
         try:
             CourseAssignment(COURSE=self.course, TA=self.ta, IS_GRADER=False)

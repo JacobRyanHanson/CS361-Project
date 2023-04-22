@@ -10,6 +10,27 @@ django.setup()
 
 from TA_Scheduling_App.models import Course, Section, User
 
+class TestSectionInit(unittest.TestCase):
+    def setUp(self):
+        # Mock a course
+        self.course = MagicMock(spec=Course)
+        self.course.pk = 1
+
+    def test_init_valid_input(self):
+        try:
+            Section(SECTION_NUMBER=901, COURSE=self.course, BUILDING='Chemistry Building',
+                    ROOM_NUMBER='190', SECTION_START=datetime.time(9, 30), SECTION_END=datetime.time(10, 20))
+        except ValueError:
+            self.fail("Section init failed with valid input values.")
+
+    def test_init_invalid_course(self):
+        with self.assertRaises(ValueError,
+                               msg="Section init did not raise ValueError for invalid COURSE"):
+            Section(SECTION_NUMBER=901, COURSE=None, BUILDING='Chemistry Building',
+                    ROOM_NUMBER='190', SECTION_START=datetime.time(9, 30), SECTION_END=datetime.time(10, 20))
+
+#     Please note setters will handle all additional checking on initialization.
+
 
 class TestSetSectionNumber(unittest.TestCase):
     def setUp(self):
@@ -68,48 +89,48 @@ class TestSetBuilding(unittest.TestCase):
         self.course.pk = 1
 
         # Create valid sections
-        self.section_1 = Section(SECTION_NUMBER=901, COURSE=self.course, BUILDING='Chemistry Building',
+        self.section = Section(SECTION_NUMBER=901, COURSE=self.course, BUILDING='Chemistry Building',
                                     ROOM_NUMBER='190', SECTION_START=datetime.time(9, 30), SECTION_END=datetime.time(10, 20))
 
     def test_setBuilding_valid_with_spaces(self):
-        self.assertTrue(self.section_1.setBuilding("Physics Building 2"), "Valid building name with spaces failed to be set.")
+        self.assertTrue(self.section.setBuilding("Physics Building 2"), "Valid building name with spaces failed to be set.")
 
     def test_setBuilding_valid_with_hyphen(self):
-        self.assertTrue(self.section_1.setBuilding("Physics-Building"), "Valid building name with hyphen failed to be set.")
+        self.assertTrue(self.section.setBuilding("Physics-Building"), "Valid building name with hyphen failed to be set.")
 
     def test_setBuilding_valid_with_apostrophe(self):
-        self.assertTrue(self.section_1.setBuilding("Physics' Building"), "Valid building name with apostrophe failed to be set.")
+        self.assertTrue(self.section.setBuilding("Physics' Building"), "Valid building name with apostrophe failed to be set.")
 
     def test_setBuilding_invalid_empty_string(self):
-        self.assertFalse(self.section_1.setBuilding(""), "Empty building name was incorrectly set.")
+        self.assertFalse(self.section.setBuilding(""), "Empty building name was incorrectly set.")
 
     def test_setBuilding_invalid_whitespace(self):
-        self.assertFalse(self.section_1.setBuilding("   "), "Building name with only whitespace was incorrectly set.")
+        self.assertFalse(self.section.setBuilding("   "), "Building name with only whitespace was incorrectly set.")
 
     def test_setBuilding_invalid_special_characters(self):
-        self.assertFalse(self.section_1.setBuilding("#$%@"), "Building name with special characters was incorrectly set.")
+        self.assertFalse(self.section.setBuilding("#$%@"), "Building name with special characters was incorrectly set.")
 
     def test_setBuilding_valid_unicode(self):
-        self.assertTrue(self.section_1.setBuilding("École"), "Valid building name with unicode characters failed to be set.")
+        self.assertTrue(self.section.setBuilding("École"), "Valid building name with unicode characters failed to be set.")
 
     def test_setBuilding_valid_mixed_case(self):
-        self.assertTrue(self.section_1.setBuilding("PhYsIcS BuIlDiNg"), "Valid building name with mixed case failed to be set.")
+        self.assertTrue(self.section.setBuilding("PhYsIcS BuIlDiNg"), "Valid building name with mixed case failed to be set.")
 
     def test_setBuilding_invalid_spaces_before_after(self):
-        self.assertFalse(self.section_1.setBuilding("  Physics Building  "),
+        self.assertFalse(self.section.setBuilding("  Physics Building  "),
                         "Invalid building name with spaces before and after set.")
 
     def test_setBuilding_invalid_only_numbers(self):
-        self.assertFalse(self.section_1.setBuilding("1234"), "Building name with only numbers was incorrectly set.")
+        self.assertFalse(self.section.setBuilding("1234"), "Building name with only numbers was incorrectly set.")
 
     def test_setBuilding_invalid_long_string(self):
-        self.assertFalse(self.section_1.setBuilding("a" * 256), "Building name that is too long was incorrectly set.")
+        self.assertFalse(self.section.setBuilding("a" * 256), "Building name that is too long was incorrectly set.")
 
     def test_setBuilding_valid_one_letter(self):
-        self.assertTrue(self.section_1.setBuilding("P"), "Valid building name with only one letter failed to be set.")
+        self.assertTrue(self.section.setBuilding("P"), "Valid building name with only one letter failed to be set.")
 
     def test_setBuilding_invalid_null(self):
-        self.assertFalse(self.section_1.setBuilding(None), "Null building name was incorrectly set.")
+        self.assertFalse(self.section.setBuilding(None), "Null building name was incorrectly set.")
 
 class TestSetRoomNumber(unittest.TestCase):
     def setUp(self):
