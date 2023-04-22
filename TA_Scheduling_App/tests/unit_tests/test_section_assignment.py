@@ -31,13 +31,13 @@ class TestSectionAssignmentInit(unittest.TestCase):
         self.section.pk = 1
         self.section.COURSE = self.course
 
-        # Mock User object for another TA
-        self.other_ta = MagicMock(spec=User)
-        self.other_ta.pk = 2
-
         # Mock another Course object
         self.other_course = MagicMock(spec=Course)
         self.other_course.pk = 2
+
+        # Mock User object for another TA
+        self.other_ta = MagicMock(spec=User)
+        self.other_ta.pk = 2       
 
         # Mock CourseAssignment object for the other TA
         self.other_course_assignment = MagicMock(spec=CourseAssignment)

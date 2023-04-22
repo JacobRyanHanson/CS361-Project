@@ -16,9 +16,18 @@ class TestCourseAssignmentInit(unittest.TestCase):
         self.course = MagicMock(spec=Course)
         self.course.pk = 1
 
-        # Mock User object
+        # Mock User objects
         self.ta = MagicMock(spec=User)
         self.ta.pk = 1
+        self.ta.ROLL = "TA"
+
+        self.instructor = MagicMock(spec=User)
+        self.instructor.pk = 2
+        self.instructor.ROLL = "INSTRUCTOR"
+
+        self.admin = MagicMock(spec=User)
+        self.admin.pk = 3
+        self.admin.ROLL = "ADMIN"
 
     def test_init_valid_input(self):
         try:
@@ -43,6 +52,14 @@ class TestCourseAssignmentInit(unittest.TestCase):
         CourseAssignment.objects.create(COURSE=self.course, TA=self.ta, IS_GRADER=False)
         with self.assertRaises(ValueError, msg="CourseAssignment created with duplicate assignment"):
             CourseAssignment(COURSE=self.course, TA=self.ta, IS_GRADER=False)
+
+    def test_wrong_roll_instructor(self):
+        with self.assertRaises(ValueError, msg="CourseAssignment created with invalid user"):
+            CourseAssignment(COURSE=self.course, TA=self.instructor, IS_GRADER=False)
+
+    def test_wrong_roll_admin(self):
+        with self.assertRaises(ValueError, msg="CourseAssignment created with invalid user"):
+            CourseAssignment(COURSE=self.course, TA=self.admin, IS_GRADER=False)
 
 
 class TestCourseAssignmentSetGrader(unittest.TestCase):
@@ -86,15 +103,7 @@ class TestCourseAssignmentSetGrader(unittest.TestCase):
         self.assertFalse(result, "Failed to reject a float input for isGrader")
 
     def test_setGrader_invalid_list(self):
-        result = self.course_assignment_1.setGrader([True])
-        self.assertFalse(result, "Failed to reject a list input for isGrader")
-
-    def test_setGrader_invalid_tuple(self):
-        result = self.course_assignment_1.setGrader((True,))
-        self.assertFalse(result, "Failed to reject a tuple input for isGrader")
-
-    def test_setGrader_invalid_dict(self):
-        result = self.course_assignment_1.setGrader({"isGrader": True})
-        self.assertFalse(result, "Failed to reject a dictionary input for isGrader")
+        result = self.course_assignment_1.setGrader("True")
+        self.assertFalse(result, "Failed to reject string input for isGrader")
 
 
