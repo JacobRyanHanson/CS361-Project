@@ -24,6 +24,4 @@ urlpatterns = [
     # Missing/future templates
     path('search-contact-information/', Home.as_view(), name='search_contact_information'),
     path('send-notifications/', Home.as_view(), name='send_notifications'),
-    path('section-creation/', Home.as_view(), name='section_creation'),
-    path('course-creation/', Home.as_view(), name='course_creation'),
 ]

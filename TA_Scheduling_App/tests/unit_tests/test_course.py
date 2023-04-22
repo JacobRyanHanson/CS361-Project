@@ -1,0 +1,442 @@
+import os
+import django
+import unittest
+from unittest.mock import MagicMock, Mock, patch
+
+# Set up the Django settings module for testing
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TA_Scheduling_Project.settings')
+django.setup()
+
+from TA_Scheduling_App.models import Course, User
+    
+class TestCourseInit(unittest.TestCase):
+    def setUp(self):
+        # Mock User object
+        self.instructor = MagicMock(spec=User)
+        self.instructor.pk = 1
+    
+    def test_init_valid_input(self):
+        try:
+            Course(COURSE_NUMBER=901, 
+                INSTRUCTOR=self.instructor, 
+                COURSE_NAME='Advanced Chemistry',
+                COURSE_DESCRIPTION='A study of advanced topics in chemistry.', 
+                SEMESTER='Spring 2024',
+                PREREQUISITES='Basic Chemistry', DEPARTMENT='Chemistry')
+        except ValueError:
+            self.fail("Course init failed with valid input values.")
+
+#     Please note setters will handle all additional checking on initialization.
+
+class TestSetCourseNumber(unittest.TestCase):
+    def setUp(self):
+        # Mock User object
+        self.instructor = MagicMock(spec=User)
+        self.instructor.pk = 1
+
+        self.instructor._state = Mock()
+        self.instructor._state.db = 'default'
+
+        # Create Course object with mocked User
+        self.course_1 = Course(
+            COURSE_NUMBER=101,
+            INSTRUCTOR=self.instructor,
+            COURSE_NAME='Introduction to Computer Science',
+            COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
+            SEMESTER='Fall 2023',
+            PREREQUISITES='None',
+            DEPARTMENT='Computer Science'
+        )
+
+        self.course_2 = Course(
+            COURSE_NUMBER=101,
+            INSTRUCTOR=self.instructor,
+            COURSE_NAME='All New Computer Science',
+            COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
+            SEMESTER='Fall 2023',
+            PREREQUISITES='None',
+            DEPARTMENT='Computer Science'
+        )
+
+    def test_setCourseNumber_valid(self):
+        self.assertTrue(self.course_1.setCourseNumber(801), "Valid course number failed to be set ")
+
+    def test_setCourseNumber_invalid_letters(self):
+        self.assertFalse(self.course_1.setCourseNumber("abc"), "Invalid course number was incorrectly set (letters)")
+
+    def test_setCourseNumber_invalid_special_characters(self):
+        self.assertFalse(self.course_1.setCourseNumber("#$%^&*"), "Invalid course number was incorrectly set ("
+                                                                "special characters)")
+
+    def test_setCourseNumber_invalid_negative(self):
+        self.assertFalse(self.course_1.setCourseNumber(-752), "Invalid course number was incorrectly set (negative)")
+
+    def test_setCourseNumber_empty(self):
+        self.assertFalse(self.course_1.setCourseNumber(""), "Empty course number was incorrectly set")
+
+    def test_setCourseNumber_empty_whitespace(self):
+        self.assertFalse(self.course_1.setCourseNumber("     "), "Empty course number was incorrectly set")
+
+    def test_setCourseNumber_invalid_null(self):
+        self.assertFalse(self.course_1.setCourseNumber(None), "Null course number was incorrectly set ")
+
+
+    def test_setCourseNumber_existing_course(self):
+        with patch.object(Course.objects, 'filter') as mock_filter:
+            # Mock the course_exists method
+            mock_filter.return_value.exists.return_value = False
+            self.assertTrue(self.course_1.setCourseNumber(301), "Valid course number failed to be set ")
+
+            # Mock the course_exists method to return True
+            mock_filter.return_value.exists.return_value = True
+            self.assertFalse(self.course_2.setCourseNumber(301), "Course number was incorrectly set, the number "
+                                                                 "is already in use within the same department")
+    def test_setCourseNumber_valid_zero(self):
+        self.assertTrue(self.course_1.setCourseNumber(0), "Valid course number (0) failed to be set")
+
+    def test_setCourseNumber_invalid_float(self):
+        self.assertFalse(self.course_1.setCourseNumber(123.45), "Invalid course number was incorrectly set (float)")
+
+    def test_setCourseNumber_valid_large_number(self):
+        self.assertFalse(self.course_1.setCourseNumber(10000), "Course number was set above max value")
+
+
+class TestSetInstructor(unittest.TestCase):
+    def setUp(self):
+        # Mock User objects
+        self.instructor = MagicMock(spec=User)
+        self.instructor.pk = 1
+        self.instructor.ROLL = "INSTRUCTOR"
+
+        self.ta = MagicMock(spec=User)
+        self.ta.pk = 2
+        self.ta.ROLL = "TA"
+
+        self.admin = MagicMock(spec=User)
+        self.admin.pk = 3
+        self.admin.ROLL = "ADMIN"
+
+        # Create Course object with mocked User
+        self.course = Course(
+            COURSE_NUMBER=101,
+            INSTRUCTOR=self.instructor,
+            COURSE_NAME='Introduction to Computer Science',
+            COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
+            SEMESTER='Fall 2023',
+            PREREQUISITES='None',
+            DEPARTMENT='Computer Science'
+        )
+
+    def test_setInstructor_valid(self):
+        self.assertTrue(self.course.setInstructor(self.instructor),
+                "Valid instructor failed to be set.")
+
+    def test_setInstructor_valid_null(self):
+        self.assertTrue(self.course.setInstructor(None),
+        "Valid null instructor failed to be set.")
+
+    def test_setInstructor_invalid_non_user_object(self):
+        non_user_object = "Not a User object"
+        self.assertFalse(self.course.setInstructor(non_user_object),
+        "Non-User object was incorrectly set as instructor.")
+    
+    def test_wrong_role_ta(self):
+        self.assertFalse(self.course.setInstructor(self.ta),
+        "User was incorrectly set as instructor.")
+
+    def test_wrong_role_admin(self):
+        self.assertFalse(self.course.setInstructor(self.admin),
+        "User was incorrectly set as instructor.")
+
+
+class TestSetCourseName(unittest.TestCase):
+    def setUp(self):
+        # Mock User object
+        self.instructor = MagicMock(spec=User)
+        self.instructor.pk = 1
+
+        # Create Course object with mocked User
+        self.course = Course(
+            COURSE_NUMBER=101,
+            INSTRUCTOR=self.instructor,
+            COURSE_NAME='Introduction to Computer Science',
+            COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
+            SEMESTER='Fall 2023',
+            PREREQUISITES='None',
+            DEPARTMENT='Computer Science'
+        )
+    
+    def test_setCourseName_valid(self):
+        self.assertTrue(self.course.setCourseName("Introduction to Computer Science"),
+        "Valid course name failed to be set.")
+
+    def test_setCourseName_valid_one_letter(self):
+        self.assertTrue(self.course.setCourseName("A"), "Valid course name with only one letter failed to be set.")
+
+    def test_setCourseName_valid_with_spaces(self):
+        self.assertTrue(self.course.setCourseName("Data Structures and Algorithms"),
+        "Valid course name with spaces failed to be set.")
+
+    def test_setCourseName_valid_mixed_case(self):
+        self.assertTrue(self.course.setCourseName("inTrOdUctIon tO CoMpUtEr ScIeNcE"),
+        "Valid course name with mixed case failed to be set.")
+
+    def test_setCourseName_invalid_empty_string(self):
+        self.assertFalse(self.course.setCourseName(""), "Empty course name was incorrectly set.")
+
+    def test_setCourseName_invalid_whitespace(self):
+        self.assertFalse(self.course.setCourseName(" "), "Course name with only whitespace was incorrectly set.")
+
+    def test_setCourseName_invalid_special_characters(self):
+        self.assertFalse(self.course.setCourseName("#$%@"), "Course name with special characters was incorrectly set.")
+
+    def test_setCourseName_invalid_numbers(self):
+        self.assertFalse(self.course.setCourseName("1234"), "Course name with numbers was incorrectly set.")
+
+    def test_setCourseName_valid_numbers_and_letters(self):
+        self.assertTrue(self.course.setCourseName("CS101"), "Valid course name with numbers and letters failed to be set.")
+
+    def test_setCourseName_valid_unicode(self):
+        self.assertTrue(self.course.setCourseName("Étude des systèmes informatiques"),
+        "Valid course name with unicode characters failed to be set.")
+
+    def test_setCourseName_invalid_spaces_before_after(self):
+        self.assertFalse(self.course.setCourseName(" Introduction to Computer Science "),
+        "Invalid course name with spaces before and after was set.")
+
+    def test_setCourseName_invalid_long_string(self):
+        self.assertFalse(self.course.setCourseName("a" * 256), "Course name that is too long was incorrectly set.")
+
+    def test_setCourseName_valid_hyphen(self):
+        self.assertTrue(self.course.setCourseName("Intro-to-Computer-Science"),
+        "Valid course name with hyphen failed to be set.")
+
+    def test_setCourseName_valid_apostrophe(self):
+        self.assertTrue(self.course.setCourseName("Computer Science's Foundation"),
+        "Valid course name with apostrophe failed to be set.")
+
+    def test_setCourseName_valid_with_colon(self):
+        self.assertTrue(self.course.setCourseName("Introduction: Basic Programming"),
+        "Valid course name with colon failed to be set.")
+
+    def test_setCourseName_valid_with_comma(self):
+        self.assertTrue(self.course.setCourseName("Computer Science, Introductory Course"),
+        "Valid course name with comma failed to be set.")
+
+    def test_setCourseName_invalid_null(self):
+        self.assertFalse(self.course.setCourseName(None), "Null course name was incorrectly set.")
+
+class TestSetCourseDescription(unittest.TestCase):
+    def setUp(self):
+        # Mock User object
+        self.instructor = MagicMock(spec=User)
+        self.instructor.pk = 1
+
+        # Create Course object with mocked User
+        self.course = Course(
+            COURSE_NUMBER=101,
+            INSTRUCTOR=self.instructor,
+            COURSE_NAME='Introduction to Computer Science',
+            COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
+            SEMESTER='Fall 2023',
+            PREREQUISITES='None',
+            DEPARTMENT='Computer Science'
+        )
+    
+    def test_setCourseDescription_valid(self):
+        new_description = "An updated course description."
+        self.assertTrue(self.course.setCourseDescription(new_description), "Valid course description failed to be set.")
+
+    def test_setCourseDescription_invalid_empty_string(self):
+        self.assertFalse(self.course.setCourseDescription(''), "Empty course description string was incorrectly set.")
+
+    def test_setCourseDescription_invalid_whitespace(self):
+        self.assertFalse(self.course.setCourseDescription('   '), "Course description with only whitespace was incorrectly set.")
+
+    def test_setCourseDescription_invalid_special_characters(self):
+        self.assertTrue(self.course.setCourseDescription('Introduction to CS!@#$%^&*'), "Valid course description with special characters failed to be set.")
+
+    def test_setCourseDescription_invalid_spaces_before_after(self):
+        new_description = "  An updated course description with spaces.  "
+        self.assertFalse(self.course.setCourseDescription(new_description), "Invalid course description with spaces before and after set.")
+
+    def test_setCourseDescription_valid_unicode(self):
+        self.assertTrue(self.course.setCourseDescription('Introduction to CS éàè'), "Valid course description with unicode characters failed to be set.")
+
+    def test_setCourseDescription_valid_with_spaces(self):
+        self.assertTrue(self.course.setCourseDescription("Intro to CS and software development"), "Valid course description with spaces failed to be set.")
+
+    def test_setCourseDescription_valid_with_hyphen(self):
+        self.assertTrue(self.course.setCourseDescription("Intro to CS - software development"), "Valid course description with hyphen failed to be set.")
+
+    def test_setCourseDescription_valid_with_apostrophe(self):
+        self.assertTrue(self.course.setCourseDescription("Intro to CS's concepts"), "Valid course description with apostrophe failed to be set.")
+
+    def test_setCourseDescription_invalid_numbers(self):
+        self.assertFalse(self.course.setCourseDescription("1234"), "Course description with numbers was incorrectly set.")
+
+    def test_setCourseDescription_invalid_combination(self):
+        self.assertFalse(self.course.setCourseDescription("Intro to CS 101"), "Course description with numbers and letters was incorrectly set.")
+
+    def test_setCourseDescription_valid_mixed_case(self):
+        self.assertTrue(self.course.setCourseDescription("iNtro to CoMPuTer sCienCe"), "Valid course description with mixed case failed to be set.")
+
+    def test_setCourseDescription_invalid_only_numbers(self):
+        self.assertFalse(self.course.setCourseDescription("1234"), "Course description with only numbers was incorrectly set.")
+    
+    def test_setCourseDescription_invalid_null(self):
+        self.assertFalse(self.course.setCourseDescription(None), "Null course description was incorrectly set.")
+
+class TestSetSemester(unittest.TestCase):
+    def setUp(self):
+        # Mock User object
+        self.instructor = MagicMock(spec=User)
+        self.instructor.pk = 1
+
+        # Create Course object with mocked User
+        self.course = Course(
+            COURSE_NUMBER=101,
+            INSTRUCTOR=self.instructor,
+            COURSE_NAME='Introduction to Computer Science',
+            COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
+            SEMESTER='Fall 2023',
+            PREREQUISITES='None',
+            DEPARTMENT='Computer Science'
+        )
+
+    def test_setSemester_valid(self):
+        self.assertTrue(self.course.setSemester('Spring 2023'), "Valid semester failed to be set.")
+
+    def test_setSemester_invalid_empty_string(self):
+        self.assertFalse(self.course.setSemester(''), "Empty semester string was incorrectly set.")
+
+    def test_setSemester_invalid_whitespace(self):
+        self.assertFalse(self.course.setSemester('   '), "Semester with only whitespace was incorrectly set.")
+
+    def test_setSemester_invalid_special_characters(self):
+        self.assertFalse(self.course.setSemester('#$%'), "Semester with special characters was incorrectly set.")
+
+    def test_setSemester_invalid_spaces_before_after(self):
+        self.assertFalse(self.course.setSemester('  Spring 2023  '), "Semester with spaces before and after was incorrectly set.")
+
+    def test_setSemester_invalid_unicode(self):
+        self.assertFalse(self.course.setSemester('Spring 2023é'), "Semester with unicode characters was incorrectly set.")
+
+    def test_setSemester_invalid_long_string(self):
+        self.assertFalse(self.course.setSemester('A' * 256), "Semester with too long string was incorrectly set.")
+
+    def test_setSemester_invalid_one_letter(self):
+        self.assertFalse(self.course.setSemester('A'), "Semester with only one letter was incorrectly set.")
+
+    def test_setSemester_invalid_numbers(self):
+        self.assertFalse(self.course.setSemester('123456'), "Semester with numbers was incorrectly set.")
+    
+    def test_setSemester_valid_mixed_case(self):
+        self.assertTrue(self.course.setSemester('SpRiNg 2023'), "Valid semester with mixed case season failed to be set.")
+
+    def test_setSemester_invalid_null(self):
+        self.assertFalse(self.course.setSemester(None), "Null semester was incorrectly set.")
+
+class TestSetPrerequisites(unittest.TestCase):
+    def setUp(self):
+        # Mock User object
+        self.instructor = MagicMock(spec=User)
+        self.instructor.pk = 1
+
+        # Create Course object with mocked User
+        self.course = Course(
+            COURSE_NUMBER=101,
+            INSTRUCTOR=self.instructor,
+            COURSE_NAME='Introduction to Computer Science',
+            COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
+            SEMESTER='Fall 2023',
+            PREREQUISITES='None',
+            DEPARTMENT='Computer Science'
+        )
+    
+    def test_setPrerequisites_valid(self):
+        self.assertTrue(self.course.setPrerequisites('CS100'), "Valid prerequisites failed to be set.")
+
+    def test_setPrerequisites_invalid_empty_string(self):
+        self.assertFalse(self.course.setPrerequisites(''), "Empty prerequisites string was incorrectly set.")
+
+    def test_setPrerequisites_invalid_whitespace(self):
+        self.assertFalse(self.course.setPrerequisites('   '), "Prerequisites with only whitespace was incorrectly set.")
+
+    def test_setPrerequisites_invalid_special_characters(self):
+        self.assertFalse(self.course.setPrerequisites('#$%'), "Prerequisites with special characters was incorrectly set.")
+
+    def test_setPrerequisites_invalid_spaces_before_after(self):
+        self.assertFalse(self.course.setPrerequisites('  CS100  '), "Prerequisites with spaces before and after was incorrectly set.")
+
+    def test_setPrerequisites_invalid_unicode(self):
+        self.assertFalse(self.course.setPrerequisites('CS100é'), "Prerequisites with unicode characters was incorrectly set.")
+
+    def test_setPrerequisites_invalid_long_string(self):
+        self.assertFalse(self.course.setPrerequisites('A' * 256), "Prerequisites with too long string was incorrectly set.")
+
+    def test_setPrerequisites_invalid_one_letter(self):
+        self.assertFalse(self.course.setPrerequisites('A'), "Prerequisites with only one letter was incorrectly set.")
+
+    def test_setPrerequisites_valid_multiple_courses(self):
+        self.assertTrue(self.course.setPrerequisites('CS100, CS101'), "Valid multiple prerequisites failed to be set.")
+    
+    def test_setPrerequisites_invalid_numbers(self):
+        self.assertFalse(self.course.setPrerequisites('123456'), "Prerequisites with numbers was incorrectly set.")
+    
+    def test_setSemester_valid_mixed_case(self):
+        self.assertTrue(self.course.setPrerequisites('Cs100'), "Valid semester with mixed case prerequisite failed to be set.")
+    
+    def test_setPrerequisites_invalid_null(self):
+        self.assertFalse(self.course.setPrerequisites(None), "Null prerequisites was incorrectly set.")
+
+
+class TestSetDepartment(unittest.TestCase):
+    def setUp(self):
+        # Mock User object
+        self.instructor = MagicMock(spec=User)
+        self.instructor.pk = 1
+
+        # Create Course object with mocked User
+        self.course = Course(
+            COURSE_NUMBER=101,
+            INSTRUCTOR=self.instructor,
+            COURSE_NAME='Introduction to Computer Science',
+            COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
+            SEMESTER='Fall 2023',
+            PREREQUISITES='None',
+            DEPARTMENT='Computer Science'
+        )
+    
+    def test_setDepartment_valid(self):
+        self.assertTrue(self.course.setDepartment('Mathematics'), "Valid department failed to be set.")
+
+    def test_setDepartment_invalid_empty_string(self):
+        self.assertFalse(self.course.setDepartment(''), "Empty department string was incorrectly set.")
+
+    def test_setDepartment_invalid_whitespace(self):
+        self.assertFalse(self.course.setDepartment('   '), "Department with only whitespace was incorrectly set.")
+
+    def test_setDepartment_invalid_numbers(self):
+        self.assertFalse(self.course.setDepartment('1234'), "Department with numbers was incorrectly set.")
+
+    def test_setDepartment_invalid_special_characters(self):
+        self.assertFalse(self.course.setDepartment('#$%'), "Department with special characters was incorrectly set.")
+
+    def test_setDepartment_invalid_spaces_before_after(self):
+        self.assertFalse(self.course.setDepartment('  Computer Science  '), "Department with spaces before and after was incorrectly set.")
+
+    def test_setDepartment_invalid_combination(self):
+        self.assertFalse(self.course.setDepartment('Math123'), "Department with letters and numbers was incorrectly set.")
+
+    def test_setDepartment_invalid_unicode(self):
+        self.assertFalse(self.course.setDepartment('Mathématics'), "Department with unicode characters was incorrectly set.")
+
+    def test_setDepartment_invalid_long_string(self):
+        self.assertFalse(self.course.setDepartment('A' * 256), "Department with too long string was incorrectly set.")
+
+    def test_setDepartment_invalid_one_letter(self):
+        self.assertFalse(self.course.setDepartment('A'), "Department with only one letter was incorrectly set.")
+
+    def test_setDepartment_invalid_null(self):
+        self.assertFalse(self.course.setDepartment(None), "Null department was incorrectly set.")
