@@ -10,6 +10,21 @@ django.setup()
 
 from TA_Scheduling_App.models.User import User
 
+class TestUserInit(unittest.TestCase):
+    def setUp(self):
+        self.valid_user = User(ROLL='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
+                               PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
+
+    def test_init_valid_input(self):
+        try:
+            User(ROLL='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
+                 PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
+        except ValueError:
+            self.fail("User init failed with valid input values.")
+
+#     Please note setters will handle all additional checking on initialization.
+
+
 class TestSetRoll(unittest.TestCase):
     def setUp(self):
         self.user = User(ROLL='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
@@ -62,7 +77,7 @@ class TestSetRoll(unittest.TestCase):
 
     def test_setRoll_invalid_null(self):
         self.assertFalse(self.user.setRoll(None), "Null roll was incorrectly set.")
-        
+
 
 class TestSetFirstName(unittest.TestCase):
     def setUp(self):
@@ -179,7 +194,7 @@ class TestSetEmail(unittest.TestCase):
         self.user1 = User(ROLL='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
                          PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
 
-        self.user2 = User(ROLL='Professor', FIRST_NAME='John', LAST_NAME='Smith', EMAIL='john.smith@example.com',
+        self.user2 = User(ROLL='INSTRUCTOR', FIRST_NAME='John', LAST_NAME='Smith', EMAIL='john.smith@example.com',
                           PHONE_NUMBER='555-987-6543', ADDRESS='5678 Oak St', BIRTH_DATE='1980-01-15')
 
     def test_setEmail_valid(self):
