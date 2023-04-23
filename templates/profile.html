@@ -19,27 +19,27 @@
             {% csrf_token %}
             <label for="firstName">First Name</label>
             <br />
-            <input type="text" name="firstName" id="firstName" required>
+            <input class="form-control" type="text" name="firstName" id="firstName" value="{{ initial.FIRST_NAME }}" required>
 
             <label for="lastName">Last Name</label>
             <br />
-            <input type="text" name="lastName" id="lastName" required>
+            <input class="form-control" type="text" name="lastName" id="lastName" value="{{ initial.LAST_NAME }}" required>
 
             <label for="email">Email</label>
             <br />
-            <input type="email" name="email" id="email" required>
+            <input class="form-control" type="email" name="email" id="email" value="{{ initial.EMAIL }}" required>
 
             <label for="phoneNumber">Phone Number</label>
             <br />
-            <input type="tel" name="phoneNumber" id="phoneNumber" required>
+            <input class="form-control" type="tel" name="phoneNumber" id="phoneNumber" value="{{ initial.PHONE_NUMBER }}" required>
 
             <label for="address">Address</label>
             <br />
-            <input type="text" name="address" id="address" required>
+            <input class="form-control" type="text" name="address" id="address" value="{{ initial.ADDRESS }}" required>
 
             <label for="dateOfBirth">Date of Birth</label>
             <br />
-            <input type="date" name="dateOfBirth" id="dateOfBirth" required>
+            <input class="form-control" type="date" name="dateOfBirth" id="dateOfBirth" value="{{ initial_date }}" required>
 
             <button id="profile-submit" class="btn btn-primary" type="submit">Update Information</button>
         </form>
