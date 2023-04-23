@@ -10,9 +10,10 @@
 </head>
 <body>
     {% include 'partials/header.html' %}
-    <div class="">
-        <div class="main-container">
-            <button class="btn btn-primary assign-btn">Courses/ TA Assignments</button>
+    <div class="main-container">
+        <h1>Instructor Dashboard</h1>
+        <div class="dashboard-container">
+            <a href="{% url 'ta_assignments' %}"><button class="btn btn-primary">View Courses and Manage TA Assignments</button></a>
         </div>
     </div>
     {% include 'partials/footer.html' %}
