@@ -21,6 +21,40 @@ class User(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        passwordHash = kwargs.get('PASSWORD_HASH', None)
+
+        if passwordHash is not None:
+            if not isinstance(passwordHash, str):
+                 raise ValueError("Invalid password")
+        else:
+             # Prevent user from being saved to DB
+            passwordHash = None
+
+        if not self.setRole(kwargs.get('ROLE', None)):
+            raise ValueError("Invalid role")
+
+        if not self.setFirstName(kwargs.get('FIRST_NAME', None)):
+            raise ValueError("Invalid first name")
+
+        if not self.setLastName(kwargs.get('LAST_NAME', None)):
+            raise ValueError("Invalid last name")
+
+        if not self.setEmail(kwargs.get('EMAIL', None)):
+            raise ValueError("Invalid email")
+
+        if not self.setPasswordHash(passwordHash):
+            raise ValueError("Invalid password hash")
+
+        if not self.setPhoneNumber(kwargs.get('PHONE_NUMBER', None)):
+            raise ValueError("Invalid phone number")
+
+        if not self.setAddress(kwargs.get('ADDRESS', None)):
+            raise ValueError("Invalid address")
+
+        if not self.setBirthDate(kwargs.get('BIRTH_DATE', None)):
+            raise ValueError("Invalid birth date")
+        self.PASSWORD_HASH = passwordHash
+
     def setRole(self, role):
         if role in ["ADMIN", "INSTRUCTOR", "TA"]:
             self.role = role
