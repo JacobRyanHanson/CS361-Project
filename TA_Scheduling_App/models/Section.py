@@ -1,11 +1,17 @@
 import datetime
 import string
-
 from django.db import models
 from .Course import Course
+from abc import ABCMeta
+from ..interfaces.i_verification import IVerification
+from ..interfaces.i_string import IString
+from django.db.models.base import ModelBase
 
+# Class to resolve inheritance
+class ABCModelMeta(ABCMeta, ModelBase):
+    pass
 
-class Section(models.Model):
+class Section(IVerification, IString, models.Model, metaclass=ABCModelMeta):
     SECTION_ID = models.AutoField(primary_key=True)
     SECTION_NUMBER = models.IntegerField()
     COURSE = models.ForeignKey(Course, on_delete=models.CASCADE)

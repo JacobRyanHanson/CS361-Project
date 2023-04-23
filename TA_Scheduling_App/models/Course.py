@@ -1,8 +1,16 @@
 import string
 from django.db import models
 from .User import User
+from abc import ABCMeta
+from ..interfaces.i_verification import IVerification
+from ..interfaces.i_string import IString
+from django.db.models.base import ModelBase
 
-class Course(models.Model):
+# Class to resolve inheritance
+class ABCModelMeta(ABCMeta, ModelBase):
+    pass
+
+class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
     COURSE_ID = models.AutoField(primary_key=True)
     COURSE_NUMBER = models.IntegerField()
     INSTRUCTOR = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)

@@ -1,8 +1,15 @@
 import datetime
 from django.db import models
+from abc import ABCMeta
+from ..interfaces.i_string import IString
+from django.db.models.base import ModelBase
+
+# Class to resolve inheritance
+class ABCModelMeta(ABCMeta, ModelBase):
+    pass
 
 
-class User(models.Model):
+class User(IString, models.Model, metaclass=ABCModelMeta):
     USER_ID = models.AutoField(primary_key=True)
     ROLE = models.CharField(max_length=10, choices=(('ADMIN', 'Admin'), ('INSTRUCTOR', 'Instructor'), ('TA', 'Teaching Assistant')))
     FIRST_NAME = models.CharField(max_length=255)

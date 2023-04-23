@@ -1,8 +1,16 @@
 from django.db import models
 from .Course import Course
 from .User import User
+from abc import ABCMeta
+from ..interfaces.i_verification import IVerification
+from django.db.models.base import ModelBase
 
-class CourseAssignment(models.Model):
+# Class to resolve inheritance
+class ABCModelMeta(ABCMeta, ModelBase):
+    pass
+
+
+class CourseAssignment(IVerification, models.Model, metaclass=ABCModelMeta):
     COURSE_ASSIGNMENT_ID = models.AutoField(primary_key=True)
     COURSE = models.ForeignKey(Course, on_delete=models.CASCADE)
     TA = models.ForeignKey(User, on_delete=models.CASCADE)
