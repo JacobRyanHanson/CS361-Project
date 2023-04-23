@@ -2,6 +2,9 @@ from django.db import models
 from .Course_Assignment import CourseAssignment
 from .Section import Section
 
+# Used so that the constructor can distinguish between no input Null()
+# and 'None' given explicitly as input.
+from ..null import Null
 
 class SectionAssignment(models.Model):
     SECTION_ASSIGNMENT_ID = models.AutoField(primary_key=True)
@@ -11,18 +14,27 @@ class SectionAssignment(models.Model):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        course_assignment = kwargs.get('COURSE_ASSIGNMENT', None)
-        section = kwargs.get('SECTION', None)
+        courseAssignment = kwargs.get('COURSE_ASSIGNMENT', Null())
 
-        if course_assignment is None or not isinstance(course_assignment, CourseAssignment):
+        if courseAssignment is None or (not isinstance(courseAssignment, str) and not Null()):
             raise ValueError("Invalid course assignment")
 
-        if section is None or not isinstance(section, Section):
-            raise ValueError("Invalid section")
+        if courseAssignment is not Null():
+            self.COURSE_ASSIGNMENT = courseAssignment
 
-        if section.COURSE != course_assignment.COURSE:
+        section = kwargs.get('SECTION', Null())
+
+        if section is None or (not isinstance(section, str) and not Null()):
+            raise ValueError("Invalid course assignment")
+
+        if section is not Null():
+            self.SECTION = section
+
+        if section is not Null() and courseAssignment is not Null() and section.COURSE != courseAssignment.COURSE:
             raise ValueError("Section is not for the same course as the course assignment")
 
-        self.COURSE_ASSIGNMENT = course_assignment
-        self.SECTION = section
+
+
+
+
 

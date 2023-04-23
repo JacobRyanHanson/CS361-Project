@@ -7,6 +7,10 @@ from ..interfaces.i_verification import IVerification
 from ..interfaces.i_string import IString
 from django.db.models.base import ModelBase
 
+# Used so that the constructor can distinguish between no input Null()
+# and 'None' given explicitly as input.
+from ..null import Null
+
 # Class to resolve inheritance
 class ABCModelMeta(ABCMeta, ModelBase):
     pass
@@ -23,29 +27,33 @@ class Section(IVerification, IString, models.Model, metaclass=ABCModelMeta):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        course = kwargs.get('COURSE', None)
+        course = kwargs.get('COURSE', Null())
 
-        if course is None or not isinstance(course, Course):
+        if course is None or (not isinstance(course, Course) and not Null()):
             raise ValueError("Invalid course")
 
-        if not self.setSectionNumber(kwargs.get('SECTION_NUMBER', None)):
+        if course is not Null():
+            self.COURSE = course
+
+        if not self.setSectionNumber(kwargs.get('SECTION_NUMBER', Null())):
             raise ValueError("Invalid section number")
 
-        if not self.setBuilding(kwargs.get('BUILDING', None)):
+        if not self.setBuilding(kwargs.get('BUILDING', Null())):
             raise ValueError("Invalid building")
 
-        if not self.setRoomNumber(kwargs.get('ROOM_NUMBER', None)):
+        if not self.setRoomNumber(kwargs.get('ROOM_NUMBER', Null())):
             raise ValueError("Invalid room number")
 
-        if not self.setSectionStart(kwargs.get('SECTION_START', None)):
+        if not self.setSectionStart(kwargs.get('SECTION_START', Null())):
             raise ValueError("Invalid section start time")
 
-        if not self.setSectionEnd(kwargs.get('SECTION_END', None)):
+        if not self.setSectionEnd(kwargs.get('SECTION_END', Null())):
             raise ValueError("Invalid section end time")
 
-        self.COURSE = course
-
     def setSectionNumber(self, number):
+        if number is Null():
+            return True
+
         # Check if the input is an integer
         if not isinstance(number, int):
             return False
@@ -63,6 +71,9 @@ class Section(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         return True
 
     def setBuilding(self, building):
+        if building is Null():
+            return True
+
         building = self.checkString(building)
         if building is False:
             return False
@@ -71,6 +82,9 @@ class Section(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         return True
 
     def setRoomNumber(self, roomNumber):
+        if roomNumber is Null():
+            return True
+
         roomNumber = self.checkString(roomNumber, True, True, 10)
         if roomNumber is False:
             return False
@@ -79,6 +93,9 @@ class Section(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         return True
 
     def setSectionStart(self, startTime):
+        if startTime is Null():
+            return True
+
         if not isinstance(startTime, datetime.time):
             return False
 
@@ -90,6 +107,9 @@ class Section(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         return True
 
     def setSectionEnd(self, endTime):
+        if endTime is Null():
+            return True
+
         if not isinstance(endTime, datetime.time):
             return False
 

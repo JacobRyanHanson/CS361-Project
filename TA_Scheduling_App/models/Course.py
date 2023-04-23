@@ -6,6 +6,10 @@ from ..interfaces.i_verification import IVerification
 from ..interfaces.i_string import IString
 from django.db.models.base import ModelBase
 
+# Used so that the constructor can distinguish between no input Null()
+# and 'None' given explicitly as input.
+from ..null import Null
+
 # Class to resolve inheritance
 class ABCModelMeta(ABCMeta, ModelBase):
     pass
@@ -20,31 +24,43 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
     PREREQUISITES = models.CharField(max_length=255, null=True)
     DEPARTMENT = models.CharField(max_length=255)
 
+    # course = kwargs.get('COURSE', Null())
+    #
+    # if course is None or (not isinstance(course, Course) and not Null()):
+    #     raise ValueError("Invalid course")
+    #
+    # if course is not Null():
+    #     self.COURSE = course
+
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        if not self.setCourseNumber(kwargs.get('COURSE_NUMBER', None)):
+        if not self.setCourseNumber(kwargs.get('COURSE_NUMBER', Null())):
             raise ValueError("Invalid course number")
 
-        if not self.setInstructor(kwargs.get('INSTRUCTOR', None)):
+        if not self.setInstructor(kwargs.get('INSTRUCTOR', Null())):
             raise ValueError("Invalid instructor")
 
-        if not self.setCourseName(kwargs.get('COURSE_NAME', None)):
+        if not self.setCourseName(kwargs.get('COURSE_NAME', Null())):
             raise ValueError("Invalid course name")
 
-        if not self.setCourseDescription(kwargs.get('COURSE_DESCRIPTION', None)):
+        if not self.setCourseDescription(kwargs.get('COURSE_DESCRIPTION', Null())):
             raise ValueError("Invalid course description")
 
-        if not self.setSemester(kwargs.get('SEMESTER', None)):
+        if not self.setSemester(kwargs.get('SEMESTER', Null())):
             raise ValueError("Invalid semester")
 
-        if not self.setPrerequisites(kwargs.get('PREREQUISITES', None)):
+        if not self.setPrerequisites(kwargs.get('PREREQUISITES', Null())):
             raise ValueError("Invalid prerequisites")
 
-        if not self.setDepartment(kwargs.get('DEPARTMENT', None)):
+        if not self.setDepartment(kwargs.get('DEPARTMENT', Null())):
             raise ValueError("Invalid department")
 
     def setCourseNumber(self, number):
+        if number is Null():
+            return True
+
         # Check if the input is an integer
         if not isinstance(number, int):
             return False
@@ -62,6 +78,9 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         return True
 
     def setInstructor(self, instructor):
+        if instructor is Null():
+            return True
+
         # Allow setting instructor to None
         if instructor is not None and not isinstance(instructor, User):
             return False
@@ -75,6 +94,9 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         return True
 
     def setCourseName(self, courseName):
+        if courseName is Null():
+            return True
+
         courseName = self.checkString(courseName)
         if courseName is False:
             return False
@@ -83,6 +105,9 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         return True
 
     def setCourseDescription(self, courseDescription):
+        if courseDescription is Null():
+            return True
+
         courseDescription = self.checkString(courseDescription)
         if courseDescription is False:
             return False
@@ -91,6 +116,9 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         return True
 
     def setSemester(self, semester):
+        if semester is Null():
+            return True
+
         if semester is None or not isinstance(semester, str):
             return False
 
@@ -117,6 +145,9 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         return True
 
     def setPrerequisites(self, prerequisites):
+        if prerequisites is Null():
+            return True
+
         prerequisites = self.checkString(prerequisites, True, True)
         if prerequisites is False:
             return False
@@ -125,6 +156,9 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         return True
 
     def setDepartment(self, department):
+        if department is Null():
+            return True
+
         department = self.checkString(department, False)
         if department is False:
             return False

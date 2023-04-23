@@ -7,6 +7,11 @@ from abc import ABCMeta
 from ..interfaces.i_string import IString
 from django.db.models.base import ModelBase
 
+# Used so that the constructor can distinguish between no input Null()
+# and 'None' given explicitly as input.
+from ..null import Null
+
+
 # Class to resolve inheritance
 class ABCModelMeta(ABCMeta, ModelBase):
     pass
@@ -14,8 +19,7 @@ class ABCModelMeta(ABCMeta, ModelBase):
 
 class User(IString, models.Model, metaclass=ABCModelMeta):
     USER_ID = models.AutoField(primary_key=True)
-    ROLE = models.CharField(max_length=10,
-                            choices=(('ADMIN', 'Admin'), ('INSTRUCTOR', 'Instructor'), ('TA', 'Teaching Assistant')))
+    ROLE = models.CharField(max_length=10)
     FIRST_NAME = models.CharField(max_length=255)
     LAST_NAME = models.CharField(max_length=255)
     EMAIL = models.EmailField(unique=True)
@@ -27,45 +31,48 @@ class User(IString, models.Model, metaclass=ABCModelMeta):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        passwordHash = kwargs.get('PASSWORD_HASH', None)
+        passwordHash = kwargs.get('PASSWORD_HASH', Null())
 
-        if passwordHash is not None:
-            if not isinstance(passwordHash, str):
-                 raise ValueError("Invalid password")
-        else:
-             # Prevent user from being saved to DB
-            passwordHash = None
+        if passwordHash is None or (not isinstance(passwordHash, str) and not Null()):
+            raise ValueError("Invalid password")
 
-        if not self.setRole(kwargs.get('ROLE', None)):
+        if passwordHash is not Null():
+            self.PASSWORD_HASH = passwordHash
+
+        if not self.setRole(kwargs.get('ROLE', Null())):
             raise ValueError("Invalid role")
 
-        if not self.setFirstName(kwargs.get('FIRST_NAME', None)):
+        if not self.setFirstName(kwargs.get('FIRST_NAME', Null())):
             raise ValueError("Invalid first name")
 
-        if not self.setLastName(kwargs.get('LAST_NAME', None)):
+        if not self.setLastName(kwargs.get('LAST_NAME', Null())):
             raise ValueError("Invalid last name")
 
-        if not self.setEmail(kwargs.get('EMAIL', None)):
+        if not self.setEmail(kwargs.get('EMAIL', Null())):
             raise ValueError("Invalid email")
 
-        if not self.setPhoneNumber(kwargs.get('PHONE_NUMBER', None)):
+        if not self.setPhoneNumber(kwargs.get('PHONE_NUMBER', Null())):
             raise ValueError("Invalid phone number")
 
-        if not self.setAddress(kwargs.get('ADDRESS', None)):
+        if not self.setAddress(kwargs.get('ADDRESS', Null())):
             raise ValueError("Invalid address")
 
-        if not self.setBirthDate(kwargs.get('BIRTH_DATE', None)):
+        if not self.setBirthDate(kwargs.get('BIRTH_DATE', Null())):
             raise ValueError("Invalid birth date")
 
-        self.PASSWORD_HASH = passwordHash
-
     def setRole(self, role):
+        if role is Null():
+            return True
+
         if role in ["ADMIN", "INSTRUCTOR", "TA"]:
             self.ROLE = role
             return True
         return False
 
     def setFirstName(self, firstName):
+        if firstName is Null():
+            return True
+
         firstName = self.checkString(firstName, False)
         if firstName is False:
             return False
@@ -74,6 +81,9 @@ class User(IString, models.Model, metaclass=ABCModelMeta):
         return True
 
     def setLastName(self, lastName):
+        if lastName is Null():
+            return True
+
         lastName = self.checkString(lastName, False)
         if lastName is False:
             return False
@@ -82,6 +92,9 @@ class User(IString, models.Model, metaclass=ABCModelMeta):
         return True
 
     def setEmail(self, email):
+        if email is Null():
+            return True
+
         # Regular expression for email validation with TLD
         pattern = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$'
 
@@ -97,6 +110,9 @@ class User(IString, models.Model, metaclass=ABCModelMeta):
         return True
 
     def setPhoneNumber(self, phoneNumber):
+        if phoneNumber is Null():
+            return True
+
         # This pattern matches phone numbers in the format xxx-xxx-xxxx, xxx xxx xxxx, or xxxxxxxxxx
         pattern = r'^\d{3}[ -]?\d{3}[ -]?\d{4}$'
 
@@ -111,11 +127,14 @@ class User(IString, models.Model, metaclass=ABCModelMeta):
         self.PHONE_NUMBER = phoneNumber
         return True
 
-    def setAddress(self, new_address):
-        if new_address is None:
+    def setAddress(self, address):
+        if address is Null():
+            return True
+
+        if address is None:
             return False
 
-        new_address = new_address.strip()
+        new_address = address.strip()
 
         if not new_address:
             return False
@@ -133,6 +152,9 @@ class User(IString, models.Model, metaclass=ABCModelMeta):
         return True
 
     def setBirthDate(self, birthDate):
+        if birthDate is Null():
+            return True
+
         if not isinstance(birthDate, datetime.date):
             return False
 
