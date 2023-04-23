@@ -12,7 +12,7 @@ from TA_Scheduling_App.models.User import User
 class TestUserInit(unittest.TestCase):
     def test_init_valid_input(self):
         try:
-            User(ROLL='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
+            User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
                  PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
         except ValueError:
             self.fail("User init failed with valid input values.")
@@ -22,7 +22,7 @@ class TestUserInit(unittest.TestCase):
 
 class TestSetRole(unittest.TestCase):
     def setUp(self):
-        self.user = User(ROLL='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
+        self.user = User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
                          PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
 
     def test_setRole_valid_admin(self):
@@ -76,7 +76,7 @@ class TestSetRole(unittest.TestCase):
 
 class TestSetFirstName(unittest.TestCase):
     def setUp(self):
-        self.user = User(ROLL='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
+        self.user = User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
                          PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
 
     def test_setFirstName_valid(self):
@@ -131,7 +131,7 @@ class TestSetFirstName(unittest.TestCase):
 
 class TestSetLastName(unittest.TestCase):
     def setUp(self):
-        self.user = User(ROLL='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
+        self.user = User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
                          PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
 
     def test_setLastName_valid(self):
@@ -186,10 +186,10 @@ class TestSetLastName(unittest.TestCase):
 
 class TestSetEmail(unittest.TestCase):
     def setUp(self):
-        self.user1 = User(ROLL='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
+        self.user1 = User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
                          PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
 
-        self.user2 = User(ROLL='INSTRUCTOR', FIRST_NAME='John', LAST_NAME='Smith', EMAIL='john.smith@example.com',
+        self.user2 = User(ROLE='INSTRUCTOR', FIRST_NAME='John', LAST_NAME='Smith', EMAIL='john.smith@example.com',
                           PHONE_NUMBER='555-987-6543', ADDRESS='5678 Oak St', BIRTH_DATE='1980-01-15')
 
     def test_setEmail_valid(self):
@@ -264,7 +264,7 @@ class TestSetEmail(unittest.TestCase):
 
 class TestSetPhoneNumber(unittest.TestCase):
     def setUp(self):
-        self.user = User(ROLL='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
+        self.user = User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
                          PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
 
     def test_setPhoneNumber_valid(self):
@@ -345,7 +345,7 @@ class TestSetPhoneNumber(unittest.TestCase):
 
 class TestSetAddress(unittest.TestCase):
     def setUp(self):
-        self.user = User(ROLL='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
+        self.user = User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
                           PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
 
     def test_setAddress_valid(self):
@@ -403,7 +403,7 @@ class TestSetAddress(unittest.TestCase):
 
 class TestSetBirthDate(unittest.TestCase):
     def setUp(self):
-        self.user = User(ROLL='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
+        self.user = User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
                           PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
 
     def test_setBirthDate_valid(self):

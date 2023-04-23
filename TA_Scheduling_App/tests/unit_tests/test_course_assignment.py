@@ -21,19 +21,19 @@ class TestCourseAssignmentInit(unittest.TestCase):
         # Mock User objects
         self.ta = MagicMock(spec=User)
         self.ta.pk = 1
-        self.ta.ROLL = "TA"
+        self.ta.ROLE = "TA"
         self.ta._state = MagicMock()
         self.ta._state.db = 'default'
 
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 2
-        self.instructor.ROLL = "INSTRUCTOR"
+        self.instructor.ROLE = "INSTRUCTOR"
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
         self.admin = MagicMock(spec=User)
         self.admin.pk = 3
-        self.admin.ROLL = "ADMIN"
+        self.admin.ROLE = "ADMIN"
         self.admin._state = MagicMock()
         self.admin._state.db = 'default'
 
@@ -78,7 +78,7 @@ class TestCourseAssignmentSetGrader(unittest.TestCase):
         # Mock User object
         self.ta = MagicMock(spec=User)
         self.ta.pk = 1
-        self.ta.ROLL = "TA"
+        self.ta.ROLE = "TA"
         self.ta._state = MagicMock()
         self.ta._state.db = 'default'
 

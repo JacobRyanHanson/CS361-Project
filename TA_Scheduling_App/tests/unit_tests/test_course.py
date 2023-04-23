@@ -15,7 +15,7 @@ class TestCourseInit(unittest.TestCase):
         # Mock User object
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 1
-        self.instructor.ROLL = "INSTRUCTOR"
+        self.instructor.ROLE = "INSTRUCTOR"
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
     
@@ -39,7 +39,7 @@ class TestSetCourseNumber(unittest.TestCase):
         # Mock User object
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 1
-        self.instructor.ROLL = "INSTRUCTOR"
+        self.instructor.ROLE = "INSTRUCTOR"
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
@@ -47,7 +47,7 @@ class TestSetCourseNumber(unittest.TestCase):
         with patch.object(Course, 'checkDuplicate', return_value=False):
             # Create Course object with mocked User
             self.course_1 = Course(
-                COURSE_NUMBER=101,
+                COURSE_NUMBER=901,
                 INSTRUCTOR=self.instructor,
                 COURSE_NAME='Introduction to Computer Science',
                 COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
@@ -93,19 +93,19 @@ class TestSetInstructor(unittest.TestCase):
         # Mock User objects
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 1
-        self.instructor.ROLL = "INSTRUCTOR"
+        self.instructor.ROLE = "INSTRUCTOR"
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
         self.ta = MagicMock(spec=User)
         self.ta.pk = 2
-        self.ta.ROLL = "TA"
+        self.ta.ROLE = "TA"
         self.ta._state = MagicMock()
         self.ta._state.db = 'default'
 
         self.admin = MagicMock(spec=User)
         self.admin.pk = 3
-        self.admin.ROLL = "ADMIN"
+        self.admin.ROLE = "ADMIN"
         self.admin._state = MagicMock()
         self.admin._state.db = 'default'
 
@@ -149,7 +149,7 @@ class TestSetCourseName(unittest.TestCase):
         # Mock User object
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 1
-        self.instructor.ROLL = "INSTRUCTOR"
+        self.instructor.ROLE = "INSTRUCTOR"
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
@@ -228,7 +228,7 @@ class TestSetCourseDescription(unittest.TestCase):
         # Mock User object
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 1
-        self.instructor.ROLL = "INSTRUCTOR"
+        self.instructor.ROLE = "INSTRUCTOR"
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
@@ -294,7 +294,7 @@ class TestSetSemester(unittest.TestCase):
         # Mock User object
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 1
-        self.instructor.ROLL = "INSTRUCTOR"
+        self.instructor.ROLE = "INSTRUCTOR"
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
@@ -346,7 +346,7 @@ class TestSetPrerequisites(unittest.TestCase):
         # Mock User object
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 1
-        self.instructor.ROLL = "INSTRUCTOR"
+        self.instructor.ROLE = "INSTRUCTOR"
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
@@ -366,11 +366,11 @@ class TestSetPrerequisites(unittest.TestCase):
     def test_setPrerequisites_valid(self):
         self.assertTrue(self.course.setPrerequisites('CS100'), "Valid prerequisites failed to be set.")
 
-    def test_setPrerequisites_invalid_empty_string(self):
-        self.assertFalse(self.course.setPrerequisites(''), "Empty prerequisites string was incorrectly set.")
+    def test_setPrerequisites_valid_empty_string(self):
+        self.assertTrue(self.course.setPrerequisites(''), "Empty prerequisites string failed to be set.")
 
-    def test_setPrerequisites_invalid_whitespace(self):
-        self.assertFalse(self.course.setPrerequisites('   '), "Prerequisites with only whitespace was incorrectly set.")
+    def test_setPrerequisites_valid_whitespace(self):
+        self.assertTrue(self.course.setPrerequisites('   '), "Prerequisites with only whitespace failed to be set.")
 
     def test_setPrerequisites_invalid_special_characters(self):
         self.assertFalse(self.course.setPrerequisites('#$%'), "Prerequisites with special characters was incorrectly set.")
@@ -393,8 +393,8 @@ class TestSetPrerequisites(unittest.TestCase):
     def test_setSemester_valid_mixed_case(self):
         self.assertTrue(self.course.setPrerequisites('Cs100'), "Valid semester with mixed case prerequisite failed to be set.")
     
-    def test_setPrerequisites_invalid_null(self):
-        self.assertFalse(self.course.setPrerequisites(None), "Null prerequisites was incorrectly set.")
+    def test_setPrerequisites_valid_null(self):
+        self.assertTrue(self.course.setPrerequisites(None), "Null prerequisites failed to be set.")
 
 
 class TestSetDepartment(unittest.TestCase):
@@ -402,7 +402,7 @@ class TestSetDepartment(unittest.TestCase):
         # Mock User object
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 1
-        self.instructor.ROLL = "INSTRUCTOR"
+        self.instructor.ROLE = "INSTRUCTOR"
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 

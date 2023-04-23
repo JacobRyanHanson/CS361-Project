@@ -17,7 +17,7 @@ class CourseAssignment(models.Model):
         if course is None or not isinstance(course, Course):
             raise ValueError("Invalid course")
 
-        if ta is None or not isinstance(ta, User) or ta.ROLL != "TA":
+        if ta is None or not isinstance(ta, User) or ta.ROLE != "TA":
             raise ValueError("Invalid TA")
 
         if not self.setGrader(kwargs.get('IS_GRADER', None)):
@@ -30,7 +30,6 @@ class CourseAssignment(models.Model):
         # Set COURSE and TA attributes directly
         self.COURSE = course
         self.TA = ta
-
 
     def setGrader(self, isGrader):
         if isinstance(isGrader, bool):

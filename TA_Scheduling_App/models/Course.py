@@ -9,7 +9,7 @@ class Course(models.Model):
     COURSE_NAME = models.CharField(max_length=255)
     COURSE_DESCRIPTION = models.TextField()
     SEMESTER = models.CharField(max_length=255)
-    PREREQUISITES = models.CharField(max_length=255)
+    PREREQUISITES = models.CharField(max_length=255, null=True)
     DEPARTMENT = models.CharField(max_length=255)
 
     def __init__(self, *args, **kwargs):
@@ -59,7 +59,7 @@ class Course(models.Model):
             return False
 
         # Check that instructor has the INSTRUCTOR role
-        if instructor is not None and instructor.ROLL != "INSTRUCTOR":
+        if instructor is not None and instructor.ROLE != "INSTRUCTOR":
             return False
 
         # Set the instructor for the course
@@ -109,7 +109,7 @@ class Course(models.Model):
         return True
 
     def setPrerequisites(self, prerequisites):
-        prerequisites = self.checkString(prerequisites)
+        prerequisites = self.checkString(prerequisites, True, True)
         if prerequisites is False:
             return False
 
@@ -124,9 +124,13 @@ class Course(models.Model):
         self.DEPARTMENT = department
         return True
 
-    def checkString(self, value, allow_numeric=True):
-        if value is None or not isinstance(value, str) or not value.strip():
+    def checkString(self, value, allowPartialNumeric=True, allowEmpty=False):
+        if (value is None or not isinstance(value, str) or not value.strip()) and not allowEmpty:
             return False
+
+        # For empty strings, return True if they are allowed
+        if allowEmpty and (value is None or not value.strip()):
+            return True
 
         # Trim whitespace from beginning and end of string
         value = value.strip()
@@ -140,7 +144,7 @@ class Course(models.Model):
             return False
 
         # Check that string contains only alphanumeric characters, spaces, and certain punctuation marks
-        allowed_chars = set(string.ascii_letters + (string.digits if allow_numeric else "") + " -'.:,")
+        allowed_chars = set(string.ascii_letters + (string.digits if allowPartialNumeric else "") + " -'.:,")
         if not all(c in allowed_chars for c in value):
             return False
 

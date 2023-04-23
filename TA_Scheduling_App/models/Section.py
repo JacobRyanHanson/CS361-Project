@@ -1,3 +1,6 @@
+import datetime
+import string
+
 from django.db import models
 from .Course import Course
 
@@ -10,4 +13,88 @@ class Section(models.Model):
     ROOM_NUMBER = models.CharField(max_length=10)
     SECTION_START = models.TimeField()
     SECTION_END = models.TimeField()
+
+    def setSectionNumber(self, number):
+        # Check if the input is an integer
+        if not isinstance(number, int):
+            return False
+
+        # Check if the input is negative or above the max value
+        if number < 0 or number > 9999:
+            return False
+
+        # Check for duplicate section number
+        if self.checkDuplicate(number):
+            return False
+
+        # If all checks pass, set the section number
+        self.SECTION_NUMBER = number
+        return True
+
+    def setBuilding(self, building):
+        building = self.checkString(building)
+        if building is False:
+            return False
+
+        self.ROOM_NUMBER = building
+        return True
+
+    def setRoomNumber(self, roomNumber):
+        roomNumber = self.checkString(roomNumber, True, True, 10)
+        if roomNumber is False:
+            return False
+
+        self.ROOM_NUMBER = roomNumber
+        return True
+
+    def setSectionStart(self, startTime):
+        if not isinstance(startTime, datetime.time):
+            return False
+
+        # Check that start_time is between midnight and 23:59
+        if not (datetime.time(0, 0) <= startTime <= datetime.time(23, 59)):
+            raise ValueError("Invalid start time")
+
+        self.SECTION_START = startTime
+        return True
+
+    def setSectionEnd(self, endTime):
+        if not isinstance(endTime, datetime.time):
+            return False
+
+        if endTime <= self.SECTION_START:
+            return False
+
+        if endTime.hour >= 24 or endTime.minute >= 60 or endTime.second >= 60:
+            raise ValueError("Invalid end time")
+
+        self.SECTION_END = endTime
+        return True
+
+    def checkString(self, value, allowPartialNumeric=True, allowAllNumeric=False, max_length=255):
+        if value is None or not isinstance(value, str) or not value.strip():
+            return False
+
+        # Trim whitespace from beginning and end of string
+        value = value.strip()
+
+        # Check that string is not too long
+        if len(value) > max_length:
+            return False
+
+        # Ensure the string is not completely numeric
+        if value.isdigit() and not allowAllNumeric:
+            return False
+
+        # Check that string contains only alphanumeric characters, spaces, and certain punctuation marks
+        allowed_chars = set(string.ascii_letters + (string.digits if allowPartialNumeric else "") + " -'.:,")
+        if not all(c in allowed_chars for c in value):
+            return False
+
+        return value
+
+    def checkDuplicate(self, number):
+        # Check if the section number is already in use within the same course
+        return Section.objects.filter(COURSE=self.COURSE, SECTION_NUMBER=number).exists()
+
 
