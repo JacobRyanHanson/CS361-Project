@@ -40,7 +40,7 @@ def insert_data():
     )
 
     user2 = User.objects.create(
-        ROLL='INSTRUCTOR',
+        ROLE='INSTRUCTOR',
         FIRST_NAME='Alice',
         LAST_NAME='Smith',
         EMAIL='alice.smith@example.com',
@@ -51,7 +51,7 @@ def insert_data():
     )
 
     user3 = User.objects.create(
-        ROLL='TA',
+        ROLE='TA',
         FIRST_NAME='Emma',
         LAST_NAME='Johnson',
         EMAIL='emma.johnson@example.com',
@@ -62,7 +62,7 @@ def insert_data():
     )
 
     user4 = User.objects.create(
-        ROLL='INSTRUCTOR',
+        ROLE='INSTRUCTOR',
         FIRST_NAME='Michael',
         LAST_NAME='Brown',
         EMAIL='michael.brown@example.com',
@@ -73,7 +73,7 @@ def insert_data():
     )
 
     user5 = User.objects.create(
-        ROLL='TA',
+        ROLE='TA',
         FIRST_NAME='Sophia',
         LAST_NAME='Williams',
         EMAIL='sophia.williams@example.com',

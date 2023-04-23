@@ -1,8 +1,21 @@
+import datetime
+import string
 from django.db import models
-from TA_Scheduling_App.models import Course
+from .Course import Course
+from abc import ABCMeta
+from ..interfaces.i_verification import IVerification
+from ..interfaces.i_string import IString
+from django.db.models.base import ModelBase
 
+# Used so that the constructor can distinguish between no input Null()
+# and 'None' given explicitly as input.
+from ..null import Null
 
-class Section(models.Model):
+# Class to resolve inheritance
+class ABCModelMeta(ABCMeta, ModelBase):
+    pass
+
+class Section(IVerification, IString, models.Model, metaclass=ABCModelMeta):
     SECTION_ID = models.AutoField(primary_key=True)
     SECTION_NUMBER = models.IntegerField()
     COURSE = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -11,66 +24,129 @@ class Section(models.Model):
     SECTION_START = models.TimeField()
     SECTION_END = models.TimeField()
 
-    def __init__(self, section_num, course, building, room_num, section_start, section_end):
-        self.set_section_num(section_num)
-        self.COURSE = course
-        self.set_building(building)
-        self.set_room_number(room_num)
-        self.set_section_start(section_start)
-        self.set_section_end(section_end)
-        self.save()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
-    def get_section(section_id):
-        return Section.objects.get(section_id=section_id)
+        course = kwargs.get('COURSE', Null())
 
-    def get_section_num(self):
-        return self.SECTION_NUMBER
+        if course is None or (not isinstance(course, Course) and not Null()):
+            raise ValueError("Invalid course")
 
-    def set_section_num(self, new_section_num):
-        if new_section_num is None:
-            raise Exception("Section number is null")
-        elif not new_section_num.isdigit():
-            raise Exception("Section number not a number")
-        elif new_section_num < 0 or new_section_num > 9999:
-            raise Exception("Section number too large or small")
-        else:
-            self.SECTION_NUMBER = new_section_num
+        if course is not Null():
+            self.COURSE = course
 
-    def get_course(self):
-        return self.COURSE
+        if not self.setSectionNumber(kwargs.get('SECTION_NUMBER', Null())):
+            raise ValueError("Invalid section number")
 
-    def get_building(self):
-        return self.BUILDING
+        if not self.setBuilding(kwargs.get('BUILDING', Null())):
+            raise ValueError("Invalid building")
 
-    def set_building(self, new_building):
-        if new_building is None:
-            raise Exception("new building can't be null")
-        else:
-            self.BUILDING = new_building
+        if not self.setRoomNumber(kwargs.get('ROOM_NUMBER', Null())):
+            raise ValueError("Invalid room number")
 
-    def get_room_number(self):
-        return self.room_number
+        if not self.setSectionStart(kwargs.get('SECTION_START', Null())):
+            raise ValueError("Invalid section start time")
 
-    def set_room_number(self, new_room_number):
-        if new_room_number is None:
-            raise Exception("New room number can't be null")
-        else:
-            self.room_number = new_room_number
+        if not self.setSectionEnd(kwargs.get('SECTION_END', Null())):
+            raise ValueError("Invalid section end time")
 
-    def get_section_start(self):
-        return self.SECTION_START
+    def setSectionNumber(self, number):
+        if number is Null():
+            return True
 
-    def set_section_start(self, new_section_start):
-        if new_section_start is None:
-            raise Exception("Start time not null")
-        else:
-            self.SECTION_START = new_section_start
+        # Check if the input is an integer
+        if not isinstance(number, int):
+            return False
 
-    def get_section_end(self):
-        return self.SECTION_END
+        # Check if the input is negative or above the max value
+        if number < 0 or number > 9999:
+            return False
 
-    def set_section_end(self, new_section_end):
-        if new_section_end is None:
-            raise Exception("Start time not null")
-        else:
-            self.SECTION_END = new_section_end
+        # Check for duplicate section number
+        if self.checkDuplicate(number):
+            return False
+
+        # If all checks pass, set the section number
+        self.SECTION_NUMBER = number
+        return True
+
+    def setBuilding(self, building):
+        if building is Null():
+            return True
+
+        building = self.checkString(building)
+        if building is False:
+            return False
+
+        self.ROOM_NUMBER = building
+        return True
+
+    def setRoomNumber(self, roomNumber):
+        if roomNumber is Null():
+            return True
+
+        roomNumber = self.checkString(roomNumber, True, True, 10)
+        if roomNumber is False:
+            return False
+
+        self.ROOM_NUMBER = roomNumber
+        return True
+
+    def setSectionStart(self, startTime):
+        if startTime is Null():
+            return True
+
+        if not isinstance(startTime, datetime.time):
+            return False
+
+        # Check that start_time is between midnight and 23:59
+        if not (datetime.time(0, 0) <= startTime <= datetime.time(23, 59)):
+            raise ValueError("Invalid start time")
+
+        self.SECTION_START = startTime
+        return True
+
+    def setSectionEnd(self, endTime):
+        if endTime is Null():
+            return True
+
+        if not isinstance(endTime, datetime.time):
+            return False
+
+        if endTime <= self.SECTION_START:
+            return False
+
+        if endTime.hour >= 24 or endTime.minute >= 60 or endTime.second >= 60:
+            raise ValueError("Invalid end time")
+
+        self.SECTION_END = endTime
+        return True
+
+    # Tested in setters
+    def checkString(self, value, allowPartialNumeric=True, allowAllNumeric=False, maxLength=255):
+        if value is None or not isinstance(value, str) or not value.strip():
+            return False
+
+        # Trim whitespace from beginning and end of string
+        value = value.strip()
+
+        # Check that string is not too long
+        if len(value) > maxLength:
+            return False
+
+        # Ensure the string is not completely numeric
+        if value.isdigit() and not allowAllNumeric:
+            return False
+
+        # Check that string contains only alphanumeric characters, spaces, and certain punctuation marks
+        allowed_chars = set(string.ascii_letters + (string.digits if allowPartialNumeric else "") + " -'.:,")
+        if not all(c in allowed_chars for c in value):
+            return False
+
+        return value
+
+    def checkDuplicate(self, number):
+        # Check if the section number is already in use within the same course
+        return Section.objects.filter(COURSE=self.COURSE, SECTION_NUMBER=number).exists()
+
+
