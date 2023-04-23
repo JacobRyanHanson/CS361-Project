@@ -11,6 +11,7 @@
 <body>
 
 {% include 'partials/header.html' %}
+{% load formatting_tags %}
 <div class="main-container">
     <p id="profile-header">Profile/Contact Information</p>
     <div class="profile-form">
@@ -39,7 +40,7 @@
 
             <label for="dateOfBirth">Date of Birth</label>
             <br />
-            <input class="form-control" type="date" name="dateOfBirth" id="dateOfBirth" value="{{ initial_date }}" required>
+            <input class="form-control" type="date" name="dateOfBirth" id="dateOfBirth" value="{{ initial.BIRTH_DATE|html_date }}" required>
 
             <button id="profile-submit" class="btn btn-primary" type="submit">Update Information</button>
         </form>
