@@ -24,15 +24,6 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
     PREREQUISITES = models.CharField(max_length=255, null=True)
     DEPARTMENT = models.CharField(max_length=255)
 
-    # course = kwargs.get('COURSE', Null())
-    #
-    # if course is None or (not isinstance(course, Course) and not Null()):
-    #     raise ValueError("Invalid course")
-    #
-    # if course is not Null():
-    #     self.COURSE = course
-
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
