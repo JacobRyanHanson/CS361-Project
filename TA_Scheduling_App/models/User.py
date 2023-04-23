@@ -9,7 +9,7 @@ from django.db.models.base import ModelBase
 
 # Used so that the constructor can distinguish between no input Null()
 # and 'None' given explicitly as input.
-from ..null import Null
+from TA_Scheduling_App.utils.null import Null
 
 
 # Class to resolve inheritance

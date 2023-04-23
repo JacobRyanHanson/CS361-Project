@@ -4,7 +4,7 @@ from .Section import Section
 
 # Used so that the constructor can distinguish between no input Null()
 # and 'None' given explicitly as input.
-from ..null import Null
+from TA_Scheduling_App.utils.null import Null
 
 class SectionAssignment(models.Model):
     SECTION_ASSIGNMENT_ID = models.AutoField(primary_key=True)
