@@ -45,9 +45,8 @@ class Course(models.Model):
         if number < 0 or number > 9999:
             return False
 
-        # Check if the course number is already in use within the same department
-        course_exists = Course.objects.filter(DEPARTMENT=self.DEPARTMENT, COURSE_NUMBER=number).exists()
-        if course_exists:
+        # Check for duplicate course number
+        if self.checkDuplicate(number):
             return False
 
         # If all checks pass, set the course number
@@ -146,5 +145,9 @@ class Course(models.Model):
             return False
 
         return value
+
+    def checkDuplicate(self, number):
+        # Check if the course number is already in use within the same department
+        return Course.objects.filter(DEPARTMENT=self.DEPARTMENT, COURSE_NUMBER=number).exists()
 
 

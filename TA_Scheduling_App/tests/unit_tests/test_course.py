@@ -1,9 +1,7 @@
 import os
 import django
 import unittest
-from unittest.mock import MagicMock, Mock, patch
-from django.test import TestCase, override_settings
-from django.db.models import Value
+from unittest.mock import MagicMock, patch
 
 # Set up the Django settings module for testing
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TA_Scheduling_Project.settings')
@@ -23,8 +21,8 @@ class TestCourseInit(unittest.TestCase):
     
     def test_init_valid_input(self):
         try:
-            # Mock the setCourseNumber method for the instantiation, so we don't actually access the DB
-            with patch.object(Course, 'setCourseNumber', return_value=True):
+            # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
+            with patch.object(Course, 'checkDuplicate', return_value=False):
                 Course(COURSE_NUMBER=101,
                     INSTRUCTOR=self.instructor,
                     COURSE_NAME='Advanced Chemistry',
@@ -45,8 +43,8 @@ class TestSetCourseNumber(unittest.TestCase):
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
-        # Mock the setCourseNumber method for the instantiation, so we don't actually access the DB
-        with patch.object(Course, 'setCourseNumber', return_value=True):
+        # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
+        with patch.object(Course, 'checkDuplicate', return_value=False):
             # Create Course object with mocked User
             self.course_1 = Course(
                 COURSE_NUMBER=101,
@@ -111,8 +109,8 @@ class TestSetInstructor(unittest.TestCase):
         self.admin._state = MagicMock()
         self.admin._state.db = 'default'
 
-        # Mock the setCourseNumber method for the instantiation, so we don't actually access the DB
-        with patch.object(Course, 'setCourseNumber', return_value=True):
+        # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
+        with patch.object(Course, 'checkDuplicate', return_value=False):
             # Create Course object with mocked User
             self.course = Course(
                 COURSE_NUMBER=101,
@@ -155,8 +153,8 @@ class TestSetCourseName(unittest.TestCase):
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
-        # Mock the setCourseNumber method for the instantiation, so we don't actually access the DB
-        with patch.object(Course, 'setCourseNumber', return_value=True):
+        # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
+        with patch.object(Course, 'checkDuplicate', return_value=False):
             # Create Course object with mocked User
             self.course = Course(
                 COURSE_NUMBER=101,
@@ -234,8 +232,8 @@ class TestSetCourseDescription(unittest.TestCase):
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
-        # Mock the setCourseNumber method for the instantiation, so we don't actually access the DB
-        with patch.object(Course, 'setCourseNumber', return_value=True):
+        # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
+        with patch.object(Course, 'checkDuplicate', return_value=False):
             # Create Course object with mocked User
             self.course = Course(
                 COURSE_NUMBER=101,
@@ -300,8 +298,8 @@ class TestSetSemester(unittest.TestCase):
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
-        # Mock the setCourseNumber method for the instantiation, so we don't actually access the DB
-        with patch.object(Course, 'setCourseNumber', return_value=True):
+        # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
+        with patch.object(Course, 'checkDuplicate', return_value=False):
             # Create Course object with mocked User
             self.course = Course(
                 COURSE_NUMBER=101,
@@ -352,8 +350,8 @@ class TestSetPrerequisites(unittest.TestCase):
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
-        # Mock the setCourseNumber method for the instantiation, so we don't actually access the DB
-        with patch.object(Course, 'setCourseNumber', return_value=True):
+        # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
+        with patch.object(Course, 'checkDuplicate', return_value=False):
             # Create Course object with mocked User
             self.course = Course(
                 COURSE_NUMBER=101,
@@ -408,8 +406,8 @@ class TestSetDepartment(unittest.TestCase):
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
-        # Mock the setCourseNumber method for the instantiation, so we don't actually access the DB
-        with patch.object(Course, 'setCourseNumber', return_value=True):
+        # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
+        with patch.object(Course, 'checkDuplicate', return_value=False):
             # Create Course object with mocked User
             self.course = Course(
                 COURSE_NUMBER=101,
