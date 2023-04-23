@@ -258,7 +258,6 @@ class TestSetEmail(unittest.TestCase):
 
     def test_setEmail_unique_emails(self):
         self.assertTrue(self.user1.setEmail("new.email@gmail.com"), "Valid new email failed to be set.")
-        self.user1.save()
         self.assertFalse(self.user2.setEmail("new.email@gmail.com"),
                          "Duplicate email was incorrectly set for a different user.")
 
