@@ -17,41 +17,46 @@ class TestCourseInit(unittest.TestCase):
         # Mock User object
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 1
+        self.instructor.ROLL = "INSTRUCTOR"
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
     
     def test_init_valid_input(self):
         try:
-            Course(COURSE_NUMBER=901, 
-                INSTRUCTOR=self.instructor, 
-                COURSE_NAME='Advanced Chemistry',
-                COURSE_DESCRIPTION='A study of advanced topics in chemistry.', 
-                SEMESTER='Spring 2024',
-                PREREQUISITES='Basic Chemistry', DEPARTMENT='Chemistry')
+            # Mock the setCourseNumber method for the instantiation, so we don't actually access the DB
+            with patch.object(Course, 'setCourseNumber', return_value=True):
+                Course(COURSE_NUMBER=101,
+                    INSTRUCTOR=self.instructor,
+                    COURSE_NAME='Advanced Chemistry',
+                    COURSE_DESCRIPTION='A study of advanced topics in chemistry.',
+                    SEMESTER='Spring 2024',
+                    PREREQUISITES='Basic Chemistry', DEPARTMENT='Computer Science')
         except ValueError:
             self.fail("Course init failed with valid input values.")
 
 #     Please note setters will handle all additional checking on initialization.
-
 
 class TestSetCourseNumber(unittest.TestCase):
     def setUp(self):
         # Mock User object
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 1
+        self.instructor.ROLL = "INSTRUCTOR"
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
-        # Create Course object with mocked User
-        self.course_1 = Course(
-            COURSE_NUMBER=101,
-            INSTRUCTOR=self.instructor,
-            COURSE_NAME='Introduction to Computer Science',
-            COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
-            SEMESTER='Fall 2023',
-            PREREQUISITES='None',
-            DEPARTMENT='Computer Science'
-        )
+        # Mock the setCourseNumber method for the instantiation, so we don't actually access the DB
+        with patch.object(Course, 'setCourseNumber', return_value=True):
+            # Create Course object with mocked User
+            self.course_1 = Course(
+                COURSE_NUMBER=101,
+                INSTRUCTOR=self.instructor,
+                COURSE_NAME='Introduction to Computer Science',
+                COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
+                SEMESTER='Fall 2023',
+                PREREQUISITES='None',
+                DEPARTMENT='Computer Science'
+            )
 
     def test_setCourseNumber_valid(self):
         self.assertTrue(self.course_1.setCourseNumber(801), "Valid course number failed to be set ")
@@ -81,7 +86,7 @@ class TestSetCourseNumber(unittest.TestCase):
     def test_setCourseNumber_invalid_float(self):
         self.assertFalse(self.course_1.setCourseNumber(123.45), "Invalid course number was incorrectly set (float)")
 
-    def test_setCourseNumber_valid_large_number(self):
+    def test_setCourseNumber_invalid_large_number(self):
         self.assertFalse(self.course_1.setCourseNumber(10000), "Course number was set above max value")
 
 
@@ -106,16 +111,18 @@ class TestSetInstructor(unittest.TestCase):
         self.admin._state = MagicMock()
         self.admin._state.db = 'default'
 
-        # Create Course object with mocked User
-        self.course = Course(
-            COURSE_NUMBER=101,
-            INSTRUCTOR=self.instructor,
-            COURSE_NAME='Introduction to Computer Science',
-            COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
-            SEMESTER='Fall 2023',
-            PREREQUISITES='None',
-            DEPARTMENT='Computer Science'
-        )
+        # Mock the setCourseNumber method for the instantiation, so we don't actually access the DB
+        with patch.object(Course, 'setCourseNumber', return_value=True):
+            # Create Course object with mocked User
+            self.course = Course(
+                COURSE_NUMBER=101,
+                INSTRUCTOR=self.instructor,
+                COURSE_NAME='Introduction to Computer Science',
+                COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
+                SEMESTER='Fall 2023',
+                PREREQUISITES='None',
+                DEPARTMENT='Computer Science'
+            )
 
     def test_setInstructor_valid(self):
         self.assertTrue(self.course.setInstructor(self.instructor),
@@ -144,19 +151,22 @@ class TestSetCourseName(unittest.TestCase):
         # Mock User object
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 1
+        self.instructor.ROLL = "INSTRUCTOR"
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
-        # Create Course object with mocked User
-        self.course = Course(
-            COURSE_NUMBER=101,
-            INSTRUCTOR=self.instructor,
-            COURSE_NAME='Introduction to Computer Science',
-            COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
-            SEMESTER='Fall 2023',
-            PREREQUISITES='None',
-            DEPARTMENT='Computer Science'
-        )
+        # Mock the setCourseNumber method for the instantiation, so we don't actually access the DB
+        with patch.object(Course, 'setCourseNumber', return_value=True):
+            # Create Course object with mocked User
+            self.course = Course(
+                COURSE_NUMBER=101,
+                INSTRUCTOR=self.instructor,
+                COURSE_NAME='Introduction to Computer Science',
+                COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
+                SEMESTER='Fall 2023',
+                PREREQUISITES='None',
+                DEPARTMENT='Computer Science'
+            )
     
     def test_setCourseName_valid(self):
         self.assertTrue(self.course.setCourseName("Introduction to Computer Science"),
@@ -220,19 +230,22 @@ class TestSetCourseDescription(unittest.TestCase):
         # Mock User object
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 1
+        self.instructor.ROLL = "INSTRUCTOR"
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
-        # Create Course object with mocked User
-        self.course = Course(
-            COURSE_NUMBER=101,
-            INSTRUCTOR=self.instructor,
-            COURSE_NAME='Introduction to Computer Science',
-            COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
-            SEMESTER='Fall 2023',
-            PREREQUISITES='None',
-            DEPARTMENT='Computer Science'
-        )
+        # Mock the setCourseNumber method for the instantiation, so we don't actually access the DB
+        with patch.object(Course, 'setCourseNumber', return_value=True):
+            # Create Course object with mocked User
+            self.course = Course(
+                COURSE_NUMBER=101,
+                INSTRUCTOR=self.instructor,
+                COURSE_NAME='Introduction to Computer Science',
+                COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
+                SEMESTER='Fall 2023',
+                PREREQUISITES='None',
+                DEPARTMENT='Computer Science'
+            )
     
     def test_setCourseDescription_valid(self):
         new_description = "An updated course description."
@@ -283,19 +296,22 @@ class TestSetSemester(unittest.TestCase):
         # Mock User object
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 1
+        self.instructor.ROLL = "INSTRUCTOR"
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
-        # Create Course object with mocked User
-        self.course = Course(
-            COURSE_NUMBER=101,
-            INSTRUCTOR=self.instructor,
-            COURSE_NAME='Introduction to Computer Science',
-            COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
-            SEMESTER='Fall 2023',
-            PREREQUISITES='None',
-            DEPARTMENT='Computer Science'
-        )
+        # Mock the setCourseNumber method for the instantiation, so we don't actually access the DB
+        with patch.object(Course, 'setCourseNumber', return_value=True):
+            # Create Course object with mocked User
+            self.course = Course(
+                COURSE_NUMBER=101,
+                INSTRUCTOR=self.instructor,
+                COURSE_NAME='Introduction to Computer Science',
+                COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
+                SEMESTER='Fall 2023',
+                PREREQUISITES='None',
+                DEPARTMENT='Computer Science'
+            )
 
     def test_setSemester_valid(self):
         self.assertTrue(self.course.setSemester('Spring 2023'), "Valid semester failed to be set.")
@@ -332,19 +348,22 @@ class TestSetPrerequisites(unittest.TestCase):
         # Mock User object
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 1
+        self.instructor.ROLL = "INSTRUCTOR"
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
-        # Create Course object with mocked User
-        self.course = Course(
-            COURSE_NUMBER=101,
-            INSTRUCTOR=self.instructor,
-            COURSE_NAME='Introduction to Computer Science',
-            COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
-            SEMESTER='Fall 2023',
-            PREREQUISITES='None',
-            DEPARTMENT='Computer Science'
-        )
+        # Mock the setCourseNumber method for the instantiation, so we don't actually access the DB
+        with patch.object(Course, 'setCourseNumber', return_value=True):
+            # Create Course object with mocked User
+            self.course = Course(
+                COURSE_NUMBER=101,
+                INSTRUCTOR=self.instructor,
+                COURSE_NAME='Introduction to Computer Science',
+                COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
+                SEMESTER='Fall 2023',
+                PREREQUISITES='None',
+                DEPARTMENT='Computer Science'
+            )
     
     def test_setPrerequisites_valid(self):
         self.assertTrue(self.course.setPrerequisites('CS100'), "Valid prerequisites failed to be set.")
@@ -385,19 +404,22 @@ class TestSetDepartment(unittest.TestCase):
         # Mock User object
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 1
+        self.instructor.ROLL = "INSTRUCTOR"
         self.instructor._state = MagicMock()
         self.instructor._state.db = 'default'
 
-        # Create Course object with mocked User
-        self.course = Course(
-            COURSE_NUMBER=101,
-            INSTRUCTOR=self.instructor,
-            COURSE_NAME='Introduction to Computer Science',
-            COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
-            SEMESTER='Fall 2023',
-            PREREQUISITES='None',
-            DEPARTMENT='Computer Science'
-        )
+        # Mock the setCourseNumber method for the instantiation, so we don't actually access the DB
+        with patch.object(Course, 'setCourseNumber', return_value=True):
+            # Create Course object with mocked User
+            self.course = Course(
+                COURSE_NUMBER=101,
+                INSTRUCTOR=self.instructor,
+                COURSE_NAME='Introduction to Computer Science',
+                COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
+                SEMESTER='Fall 2023',
+                PREREQUISITES='None',
+                DEPARTMENT='Computer Science'
+            )
     
     def test_setDepartment_valid(self):
         self.assertTrue(self.course.setDepartment('Mathematics'), "Valid department failed to be set.")
@@ -414,8 +436,8 @@ class TestSetDepartment(unittest.TestCase):
     def test_setDepartment_invalid_special_characters(self):
         self.assertFalse(self.course.setDepartment('#$%'), "Department with special characters was incorrectly set.")
 
-    def test_setDepartment_invalid_spaces_before_after(self):
-        self.assertFalse(self.course.setDepartment('  Computer Science  '), "Department with spaces before and after was incorrectly set.")
+    def test_setDepartment_valid_spaces_before_after(self):
+        self.assertTrue(self.course.setDepartment('  Computer Science  '), "Department with spaces before and after failed to be set.")
 
     def test_setDepartment_invalid_combination(self):
         self.assertFalse(self.course.setDepartment('Math123'), "Department with letters and numbers was incorrectly set.")

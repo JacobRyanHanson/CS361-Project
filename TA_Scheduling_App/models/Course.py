@@ -2,7 +2,6 @@ import string
 from django.db import models
 from .User import User
 
-
 class Course(models.Model):
     COURSE_ID = models.AutoField(primary_key=True)
     COURSE_NUMBER = models.IntegerField()
@@ -15,13 +14,27 @@ class Course(models.Model):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.setCourseNumber(kwargs.get('COURSE_NUMBER', None))
-        self.setInstructor(kwargs.get('INSTRUCTOR', None))
-        self.setCourseName(kwargs.get('COURSE_NAME', None))
-        self.setCourseDescription(kwargs.get('COURSE_DESCRIPTION', None))
-        self.setSemester(kwargs.get('SEMESTER', None))
-        self.setPrerequisites(kwargs.get('PREREQUISITES', None))
-        self.setDepartment(kwargs.get('DEPARTMENT', None))
+
+        if not self.setCourseNumber(kwargs.get('COURSE_NUMBER', None)):
+            raise ValueError("Invalid course number")
+
+        if not self.setInstructor(kwargs.get('INSTRUCTOR', None)):
+            raise ValueError("Invalid instructor")
+
+        if not self.setCourseName(kwargs.get('COURSE_NAME', None)):
+            raise ValueError("Invalid course name")
+
+        if not self.setCourseDescription(kwargs.get('COURSE_DESCRIPTION', None)):
+            raise ValueError("Invalid course description")
+
+        if not self.setSemester(kwargs.get('SEMESTER', None)):
+            raise ValueError("Invalid semester")
+
+        if not self.setPrerequisites(kwargs.get('PREREQUISITES', None)):
+            raise ValueError("Invalid prerequisites")
+
+        if not self.setDepartment(kwargs.get('DEPARTMENT', None)):
+            raise ValueError("Invalid department")
 
     def setCourseNumber(self, number):
         # Check if the input is an integer
@@ -128,7 +141,7 @@ class Course(models.Model):
             return False
 
         # Check that string contains only alphanumeric characters, spaces, and certain punctuation marks
-        allowed_chars = set(string.ascii_letters + string.digits * allow_numeric + ("-'.:, " if allow_numeric else ""))
+        allowed_chars = set(string.ascii_letters + (string.digits if allow_numeric else "") + " -'.:,")
         if not all(c in allowed_chars for c in value):
             return False
 

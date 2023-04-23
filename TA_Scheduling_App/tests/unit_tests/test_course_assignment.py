@@ -15,19 +15,27 @@ class TestCourseAssignmentInit(unittest.TestCase):
         # Mock Course object
         self.course = MagicMock(spec=Course)
         self.course.pk = 1
+        self.course._state = MagicMock()
+        self.course._state.db = 'default'
 
         # Mock User objects
         self.ta = MagicMock(spec=User)
         self.ta.pk = 1
         self.ta.ROLL = "TA"
+        self.ta._state = MagicMock()
+        self.ta._state.db = 'default'
 
         self.instructor = MagicMock(spec=User)
         self.instructor.pk = 2
         self.instructor.ROLL = "INSTRUCTOR"
+        self.instructor._state = MagicMock()
+        self.instructor._state.db = 'default'
 
         self.admin = MagicMock(spec=User)
         self.admin.pk = 3
         self.admin.ROLL = "ADMIN"
+        self.admin._state = MagicMock()
+        self.admin._state.db = 'default'
 
     def test_init_valid_input(self):
         try:
@@ -67,10 +75,14 @@ class TestCourseAssignmentSetGrader(unittest.TestCase):
         # Mock Course object
         self.course = MagicMock(spec=Course)
         self.course.pk = 1
+        self.course._state = MagicMock()
+        self.course._state.db = 'default'
 
         # Mock User object
         self.ta = MagicMock(spec=User)
         self.ta.pk = 1
+        self.ta._state = MagicMock()
+        self.ta._state.db = 'default'
 
         # Create CourseAssignment object with mocked Course and User
         self.course_assignment_1 = CourseAssignment(COURSE=self.course, TA=self.ta, IS_GRADER=False)
