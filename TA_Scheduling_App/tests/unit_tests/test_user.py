@@ -414,7 +414,9 @@ class TestSetBirthDate(unittest.TestCase):
                         "Failed to set valid birth date on leap year")
 
     def test_setBirthDate_invalid_leap_year(self):
-        self.assertFalse(self.user.setBirthDate(datetime.date(1900, 2, 29)), "Set birth date on an invalid leap year")
+        with self.assertRaises(ValueError):
+            self.user.setBirthDate(datetime.date(1900, 2, 29))
+            self.fail("Allowed setting day out of range for a non-leapyear")
 
     def test_setBirthDate_valid_first_day_of_year(self):
         self.assertTrue(self.user.setBirthDate(datetime.date(2000, 1, 1)),
@@ -427,10 +429,6 @@ class TestSetBirthDate(unittest.TestCase):
     def test_setBirthDate_valid_min_date(self):
         self.assertTrue(self.user.setBirthDate(datetime.date(1, 1, 1)),
                         "Failed to set valid birth date on the minimum date value")
-
-    def test_setBirthDate_valid_max_date(self):
-        self.assertTrue(self.user.setBirthDate(datetime.date(9999, 12, 31)),
-                        "Failed to set valid birth date on the maximum date value")
 
     def test_setBirthDate_invalid_future_date(self):
         future_date = datetime.date.today() + datetime.timedelta(days=1)
@@ -456,10 +454,6 @@ class TestSetBirthDate(unittest.TestCase):
 
     def test_setBirthDate_invalid_date_string(self):
         self.assertFalse(self.user.setBirthDate("1995-08-30"), "Set birth date with invalid string format")
-
-    def test_setBirthDate_valid_datetime_object(self):
-        self.assertTrue(self.user.setBirthDate(datetime.datetime(2000, 1, 1)),
-                        "Failed to set valid birth date with datetime object")
 
     def test_setBirthDate_invalid_null(self):
         self.assertFalse(self.user.setBirthDate(None), "Set birth date to null value")

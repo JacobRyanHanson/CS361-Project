@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 
 
@@ -11,3 +12,16 @@ class User(models.Model):
     PHONE_NUMBER = models.CharField(max_length=20)
     ADDRESS = models.CharField(max_length=255)
     BIRTH_DATE = models.DateField()
+
+    def setBirthDate(self, birthDate):
+        if not isinstance(birthDate, datetime.date):
+            return False
+
+        # Check if the birthDate is not in the future
+        if birthDate > datetime.date.today():
+            return False
+
+        # If all checks pass, set the birth date
+        self.BIRTH_DATE = birthDate
+        return True
+    
