@@ -1,9 +1,7 @@
 import string
 import datetime
 import re
-from email_validator import validate_email, EmailNotValidError
 
-import datetime
 from django.db import models
 from abc import ABCMeta
 from ..interfaces.i_string import IString
@@ -50,9 +48,6 @@ class User(IString, models.Model, metaclass=ABCModelMeta):
         if not self.setEmail(kwargs.get('EMAIL', None)):
             raise ValueError("Invalid email")
 
-        if not self.setPasswordHash(passwordHash):
-            raise ValueError("Invalid password hash")
-
         if not self.setPhoneNumber(kwargs.get('PHONE_NUMBER', None)):
             raise ValueError("Invalid phone number")
 
@@ -61,38 +56,14 @@ class User(IString, models.Model, metaclass=ABCModelMeta):
 
         if not self.setBirthDate(kwargs.get('BIRTH_DATE', None)):
             raise ValueError("Invalid birth date")
+
         self.PASSWORD_HASH = passwordHash
 
     def setRole(self, role):
         if role in ["ADMIN", "INSTRUCTOR", "TA"]:
-            self.role = role
+            self.ROLE = role
             return True
         return False
-
-    def checkString(self, value, allowPartialNumeric=True, allowEmpty=False, max=255, special_chars=""):
-        if (value is None or not isinstance(value, str) or not value.strip()) and not allowEmpty:
-            return False
-
-        if allowEmpty and (value is None or not value.strip()):
-            return True
-
-        if value.strip() != value:
-            return False
-
-        if len(value) > max:
-            return False
-
-        if value.isdigit():
-            return False
-
-        allowed_chars = set(string.ascii_letters + (string.digits if allowPartialNumeric else "") + " -'.:," + special_chars)
-        if not all(c in allowed_chars or (c.isalnum() and not c.isascii()) for c in value):
-            return False
-
-        return value
-
-    def checkDuplicate(self, email):
-        return User.objects.filter(EMAIL=email).exists()
 
     def setFirstName(self, firstName):
         firstName = self.checkString(firstName, False)
@@ -111,43 +82,54 @@ class User(IString, models.Model, metaclass=ABCModelMeta):
         return True
 
     def setEmail(self, email):
-        if email is None:
+        # Regular expression for email validation with TLD
+        pattern = r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$'
+
+        # Check if email is None or longer than 255 characters
+        if email is None or len(email) > 255:
             return False
 
-        try:
-            validate_email(email)
-        except EmailNotValidError:
-            return False
-
-        if self.checkDuplicate(email):
+        # Check if the email address matches the pattern
+        if not re.match(pattern, email):
             return False
 
         self.EMAIL = email
         return True
 
-    def setPhoneNumber(self, phoneNumber, region=None):
-        if phoneNumber is None or not isinstance(phoneNumber, str) or not phoneNumber.strip():
+    def setPhoneNumber(self, phoneNumber):
+        # This pattern matches phone numbers in the format xxx-xxx-xxxx, xxx xxx xxxx, or xxxxxxxxxx
+        pattern = r'^\d{3}[ -]?\d{3}[ -]?\d{4}$'
+
+        # Check if email is None or longer than 255 characters
+        if phoneNumber is None or len(phoneNumber) > 20:
             return False
 
-        if len(phoneNumber) > 20:
+        # Check if the email address matches the pattern
+        if not re.match(pattern, phoneNumber):
             return False
 
-        pattern = re.compile(
-            r"^(?:\+\d{1,3}\s?)?[-. (]*\d{1,4}[-. )]*(\d{1,3}[-. ]*){1,2}\d{1,4}$"
-        )
-
-        if not pattern.match(phoneNumber):
-            return False
-
-        self.phoneNumber = phoneNumber
+        self.PHONE_NUMBER = phoneNumber
         return True
 
-    def setAddress(self, address):
-        address = self.checkString(address, special_chars="()\n#")
-        if address is False:
+    def setAddress(self, new_address):
+        if new_address is None:
             return False
 
-        self.ADDRESS = address
+        new_address = new_address.strip()
+
+        if not new_address:
+            return False
+
+        if len(new_address) > 255:
+            return False
+
+        if not all(c.isascii() for c in new_address):
+            return False
+
+        if not any(c.isalnum() for c in new_address):
+            return False
+
+        self.address = new_address
         return True
 
     def setBirthDate(self, birthDate):
@@ -162,3 +144,28 @@ class User(IString, models.Model, metaclass=ABCModelMeta):
         self.BIRTH_DATE = birthDate
         return True
 
+    def checkString(self, value, allowPartialNumeric=True, allowEmpty=False):
+        if (value is None or not isinstance(value, str) or not value.strip()) and not allowEmpty:
+            return False
+
+        # For empty strings, return True if they are allowed
+        if allowEmpty and (value is None or not value.strip()):
+            return True
+
+        # Trim whitespace from beginning and end of string
+        value = value.strip()
+
+        # Check that string is not too long
+        if len(value) > 255:
+            return False
+
+        # Ensure the string is not completely numeric
+        if value.isdigit():
+            return False
+
+        # Check that string contains only alphanumeric characters, spaces, and certain punctuation marks
+        allowed_chars = set(string.ascii_letters + (string.digits if allowPartialNumeric else "") + " -'.:,")
+        if not all(c in allowed_chars for c in value):
+            return False
+
+        return value

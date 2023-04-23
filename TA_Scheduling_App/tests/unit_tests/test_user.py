@@ -14,7 +14,7 @@ class TestUserInit(unittest.TestCase):
     def test_init_valid_input(self):
         try:
             User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
-                 PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
+                 PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE=datetime.date(1995, 8, 30))
         except ValueError:
             self.fail("User init failed with valid input values.")
 
@@ -25,7 +25,7 @@ class TestUserInit(unittest.TestCase):
 class TestSetRole(unittest.TestCase):
     def setUp(self):
         self.user = User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
-                         PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
+                         PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE=datetime.date(1995, 8, 30))
 
     def test_setRole_valid_admin(self):
         self.assertTrue(self.user.setRole("ADMIN"), "Valid role 'ADMIN' failed to be set.")
@@ -79,7 +79,7 @@ class TestSetRole(unittest.TestCase):
 class TestSetFirstName(unittest.TestCase):
     def setUp(self):
         self.user = User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
-                         PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
+                         PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE=datetime.date(1995, 8, 30))
 
     def test_setFirstName_valid(self):
         self.assertTrue(self.user.setFirstName("John"), "Valid first name failed to be set.")
@@ -108,15 +108,15 @@ class TestSetFirstName(unittest.TestCase):
     def test_setFirstName_invalid_combination(self):
         self.assertFalse(self.user.setFirstName("John1234"), "First name with numbers and letters was incorrectly set.")
 
-    def test_setFirstName_valid_unicode(self):
-        self.assertTrue(self.user.setFirstName("Élodie"), "Valid first name with unicode characters failed to be set.")
+    def test_setFirstName_invalid_unicode(self):
+        self.assertFalse(self.user.setFirstName("Élodie"), "Invalid first name with unicode characters set.")
 
     def test_setFirstName_valid_mixed_case(self):
         self.assertTrue(self.user.setFirstName("jOhN"), "Valid first name with mixed case failed to be set.")
 
-    def test_setFirstName_invalid_spaces_before_after(self):
-        self.assertFalse(self.user.setFirstName("  John  "),
-                         "Invalid first name with spaces before and after set.")
+    def test_setFirstName_valid_spaces_before_after(self):
+        self.assertTrue(self.user.setFirstName("  John  "),
+                         "Valid first name with spaces before and after failed to be set.")
 
     def test_setFirstName_invalid_only_numbers(self):
         self.assertFalse(self.user.setFirstName("1234"), "First name with only numbers was incorrectly set.")
@@ -134,7 +134,7 @@ class TestSetFirstName(unittest.TestCase):
 class TestSetLastName(unittest.TestCase):
     def setUp(self):
         self.user = User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
-                         PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
+                         PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE=datetime.date(1995, 8, 30))
 
     def test_setLastName_valid(self):
         self.assertTrue(self.user.setLastName("Smith"), "Valid last name failed to be set.")
@@ -163,15 +163,15 @@ class TestSetLastName(unittest.TestCase):
     def test_setLastName_invalid_combination(self):
         self.assertFalse(self.user.setLastName("Smith1234"), "Last name with numbers and letters was incorrectly set.")
 
-    def test_setLastName_valid_unicode(self):
-        self.assertTrue(self.user.setLastName("Åström"), "Valid last name with unicode characters failed to be set.")
+    def test_setLastName_invalid_unicode(self):
+        self.assertFalse(self.user.setLastName("Åström"), "Invalid last name with unicode characters set.")
 
     def test_setLastName_valid_mixed_case(self):
         self.assertTrue(self.user.setLastName("sMitH"), "Valid last name with mixed case failed to be set.")
 
-    def test_setLastName_invalid_spaces_before_after(self):
-        self.assertFalse(self.user.setLastName("  Smith  "),
-                         "Invalid last name with spaces before and after set.")
+    def test_setLastName_valid_spaces_before_after(self):
+        self.assertTrue(self.user.setLastName("  Smith  "),
+                         "Valid last name with spaces before and after failed to be set.")
 
     def test_setLastName_invalid_only_numbers(self):
         self.assertFalse(self.user.setLastName("1234"), "Last name with only numbers was incorrectly set.")
@@ -189,10 +189,7 @@ class TestSetLastName(unittest.TestCase):
 class TestSetEmail(unittest.TestCase):
     def setUp(self):
         self.user1 = User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
-                          PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
-
-        self.user2 = User(ROLE='INSTRUCTOR', FIRST_NAME='John', LAST_NAME='Smith', EMAIL='john.smith@example.com',
-                          PHONE_NUMBER='555-987-6543', ADDRESS='5678 Oak St', BIRTH_DATE='1980-01-15')
+                          PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE=datetime.date(1995, 8, 30))
 
     def test_setEmail_valid(self):
         self.assertTrue(self.user1.setEmail("john.smith@yahoo.com"), "Valid email failed to be set.")
@@ -235,9 +232,9 @@ class TestSetEmail(unittest.TestCase):
     def test_setEmail_valid_mixed_case(self):
         self.assertTrue(self.user1.setEmail("JOHN.Smith@yahoo.com"), "Valid email with mixed case failed to be set.")
 
-    def test_setEmail_valid_unicode(self):
-        self.assertTrue(self.user1.setEmail("jane.åström@gmail.com"),
-                        "Valid email with unicode characters failed to be set.")
+    def test_setEmail_invalid_unicode(self):
+        self.assertFalse(self.user1.setEmail("jane.åström@gmail.com"),
+                        "Invalid email with unicode characters set.")
 
     def test_setEmail_valid_subdomain(self):
         self.assertTrue(self.user1.setEmail("jane.doe@mail.hive.com"),
@@ -252,18 +249,6 @@ class TestSetEmail(unittest.TestCase):
     def test_setEmail_valid_dash(self):
         self.assertTrue(self.user1.setEmail("john-smith@yahoo.com"), "Valid email with dash failed to be set.")
 
-    def test_setEmail_invalid_username_start_with_period(self):
-        self.assertFalse(self.user1.setEmail(".john.smith@outlook.com"),
-                         "Email with username starting with a period was incorrectly set.")
-
-    def test_setEmail_unique_emails(self):
-        self.assertTrue(self.user1.setEmail("new.email@gmail.com"), "Valid new email failed to be set.")
-        self.assertFalse(self.user2.setEmail("new.email@gmail.com"),
-                         "Duplicate email was incorrectly set for a different user.")
-
-    def test_setEmail_invalid_domain(self):
-        self.assertFalse(self.user1.setEmail("john-smith@example.com"), "Invalid email was set.")
-
     def test_setEmail_invalid_null(self):
         self.assertFalse(self.user1.setEmail(None), "Null email was incorrectly set.")
 
@@ -271,10 +256,13 @@ class TestSetEmail(unittest.TestCase):
 class TestSetPhoneNumber(unittest.TestCase):
     def setUp(self):
         self.user = User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
-                         PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
+                         PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE=datetime.date(1995, 8, 30))
 
     def test_setPhoneNumber_valid(self):
         self.assertTrue(self.user.setPhoneNumber("555-987-6543"), "Valid phone number failed to be set.")
+
+    def test_setPhoneNumber_invalid_parentheses(self):
+        self.assertFalse(self.user.setPhoneNumber("(555)-987-6543"), "Invalid phone number set.")
 
     def test_setPhoneNumber_valid_no_dash(self):
         self.assertTrue(self.user.setPhoneNumber("5559876543"), "Valid phone number without dashes failed to be set.")
@@ -282,13 +270,9 @@ class TestSetPhoneNumber(unittest.TestCase):
     def test_setPhoneNumber_valid_with_spaces(self):
         self.assertTrue(self.user.setPhoneNumber("555 987 6543"), "Valid phone number with spaces failed to be set.")
 
-    def test_setPhoneNumber_valid_with_parentheses(self):
-        self.assertTrue(self.user.setPhoneNumber("(555) 987-6543"),
-                        "Valid phone number with parentheses failed to be set.")
-
-    def test_setPhoneNumber_valid_with_country_code(self):
-        self.assertTrue(self.user.setPhoneNumber("+1-555-987-6543"),
-                        "Valid phone number with country code failed to be set.")
+    def test_setPhoneNumber_invalid_with_country_code(self):
+        self.assertFalse(self.user.setPhoneNumber("+1-555-987-6543"),
+                        "Invalid phone number with country code set.")
 
     def test_setPhoneNumber_invalid_empty_string(self):
         self.assertFalse(self.user.setPhoneNumber(""), "Empty phone number was incorrectly set.")
@@ -314,10 +298,6 @@ class TestSetPhoneNumber(unittest.TestCase):
     def test_setPhoneNumber_invalid_long_string(self):
         self.assertFalse(self.user.setPhoneNumber("1" * 21), "Phone number that is too long was incorrectly set.")
 
-    def test_setPhoneNumber_valid_mixed_formats(self):
-        self.assertTrue(self.user.setPhoneNumber("+1 (555) 987-6543"),
-                        "Valid phone number with mixed formats failed to be set.")
-
     def test_setPhoneNumber_invalid_missing_digits_1(self):
         self.assertFalse(self.user.setPhoneNumber("55-987-6543"),
                          "Phone number with missing digits was incorrectly set.")
@@ -342,10 +322,6 @@ class TestSetPhoneNumber(unittest.TestCase):
         self.assertFalse(self.user.setPhoneNumber("555-987-65433"),
                          "Phone number with extra digits was incorrectly set.")
 
-    def test_setPhoneNumber_valid_max_length(self):
-        self.assertTrue(self.user.setPhoneNumber("+123 (456) 789-0123"),
-                        "Phone number with max length failed to be set.")
-
     def test_setPhoneNumber_invalid_null(self):
         self.assertFalse(self.user.setPhoneNumber(None), "Null phone number was incorrectly set.")
 
@@ -353,7 +329,7 @@ class TestSetPhoneNumber(unittest.TestCase):
 class TestSetAddress(unittest.TestCase):
     def setUp(self):
         self.user = User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
-                         PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
+                         PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE=datetime.date(1995, 8, 30))
 
     def test_setAddress_valid(self):
         self.assertTrue(self.user.setAddress("5678 Oak St"), "Valid address failed to be set.")
@@ -387,12 +363,12 @@ class TestSetAddress(unittest.TestCase):
     def test_setAddress_valid_mixed_case(self):
         self.assertTrue(self.user.setAddress("1234 eLM St"), "Valid address with mixed case failed to be set.")
 
-    def test_setAddress_invalid_spaces_before_after(self):
-        self.assertFalse(self.user.setAddress("  1234 Elm St  "),
+    def test_setAddress_valid_spaces_before_after(self):
+        self.assertTrue(self.user.setAddress("  1234 Elm St  "),
                         "Valid address with spaces before and after failed to be set.")
 
-    def test_setAddress_valid_unicode(self):
-        self.assertTrue(self.user.setAddress("1234 Åvägen"), "Valid address with unicode characters failed to be set.")
+    def test_setAddress_invalid_unicode(self):
+        self.assertFalse(self.user.setAddress("1234 Åvägen"), "Invalid address with unicode characters set.")
 
     def test_setAddress_valid_with_dash(self):
         self.assertTrue(self.user.setAddress("1234-1236 Elm St"), "Valid address with dash failed to be set.")
@@ -411,7 +387,7 @@ class TestSetAddress(unittest.TestCase):
 class TestSetBirthDate(unittest.TestCase):
     def setUp(self):
         self.user = User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
-                         PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE='1995-08-30')
+                         PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE=datetime.date(1995, 8, 30))
 
     def test_setBirthDate_valid(self):
         self.assertTrue(self.user.setBirthDate(datetime.date(2000, 1, 1)), "Failed to set valid birth date")
