@@ -200,11 +200,13 @@ footer {
 /* ------------------------ Account Settings/Profile Page ------------------------*/
 
 .profile-form {
+  background-color: white;
   text-align: center;
   display: block;
   padding: 20px;
-  border: solid 2px;
   width: 20%;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* display form elements as block */
