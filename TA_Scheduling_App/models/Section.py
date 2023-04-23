@@ -102,7 +102,8 @@ class Section(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         self.SECTION_END = endTime
         return True
 
-    def checkString(self, value, allowPartialNumeric=True, allowAllNumeric=False, max_length=255):
+    # Tested in setters
+    def checkString(self, value, allowPartialNumeric=True, allowAllNumeric=False, maxLength=255):
         if value is None or not isinstance(value, str) or not value.strip():
             return False
 
@@ -110,7 +111,7 @@ class Section(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         value = value.strip()
 
         # Check that string is not too long
-        if len(value) > max_length:
+        if len(value) > maxLength:
             return False
 
         # Ensure the string is not completely numeric
