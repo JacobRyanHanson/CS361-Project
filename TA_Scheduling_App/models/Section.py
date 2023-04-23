@@ -37,6 +37,8 @@ class Section(models.Model):
         if not self.setSectionEnd(kwargs.get('SECTION_END', None)):
             raise ValueError("Invalid section end time")
 
+        self.COURSE = course
+
     def setSectionNumber(self, number):
         # Check if the input is an integer
         if not isinstance(number, int):
