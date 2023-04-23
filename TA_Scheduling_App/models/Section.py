@@ -14,6 +14,29 @@ class Section(models.Model):
     SECTION_START = models.TimeField()
     SECTION_END = models.TimeField()
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        course = kwargs.get('COURSE', None)
+
+        if course is None or not isinstance(course, Course):
+            raise ValueError("Invalid course")
+
+        if not self.setSectionNumber(kwargs.get('SECTION_NUMBER', None)):
+            raise ValueError("Invalid section number")
+
+        if not self.setBuilding(kwargs.get('BUILDING', None)):
+            raise ValueError("Invalid building")
+
+        if not self.setRoomNumber(kwargs.get('ROOM_NUMBER', None)):
+            raise ValueError("Invalid room number")
+
+        if not self.setSectionStart(kwargs.get('SECTION_START', None)):
+            raise ValueError("Invalid section start time")
+
+        if not self.setSectionEnd(kwargs.get('SECTION_END', None)):
+            raise ValueError("Invalid section end time")
+
     def setSectionNumber(self, number):
         # Check if the input is an integer
         if not isinstance(number, int):

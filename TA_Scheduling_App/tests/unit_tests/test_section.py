@@ -20,16 +20,27 @@ class TestSectionInit(unittest.TestCase):
 
     def test_init_valid_input(self):
         try:
-            Section(SECTION_NUMBER=901, COURSE=self.course, BUILDING='Chemistry Building',
-                    ROOM_NUMBER='190', SECTION_START=datetime.time(9, 30), SECTION_END=datetime.time(10, 20))
+            # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
+            with patch.object(Section, 'checkDuplicate', return_value=False):
+                Section(SECTION_NUMBER=901,
+                        COURSE=self.course,
+                        BUILDING='Chemistry Building',
+                        ROOM_NUMBER='190',
+                        SECTION_START=datetime.time(9, 30),
+                        SECTION_END=datetime.time(10, 20))
         except ValueError:
             self.fail("Section init failed with valid input values.")
 
     def test_init_invalid_course(self):
-        with self.assertRaises(ValueError,
-                               msg="Section init did not raise ValueError for invalid COURSE"):
-            Section(SECTION_NUMBER=901, COURSE=None, BUILDING='Chemistry Building',
-                    ROOM_NUMBER='190', SECTION_START=datetime.time(9, 30), SECTION_END=datetime.time(10, 20))
+        with self.assertRaises(ValueError, msg="Section init did not raise ValueError for invalid COURSE"):
+            # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
+            with patch.object(Section, 'checkDuplicate', return_value=False):
+                Section(SECTION_NUMBER=901,
+                        COURSE=None,
+                        BUILDING='Chemistry Building',
+                        ROOM_NUMBER='190',
+                        SECTION_START=datetime.time(9, 30),
+                        SECTION_END=datetime.time(10, 20))
 
 #     Please note setters will handle all additional checking on initialization.
 
@@ -43,7 +54,7 @@ class TestSetSectionNumber(unittest.TestCase):
         self.course._state.db = 'default'
 
         # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
-        with patch.object(Course, 'checkDuplicate', return_value=False):
+        with patch.object(Section, 'checkDuplicate', return_value=False):
             # Create valid section
             self.section = Section(
                 SECTION_NUMBER=901,
@@ -55,35 +66,45 @@ class TestSetSectionNumber(unittest.TestCase):
 
 
     def test_setSectionNumber_valid(self):
-        self.assertTrue(self.section.setSectionNumber(801), "Valid section number failed to be set ")
+        with patch.object(self.section, 'checkDuplicate', return_value=False):
+            self.assertTrue(self.section.setSectionNumber(801), "Valid section number failed to be set ")
 
     def test_setSectionNumber_invalid_letters(self):
-        self.assertFalse(self.section.setSectionNumber("abc"), "Invalid section number was incorrectly set (letters)")
+        with patch.object(self.section, 'checkDuplicate', return_value=False):
+            self.assertFalse(self.section.setSectionNumber("abc"), "Invalid section number was incorrectly set (letters)")
 
     def test_setSectionNumber_invalid_special_characters(self):
-        self.assertFalse(self.section.setSectionNumber("#$%^&*"), "Invalid section number was incorrectly set ("
+        with patch.object(self.section, 'checkDuplicate', return_value=False):
+            self.assertFalse(self.section.setSectionNumber("#$%^&*"), "Invalid section number was incorrectly set ("
                                                                   "special characters)")
 
     def test_setSectionNumber_invalid_negative(self):
-        self.assertFalse(self.section.setSectionNumber(-752), "Invalid section number was incorrectly set (negative)")
+        with patch.object(self.section, 'checkDuplicate', return_value=False):
+            self.assertFalse(self.section.setSectionNumber(-752), "Invalid section number was incorrectly set (negative)")
 
     def test_setSectionNumber_empty(self):
-        self.assertFalse(self.section.setSectionNumber(""), "Empty section number was incorrectly set")
+        with patch.object(self.section, 'checkDuplicate', return_value=False):
+            self.assertFalse(self.section.setSectionNumber(""), "Empty section number was incorrectly set")
 
     def test_setSectionNumber_empty_whitespace(self):
-        self.assertFalse(self.section.setSectionNumber("     "), "Empty section number was incorrectly set")
+        with patch.object(self.section, 'checkDuplicate', return_value=False):
+            self.assertFalse(self.section.setSectionNumber("     "), "Empty section number was incorrectly set")
 
     def test_setSectionNumber_invalid_null(self):
-        self.assertFalse(self.section.setSectionNumber(None), "Null section number was incorrectly set ")
+        with patch.object(self.section, 'checkDuplicate', return_value=False):
+            self.assertFalse(self.section.setSectionNumber(None), "Null section number was incorrectly set ")
 
     def test_setSectionNumber_valid_zero(self):
-        self.assertTrue(self.section.setSectionNumber(0), "Valid section number (0) failed to be set")
+        with patch.object(self.section, 'checkDuplicate', return_value=False):
+            self.assertTrue(self.section.setSectionNumber(0), "Valid section number (0) failed to be set")
 
     def test_setSectionNumber_invalid_float(self):
-        self.assertFalse(self.section.setSectionNumber(123.45), "Invalid section number was incorrectly set (float)")
+        with patch.object(self.section, 'checkDuplicate', return_value=False):
+            self.assertFalse(self.section.setSectionNumber(123.45), "Invalid section number was incorrectly set (float)")
 
     def test_setSectionNumber_valid_large_number(self):
-        self.assertFalse(self.section.setSectionNumber(10000), "Section number was set above max value")
+        with patch.object(self.section, 'checkDuplicate', return_value=False):
+            self.assertFalse(self.section.setSectionNumber(10000), "Section number was set above max value")
 
 class TestSetBuilding(unittest.TestCase):
     def setUp(self):
@@ -94,7 +115,7 @@ class TestSetBuilding(unittest.TestCase):
         self.course._state.db = 'default'
 
         # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
-        with patch.object(Course, 'checkDuplicate', return_value=False):
+        with patch.object(Section, 'checkDuplicate', return_value=False):
             # Create valid section
             self.section = Section(
                 SECTION_NUMBER=901,
@@ -153,7 +174,7 @@ class TestSetRoomNumber(unittest.TestCase):
         self.course._state.db = 'default'
 
         # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
-        with patch.object(Course, 'checkDuplicate', return_value=False):
+        with patch.object(Section, 'checkDuplicate', return_value=False):
             # Create valid section
             self.section = Section(
                 SECTION_NUMBER=901,
@@ -204,7 +225,7 @@ class TestSetSectionStart(unittest.TestCase):
         self.course._state.db = 'default'
 
         # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
-        with patch.object(Course, 'checkDuplicate', return_value=False):
+        with patch.object(Section, 'checkDuplicate', return_value=False):
             # Create valid section
             self.section = Section(
                 SECTION_NUMBER=901,
@@ -252,7 +273,7 @@ class TestSetSectionEnd(unittest.TestCase):
         self.course._state.db = 'default'
 
         # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
-        with patch.object(Course, 'checkDuplicate', return_value=False):
+        with patch.object(Section, 'checkDuplicate', return_value=False):
             # Create valid section
             self.section = Section(
                 SECTION_NUMBER=901,

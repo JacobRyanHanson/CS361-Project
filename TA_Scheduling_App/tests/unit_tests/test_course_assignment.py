@@ -48,23 +48,28 @@ class TestCourseAssignmentInit(unittest.TestCase):
 
     def test_init_invalid_course(self):
         with self.assertRaises(ValueError, msg="CourseAssignment created with invalid course"):
-            CourseAssignment(COURSE=None, TA=self.ta, IS_GRADER=False)
+            with patch.object(CourseAssignment, 'checkDuplicate', return_value=False):
+                CourseAssignment(COURSE=None, TA=self.ta, IS_GRADER=False)
 
     def test_init_invalid_ta(self):
         with self.assertRaises(ValueError, msg="CourseAssignment created with invalid TA"):
-            CourseAssignment(COURSE=self.course, TA=None, IS_GRADER=False)
+            with patch.object(CourseAssignment, 'checkDuplicate', return_value=False):
+                CourseAssignment(COURSE=self.course, TA=None, IS_GRADER=False)
 
     def test_init_invalid_is_grader(self):
         with self.assertRaises(ValueError, msg="CourseAssignment created with invalid isGrader"):
-            CourseAssignment(COURSE=self.course, TA=self.ta, IS_GRADER=None)
+            with patch.object(CourseAssignment, 'checkDuplicate', return_value=False):
+                CourseAssignment(COURSE=self.course, TA=self.ta, IS_GRADER=None)
 
     def test_wrong_role_instructor(self):
         with self.assertRaises(ValueError, msg="CourseAssignment created with invalid user"):
-            CourseAssignment(COURSE=self.course, TA=self.instructor, IS_GRADER=False)
+            with patch.object(CourseAssignment, 'checkDuplicate', return_value=False):
+                CourseAssignment(COURSE=self.course, TA=self.instructor, IS_GRADER=False)
 
     def test_wrong_role_admin(self):
         with self.assertRaises(ValueError, msg="CourseAssignment created with invalid user"):
-            CourseAssignment(COURSE=self.course, TA=self.admin, IS_GRADER=False)
+            with patch.object(CourseAssignment, 'checkDuplicate', return_value=False):
+                CourseAssignment(COURSE=self.course, TA=self.admin, IS_GRADER=False)
 
 
 class TestCourseAssignmentSetGrader(unittest.TestCase):

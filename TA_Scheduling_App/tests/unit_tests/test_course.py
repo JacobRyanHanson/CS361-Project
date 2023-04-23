@@ -57,35 +57,45 @@ class TestSetCourseNumber(unittest.TestCase):
             )
 
     def test_setCourseNumber_valid(self):
-        self.assertTrue(self.course_1.setCourseNumber(801), "Valid course number failed to be set ")
+        with patch.object(self.course_1, 'checkDuplicate', return_value=False):
+            self.assertTrue(self.course_1.setCourseNumber(801), "Valid course number failed to be set ")
 
     def test_setCourseNumber_invalid_letters(self):
-        self.assertFalse(self.course_1.setCourseNumber("abc"), "Invalid course number was incorrectly set (letters)")
+        with patch.object(self.course_1, 'checkDuplicate', return_value=False):
+            self.assertFalse(self.course_1.setCourseNumber("abc"), "Invalid course number was incorrectly set (letters)")
 
     def test_setCourseNumber_invalid_special_characters(self):
-        self.assertFalse(self.course_1.setCourseNumber("#$%^&*"), "Invalid course number was incorrectly set ("
+        with patch.object(self.course_1, 'checkDuplicate', return_value=False):
+            self.assertFalse(self.course_1.setCourseNumber("#$%^&*"), "Invalid course number was incorrectly set ("
                                                                 "special characters)")
 
     def test_setCourseNumber_invalid_negative(self):
-        self.assertFalse(self.course_1.setCourseNumber(-752), "Invalid course number was incorrectly set (negative)")
+        with patch.object(self.course_1, 'checkDuplicate', return_value=False):
+            self.assertFalse(self.course_1.setCourseNumber(-752), "Invalid course number was incorrectly set (negative)")
 
     def test_setCourseNumber_empty(self):
-        self.assertFalse(self.course_1.setCourseNumber(""), "Empty course number was incorrectly set")
+        with patch.object(self.course_1, 'checkDuplicate', return_value=False):
+            self.assertFalse(self.course_1.setCourseNumber(""), "Empty course number was incorrectly set")
 
     def test_setCourseNumber_empty_whitespace(self):
-        self.assertFalse(self.course_1.setCourseNumber("     "), "Empty course number was incorrectly set")
+        with patch.object(self.course_1, 'checkDuplicate', return_value=False):
+            self.assertFalse(self.course_1.setCourseNumber("     "), "Empty course number was incorrectly set")
 
     def test_setCourseNumber_invalid_null(self):
-        self.assertFalse(self.course_1.setCourseNumber(None), "Null course number was incorrectly set ")
+        with patch.object(self.course_1, 'checkDuplicate', return_value=False):
+            self.assertFalse(self.course_1.setCourseNumber(None), "Null course number was incorrectly set ")
 
     def test_setCourseNumber_valid_zero(self):
-        self.assertTrue(self.course_1.setCourseNumber(0), "Valid course number (0) failed to be set")
+        with patch.object(self.course_1, 'checkDuplicate', return_value=False):
+            self.assertTrue(self.course_1.setCourseNumber(0), "Valid course number (0) failed to be set")
 
     def test_setCourseNumber_invalid_float(self):
-        self.assertFalse(self.course_1.setCourseNumber(123.45), "Invalid course number was incorrectly set (float)")
+        with patch.object(self.course_1, 'checkDuplicate', return_value=False):
+            self.assertFalse(self.course_1.setCourseNumber(123.45), "Invalid course number was incorrectly set (float)")
 
     def test_setCourseNumber_invalid_large_number(self):
-        self.assertFalse(self.course_1.setCourseNumber(10000), "Course number was set above max value")
+        with patch.object(self.course_1, 'checkDuplicate', return_value=False):
+            self.assertFalse(self.course_1.setCourseNumber(10000), "Course number was set above max value")
 
 
 class TestSetInstructor(unittest.TestCase):
