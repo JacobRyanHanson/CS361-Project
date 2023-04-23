@@ -14,7 +14,8 @@
             <div class="login-container">
                 <h1>Login</h1>
                 <div class="status-message">{{ status }}</div>
-                <form name="loginForm" action="" method="post">
+                <form name="login-form" action="" method="post">
+                    {% csrf_token %}
                     <div class="form-element">
                       <label for="email">Email:</label>
                       <input type="email" name="email" required>
