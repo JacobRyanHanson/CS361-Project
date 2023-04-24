@@ -16,35 +16,42 @@
     <div id="user-management-user-list">
         {# Table for each user in context #}
         {% for user in users %}
-            <div>
-                <table class="table table-striped table-bordered user-management-user-table">
+            <div class="user-management-user-table">
+                <table class="table table-striped table-bordered">
                     <tr>
                         <td>ID</td>
                         <td>
-                            {{ user.id }}
-                            <form id="user-delete-form" name="userDeleteForm" action="" method="post">
-                                {% csrf_token %}
-                                <button class="btn btn-outline-danger" type="submit" name="deleteUserId" value="{{ user.id }}">Delete</button>
-                            </form>
+                            {{ user.USER_ID }}
+                            {% if user.deletable %}
+                                <form class="user-delete-form" name="userDeleteForm" action="" method="post">
+                                    {% csrf_token %}
+                                    <button class="btn btn-outline-danger" type="submit" name="deleteUserId" value="{{ user.USER_ID }}">Delete</button>
+                                </form>
+                            {% else %}
+                                <button class="user-delete-form btn btn-outline-primary" disabled>Current User</button>
+                            {% endif %}
                         </td>
                     </tr>
                     <tr>
-                        <td>First Name</td><td>{{ user.firstName }}</td>
+                        <td>Role</td><td>{{ user.ROLE }}</td>
                     </tr>
                     <tr>
-                        <td>Last Name</td><td>{{ user.lastName }}</td>
+                        <td>First Name</td><td>{{ user.FIRST_NAME }}</td>
                     </tr>
                     <tr>
-                        <td>Email</td><td>{{ user.email }}</td>
+                        <td>Last Name</td><td>{{ user.LAST_NAME }}</td>
                     </tr>
                     <tr>
-                        <td>Phone#</td><td>{{ user.phoneNumber }}</td>
+                        <td>Email</td><td>{{ user.EMAIL }}</td>
                     </tr>
                     <tr>
-                        <td>Address</td><td>{{ user.address }}</td>
+                        <td>Phone#</td><td>{{ user.PHONE_NUMBER }}</td>
                     </tr>
                     <tr>
-                        <td>Date of Birth</td><td>{{ user.dateOfBirth }}</td>
+                        <td>Address</td><td>{{ user.ADDRESS }}</td>
+                    </tr>
+                    <tr>
+                        <td>Date of Birth</td><td>{{ user.BIRTH_DATE }}</td>
                     </tr>
                 </table>
             </div>

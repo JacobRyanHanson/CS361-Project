@@ -116,7 +116,7 @@ footer {
     flex-direction: column;
     align-content: center;
   }
-  
+
   .app-name-container {
     margin-right: 0px;
   }
@@ -227,22 +227,24 @@ footer {
 /* Container with all user list tables inside */
 #user-management-user-list {
   display: flex;
-  flex-grow: 1;
   flex-wrap: wrap;
   gap: 1rem;
   width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 /* Styling on each table representing a user */
 .user-management-user-table {
-
+  background-color: white;
+  display: block;
 }
 
 .user-management-user-table td {
   vertical-align: middle;
 }
 
-#user-delete-form {
+.user-delete-form {
   float: right;
 }
 
