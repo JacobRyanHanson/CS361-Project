@@ -87,7 +87,7 @@
                         <form class="input-group" name="course-instructor" action="/" method="post">
                             {% csrf_token %}
                             <span class="tlabel">Email:</span>
-                            <input type="text" class="form-control" value="{{ course.INSTRUCTOR.EMAIL }}">
+                            <input type="email" class="form-control" value="{{ course.INSTRUCTOR.EMAIL }}" required>
                             <span class="input-group-btn">
                                 <button class="btn btn-primary form-btn" type="submit">Update</button>
                             </span>
@@ -128,13 +128,13 @@
                         <tr data-rn="9">
                             <td class="d-flex">
                                 <span class="tlabel">Email:</span>
-                                <input type="text" class="form-control multi-row-input-1" placeholder="TA Email">
+                                <input type="email" class="form-control multi-row-input-1" placeholder="TA Email" required>
                             </td>
                         </tr>
                         <tr data-rn="10">
                             <td>
                                 <span class="tlabel">Grader Status:</span>
-                                <select class="form-control multi-row-input-2">
+                                <select class="form-control multi-row-input-2" required>
                                     <option value="">Select</option>
                                     <option value="true">True</option>
                                     <option value="false">False</option>
@@ -171,7 +171,7 @@
                                     <form class="input-group" name="assignment-ta" action="/" method="post">
                                         {% csrf_token %}
                                         <span class="tlabel">Email:</span>
-                                        <input type="text" class="form-control" placeholder="TA Email">
+                                        <input type="email" class="form-control" placeholder="TA Email" required>
                                         <span class="input-group-btn">
                                             <button class="btn btn-primary form-btn" type="submit">Update</button>
                                         </span>
