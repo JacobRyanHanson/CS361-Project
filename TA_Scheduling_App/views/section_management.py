@@ -21,10 +21,9 @@ class SectionManagement(View):
             section = Section(0, SECTION_NUMBER, COURSE,
                               BUILDING, ROOM_NUMBER, SECTION_START, SECTION_END)  # create section object with
                                                                                   # temp section id of 0
-        except ValueError:
-            context = {'status': "Invalid Section Information"}
+        except ValueError as e:
+            context = {'status': str(e)}
             return render(request, "section-management.html", context)
 
         section.save()  # Save the updated section object to the database
-        context = {'status': "Success!"}  # add a success message?
-        return render(request, "section-management.html", {context})
+        return render(request, "section-management.html", {'status': 'Success!'})
