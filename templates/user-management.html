@@ -25,12 +25,15 @@
                             {% if user.deletable %}
                                 <form class="user-delete-form" name="userDeleteForm" action="" method="post">
                                     {% csrf_token %}
-                                    <button class="btn btn-outline-danger" type="submit" name="deleteUserId" value="{{ user.id }}">Delete</button>
+                                    <button class="btn btn-outline-danger" type="submit" name="deleteUserId" value="{{ user.USER_ID }}">Delete</button>
                                 </form>
                             {% else %}
                                 <button class="user-delete-form btn btn-outline-primary" disabled>Current User</button>
                             {% endif %}
                         </td>
+                    </tr>
+                    <tr>
+                        <td>Role</td><td>{{ user.ROLE }}</td>
                     </tr>
                     <tr>
                         <td>First Name</td><td>{{ user.FIRST_NAME }}</td>
