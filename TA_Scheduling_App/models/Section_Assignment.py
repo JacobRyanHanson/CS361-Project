@@ -1,4 +1,7 @@
+from abc import ABCMeta
+from ..interfaces.i_verification import IVerification
 from django.db import models
+from django.db.models.base import ModelBase
 from .Course_Assignment import CourseAssignment
 from .Section import Section
 
@@ -6,7 +9,11 @@ from .Section import Section
 # and 'None' given explicitly as input.
 from TA_Scheduling_App.utils.null import Null
 
-class SectionAssignment(models.Model):
+# Class to resolve inheritance
+class ABCModelMeta(ABCMeta, ModelBase):
+    pass
+
+class SectionAssignment(IVerification, models.Model, metaclass=ABCModelMeta):
     SECTION_ASSIGNMENT_ID = models.AutoField(primary_key=True)
     COURSE_ASSIGNMENT = models.ForeignKey(CourseAssignment, on_delete=models.CASCADE)
     SECTION = models.ForeignKey(Section, on_delete=models.CASCADE)
