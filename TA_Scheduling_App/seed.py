@@ -33,7 +33,7 @@ def insert_data():
         FIRST_NAME='John',
         LAST_NAME='Doe',
         EMAIL='john.doe@example.com',
-        PASSWORD_HASH='<hashed_password>',
+        PASSWORD_HASH='test',
         PHONE_NUMBER='555-123-4567',
         ADDRESS='123 Main St',
         BIRTH_DATE=date(1990, 1, 1)
@@ -136,7 +136,7 @@ def insert_data():
 
     section2 = Section.objects.create(
         SECTION_NUMBER=2,
-        COURSE=course2,
+        COURSE=course1,
         BUILDING='Tech Building',
         ROOM_NUMBER='102',
         SECTION_START=time(10, 30),
@@ -187,7 +187,7 @@ def insert_data():
     )
 
     section_assignment2 = SectionAssignment.objects.create(
-        COURSE_ASSIGNMENT=course_assignment2,
+        COURSE_ASSIGNMENT=course_assignment1,
         SECTION=section2
     )
 
@@ -210,5 +210,5 @@ if __name__ == '__main__':
     reset_app('TA_Scheduling_App')
     insert_data()
     # For testing
-    delete_user('Alice', 'Smith')
+    # delete_user('Alice', 'Smith')
     # delete_user('Sophia', 'Williams')

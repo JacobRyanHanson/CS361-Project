@@ -88,8 +88,8 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         if courseName is Null():
             return True
 
-        courseName = self.checkString(courseName)
-        if courseName is False:
+        result = self.checkString(courseName)
+        if result is False:
             return False
 
         self.COURSE_NAME = courseName
@@ -99,8 +99,8 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         if courseDescription is Null():
             return True
 
-        courseDescription = self.checkString(courseDescription)
-        if courseDescription is False:
+        result = self.checkString(courseDescription)
+        if result is False:
             return False
 
         self.COURSE_DESCRIPTION = courseDescription
@@ -139,8 +139,8 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         if prerequisites is Null():
             return True
 
-        prerequisites = self.checkString(prerequisites, True, True)
-        if prerequisites is False:
+        result = self.checkString(prerequisites, True, True)
+        if result is False:
             return False
 
         self.PREREQUISITES = prerequisites
@@ -150,8 +150,8 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         if department is Null():
             return True
 
-        department = self.checkString(department, False)
-        if department is False:
+        result = self.checkString(department, False)
+        if result is False:
             return False
 
         self.DEPARTMENT = department

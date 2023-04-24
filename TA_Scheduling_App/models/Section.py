@@ -74,8 +74,8 @@ class Section(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         if building is Null():
             return True
 
-        building = self.checkString(building)
-        if building is False:
+        result = self.checkString(building)
+        if result is False:
             return False
 
         self.ROOM_NUMBER = building
@@ -85,8 +85,8 @@ class Section(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         if roomNumber is Null():
             return True
 
-        roomNumber = self.checkString(roomNumber, True, True, 10)
-        if roomNumber is False:
+        result = self.checkString(roomNumber, True, True, 10)
+        if result is False:
             return False
 
         self.ROOM_NUMBER = roomNumber
