@@ -50,9 +50,9 @@ class TAAssignments(View):
 
                 status = f'TA {ta.FIRST_NAME} {ta.LAST_NAME} assigned to course {course.COURSE_NAME}.'
             except Course.DoesNotExist:
-                status = f'Course with instructor email {instructor_email} does not exist.'
+                status = f'Course with number {course.COURSE_NUMBER} does not exist.'
             except User.DoesNotExist:
-                status = f'Instructor with email {instructor_email} does not exist.'
+                status = f'TA with email {course_ta_email} does not exist.'
             except Exception as e:
                 status = e
         elif section_ta_email:
@@ -68,8 +68,12 @@ class TAAssignments(View):
                 status = f'TA {ta.FIRST_NAME} {ta.LAST_NAME} assigned to section {section.SECTION_NUMBER}.'
             except User.DoesNotExist:
                 status = f'TA with email {section_ta_email} does not exist.'
+            except Course.DoesNotExist:
+                status = f'Course with number {course.COURSE_NUMBER} does not exist.'
             except Section.DoesNotExist:
                 status = f'Section with number {section.SECTION_NUMBER} does not exist.'
+            except CourseAssignment.DoesNotExist:
+                status = f'The TA is not assigned to the course.'
             except Exception as e:
                 status = e
         elif section_id:

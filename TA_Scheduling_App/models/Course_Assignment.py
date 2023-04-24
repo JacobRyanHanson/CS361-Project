@@ -33,7 +33,7 @@ class CourseAssignment(IVerification, models.Model, metaclass=ABCModelMeta):
 
         ta = kwargs.get('TA', Null())
 
-        if (ta is None) or (not Null() and ta.ROLE != "TA") or (not isinstance(ta, User) and not Null()):
+        if (ta is None) or (ta is not Null() and ta.ROLE != "TA") or (not isinstance(ta, User) and not Null()):
             raise ValueError("Invalid TA")
 
         if ta is not Null():
