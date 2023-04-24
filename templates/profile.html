@@ -13,45 +13,43 @@
 {% include 'partials/header.html' %}
 {% load formatting_tags %}
 <div class="main-container">
-    <div class="vertical-group profile-group">
+    <div class="profile-form profile-group">
         <p id="profile-header">Account Settings</p>
-        <div class="profile-form">
-            <div class="status-message">{{ status }}</div>
-            <form class="input-group flex-column" name="updateProfileForm" action="" method="post">
-                {% csrf_token %}
-                <div class="d-flex form-div">
-                    <label class="profile-form-label" for="firstName">First Name:</label>
-                    <input class="form-control" type="text" name="firstName" id="firstName" value="{{ initial.FIRST_NAME }}" required>
-                </div>
+        <div class="status-message">{{ status }}</div>
+        <form class="d-flex flex-column" name="updateProfileForm" action="" method="post">
+            {% csrf_token %}
+            <div class="d-flex form-div">
+                <label class="profile-form-label" for="firstName">First Name:</label>
+                <input class="form-control" type="text" name="firstName" id="firstName" value="{{ initial.FIRST_NAME }}" required>
+            </div>
 
-                <div class="d-flex form-div">
-                    <label class="profile-form-label" for="lastName">Last Name: </label>
-                    <input class="form-control" type="text" name="lastName" id="lastName" value="{{ initial.LAST_NAME }}" required>
-                </div>
+            <div class="d-flex form-div">
+                <label class="profile-form-label" for="lastName">Last Name: </label>
+                <input class="form-control" type="text" name="lastName" id="lastName" value="{{ initial.LAST_NAME }}" required>
+            </div>
 
-                <div class="d-flex form-div">
-                    <label class="profile-form-label" for="email">Email:</label>
-                    <input class="form-control" type="email" name="email" id="email" value="{{ initial.EMAIL }}" required>
-                </div>
+            <div class="d-flex form-div">
+                <label class="profile-form-label" for="email">Email:</label>
+                <input class="form-control" type="email" name="email" id="email" value="{{ initial.EMAIL }}" required>
+            </div>
 
-                <div class="d-flex form-div">
-                    <label class="profile-form-label" for="phoneNumber">Phone Number:</label>
-                    <input class="form-control" type="tel" name="phoneNumber" id="phoneNumber" value="{{ initial.PHONE_NUMBER }}" required>
-                </div>
+            <div class="d-flex form-div">
+                <label class="profile-form-label" for="phoneNumber">Phone Number:</label>
+                <input class="form-control" type="tel" name="phoneNumber" id="phoneNumber" value="{{ initial.PHONE_NUMBER }}" required>
+            </div>
 
-                <div class="d-flex form-div">
-                    <label class="profile-form-label" for="address">Address:</label>
-                    <input class="form-control" type="text" name="address" id="address" value="{{ initial.ADDRESS }}" required>
-                </div>
+            <div class="d-flex form-div">
+                <label class="profile-form-label" for="address">Address:</label>
+                <input class="form-control" type="text" name="address" id="address" value="{{ initial.ADDRESS }}" required>
+            </div>
 
-                <div class="d-flex form-div">
-                    <label class="profile-form-label" for="dateOfBirth">Date of Birth:</label>
-                    <input class="form-control" type="date" name="dateOfBirth" id="dateOfBirth" value="{{ initial.BIRTH_DATE|html_date }}" required>
-                </div>
+            <div class="d-flex form-div">
+                <label class="profile-form-label" for="dateOfBirth">Date of Birth:</label>
+                <input class="form-control" type="date" name="dateOfBirth" id="dateOfBirth" value="{{ initial.BIRTH_DATE|html_date }}" required>
+            </div>
 
-                <button id="profile-submit" class="btn btn-primary" type="submit">Update Information</button>
-            </form>
-        </div>
+            <button id="profile-submit" class="btn btn-primary bottom-form-button" type="submit">Update Information</button>
+        </form>
     </div>
 </div>
 {% include 'partials/footer.html' %}

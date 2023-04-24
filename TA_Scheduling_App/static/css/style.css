@@ -61,6 +61,10 @@ label {
   margin-bottom: 30px;
 }
 
+.bottom-form-button {
+  width: 100%;
+}
+
 /* ------------------------ Header/Footer ------------------------*/
 
 header,
@@ -146,7 +150,7 @@ form[name="section-id"] {
 .nested-table-container {
   border: solid 1px #dee2e6;
   box-shadow: 2px 2px 6px 4px #ccc;
-  background-color: #ffffff;
+  background-color: white;
   margin-left: 20px;
   margin-right: 20px;
   flex-basis: 400px;
@@ -248,10 +252,6 @@ form[name="section-id"] {
   width: 100% !important;
 }
 
-.profile-form label {
-  margin-bottom: 5px;
-}
-
 /* text above contact information submission form */
 #profile-header {
   font-size: 24pt;
@@ -291,30 +291,22 @@ form[name="section-id"] {
 /* ------------------------ Login Page ------------------------*/
 
 .login-container {
-  background-color: #ffffff;
+  background-color: white;
   border-radius: 10px;
   box-shadow: 2px 2px 6px 4px #ccc;
-  width: 350px;
-  height: 350px;
+  flex-basis: 350px;
   padding: 20px;
   align-self: center;
+}
+
+.login-form-label {
+  width: 100px;
 }
 
 .form-head {
   font-size: 24pt;
   text-align: center;
   margin-top: 10px;
-}
-
-.form-element {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 25px;
-}
-
-.center-btn {
-  display: flex;
-  justify-content: center;
 }
 
 /* ------------------------ Dashboard Pages ------------------------*/
