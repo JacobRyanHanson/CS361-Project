@@ -299,3 +299,8 @@ form[name="section-id"] {
   height: 100px;
   font-size: 20px;
 }
+
+/* ------------------------ Create Course/Course Management Page ------------------------*/
+.course-form-label {
+  width: 287px;
+}

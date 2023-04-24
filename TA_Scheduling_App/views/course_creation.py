@@ -5,14 +5,14 @@ from django.shortcuts import render, redirect
 from django.views import View
 
 
-class CourseManagement(View):
+class CourseCreation(View):
     def get(self, request):
         if not request.session.get("is_authenticated"):
             return redirect("login")
         if request.session.get("user_role") not in ["ADMIN", "INSTRUCTOR"]:
             raise PermissionDenied("You are not permitted to create courses")
 
-        return render(request, "course-management.html", {})
+        return render(request, "course_creation.html", {})
 
     def post(self, request):
         course_number = request.POST['course-number']
@@ -30,8 +30,8 @@ class CourseManagement(View):
 
         except ValueError as e:
             context = {'status': str(e)}
-            return render(request, "course-management.html", context)
+            return render(request, "course_creation.html", context)
 
         course.save()
         context = {'status': "Successful Course Creation"}
-        return render(request, "course-management.html", context)
+        return render(request, "course_creation.html", context)

@@ -17,7 +17,7 @@ urlpatterns = [
     path('dashboard-instructor/', DashboardInstructor.as_view(), name="dashboard_instructor"),
     path('dashboard-ta/', DashboardTA.as_view(), name="dashboard_ta"),
 
-    path('course-creation/', CourseManagement.as_view(), name="course_creation"),
+    path('course-creation/', CourseCreation.as_view(), name="course_creation"),
     path('section-creation/', SectionManagement.as_view(), name="section_creation"),
     path('user-creation/', UserCreation.as_view(), name="user_creation"),
 

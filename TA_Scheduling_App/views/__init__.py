@@ -1,5 +1,5 @@
 from .account_settings import AccountSettings
-from .course_management import CourseManagement
+from .course_creation import CourseCreation
 from .dashboard_admin import DashboardAdmin
 from .dashboard_instructor import DashboardInstructor
 from .dashboard_ta import DashboardTA
