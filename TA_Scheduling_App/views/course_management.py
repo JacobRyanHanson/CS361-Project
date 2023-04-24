@@ -24,7 +24,7 @@ class CourseManagement(View):
         DEPARTMENT = request.POST['department']
 
         try:
-            course = Course(COURSE_NUMBER=COURSE_NUMBER, INSTRUCTOR= User.objects.get(pk=INSTRUCTOR),
+            course = Course(COURSE_NUMBER=COURSE_NUMBER, INSTRUCTOR=User.objects.get(pk=INSTRUCTOR),
                             COURSE_NAME=COURSE_NAME, COURSE_DESCRIPTION=COURSE_DESCRIPTION, SEMESTER=SEMESTER,
                             PREREQUISITES=PREREQUISITES, DEPARTMENT=DEPARTMENT)
 
