@@ -10,7 +10,7 @@ class AccountSettings(View):
         return User.objects.get(USER_ID=request.session["user_id"])
 
     def get(self, request):
-        # check user is logged in
+        # check user is logged in - all users can access their own account settings
         if not request.session.get("is_authenticated"):
             return redirect("login")
 
