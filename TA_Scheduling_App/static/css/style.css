@@ -37,10 +37,6 @@ h1 {
   margin: 0px;
 }
 
-tbody td {
-  overflow-wrap: break-word;
-}
-
 /* Hide Bootstrap's bottom border on the last row. */
 tbody>tr:last-child>td {
   border-bottom: 0;
@@ -49,11 +45,21 @@ tbody>tr:last-child>td {
 /* For status message context variables above forms */
 .status-message {
   text-align: center;
-  margin-bottom: 5px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   display: inline-block;
   width: 100%;
 }
 
+label {
+  white-space: nowrap;
+  align-self: center;
+  margin: 0px 10px 0px 0px !important;
+}
+
+.form-div {
+  margin-bottom: 30px;
+}
 
 /* ------------------------ Header/Footer ------------------------*/
 
@@ -220,38 +226,36 @@ form[name="section-id"] {
 .profile-form {
   background-color: white;
   text-align: center;
-  display: block;
   padding: 20px;
-  width: 20%;
   border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  flex-basis: 400px;
+  width: 100%;
+  display: inline-block;
+  box-shadow: 2px 2px 6px 4px #ccc;
 }
 
-/* display form elements as block */
+.profile-group {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.profile-form-label {
+  width: 172px;
+  text-align: left;
+}
+
 .profile-form input {
-  display: block;
-  padding: 6px 4px;
-  border: solid 1px cornflowerblue;
-  width: 100%;
-  margin-bottom: 10px;
-  /* between input and next element */
+  width: 100% !important;
 }
 
 .profile-form label {
   margin-bottom: 5px;
-  /* between label and input */
-}
-
-/* profile form submission button */
-#profile-submit {
-  margin-top: 20px;
-  /* extra spacing for submit button */
-  justify-content: center;
 }
 
 /* text above contact information submission form */
 #profile-header {
   font-size: 24pt;
+  text-align: center;
 }
 
 /* ------------------------ Account User Management Page ------------------------*/
@@ -297,6 +301,7 @@ form[name="section-id"] {
 }
 
 .form-head {
+  font-size: 24pt;
   text-align: center;
   margin-top: 10px;
 }
@@ -317,7 +322,12 @@ form[name="section-id"] {
 .dashboard-container {
   display: flex;
   flex-direction: row;
+  align-self: center;
   gap: 6px;
+}
+
+.dashboard-container .btn {
+  height: 100px;
 }
 
 .dashboard-container button {

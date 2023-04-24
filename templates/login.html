@@ -16,11 +16,11 @@
                  <div class="status-message">{{ status }}</div>
                 <form name="login-form" class="login-form" action="" method="post">
                     {% csrf_token %}
-                    <div class="form-element">
+                    <div class="d-flex form-div">
                       <label for="email">Email:</label>
                       <input type="email" class="form-control" name="email" required>
                     </div>
-                    <div class="form-element">
+                    <div class="d-flex form-div">
                       <label for="password">Password:</label>
                       <input type="password"  class="form-control" name="password" required>
                     </div>

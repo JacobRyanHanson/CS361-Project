@@ -36,18 +36,22 @@ class AccountSettings(View):
         _date_of_birth = request.POST["dateOfBirth"]
         birth_date = datetime.date.fromisoformat(_date_of_birth)
         try:
-            User(FIRST_NAME=first_name, LAST_NAME=last_name, EMAIL=email, PHONE_NUMBER=phone_number, ADDRESS=address,
+            User(FIRST_NAME=first_name,
+                 LAST_NAME=last_name,
+                 EMAIL=email,
+                 PHONE_NUMBER=phone_number,
+                 ADDRESS=address,
                  BIRTH_DATE=birth_date)
         except ValueError as ve:
             return render(request, "profile.html", {'initial': user, 'status': str(ve)})
 
         # information has been validated, update object
-        user.FIRST_NAME = first_name
-        user.LAST_NAME = last_name
-        user.EMAIL = email
-        user.PHONE_NUMBER = phone_number
-        user.ADDRESS = address
-        user.BIRTH_DATE = birth_date
+        user.setFirstName(first_name)
+        user.setLastName(last_name)
+        user.setEmail(email)
+        user.setPhoneNumber(phone_number)
+        user.setAddress(address)
+        user.setBirthDate(birth_date)
         user.save()
 
         updated = "Your profile changes have been successfully saved."

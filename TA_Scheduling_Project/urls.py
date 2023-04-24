@@ -8,7 +8,7 @@ from TA_Scheduling_App.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', Login.as_view(), name='login'),
+    path('', Login.as_view(), name='login'),
     path('logout/', Login.as_view(), name='logout'),
     path('home/', Home.as_view(), name="home"),
 
