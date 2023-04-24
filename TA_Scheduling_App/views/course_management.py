@@ -24,10 +24,9 @@ class CourseManagement(View):
         DEPARTMENT = request.POST['department']
 
         try:
-            instructor = User.objects.get(pk=INSTRUCTOR)
-            course = Course(COURSE_NUMBER=COURSE_NUMBER, INSTRUCTOR=instructor, COURSE_NAME=COURSE_NAME,
-                            COURSE_DESCRIPTION=COURSE_DESCRIPTION, SEMESTER=SEMESTER, PREREQUISITES=PREREQUISITES,
-                            DEPARTMENT=DEPARTMENT)
+            course = Course(COURSE_NUMBER=COURSE_NUMBER, INSTRUCTOR= User.objects.get(pk=INSTRUCTOR),
+                            COURSE_NAME=COURSE_NAME, COURSE_DESCRIPTION=COURSE_DESCRIPTION, SEMESTER=SEMESTER,
+                            PREREQUISITES=PREREQUISITES, DEPARTMENT=DEPARTMENT)
 
         except ValueError as e:
             context = {'status': str(e)}
