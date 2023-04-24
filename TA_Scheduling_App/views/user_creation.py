@@ -24,7 +24,7 @@ class UserCreation(View):
 
         try:
             user = User(ROLE=role, FIRST_NAME=first_name, LAST_NAME=last_name, EMAIL=email,
-                        PASSWORD_HASH="<hashed_password>", PHONE_NUMBER=phone_number,
+                        PASSWORD_HASH="default", PHONE_NUMBER=phone_number,
                         ADDRESS=address, BIRTH_DATE=birth_date)
 
         except ValueError as e:

@@ -91,9 +91,9 @@ class TAAssignments(View):
                 course = Course.objects.get(COURSE_ID=course_id)
                 course.delete()
 
-                status = f'Section with ID {course_id} has been deleted.'
+                status = f'Course with ID {course_id} has been deleted.'
             except Course.DoesNotExist:
-                status = f'Section with ID {course_id} does not exist.'
+                status = f'Course with ID {course_id} does not exist.'
             except Exception as e:
                 status = e
         else:

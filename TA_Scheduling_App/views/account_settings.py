@@ -16,7 +16,7 @@ class AccountSettings(View):
 
         # get known profile information for user
         user = self.get_active_user(request)
-        return render(request, "profile.html", {'initial': user})
+        return render(request, "account-settings.html", {'initial': user})
 
     def post(self, request):
         # user has requested a profile update
@@ -43,7 +43,7 @@ class AccountSettings(View):
                  ADDRESS=address,
                  BIRTH_DATE=birth_date)
         except ValueError as ve:
-            return render(request, "profile.html", {'initial': user, 'status': str(ve)})
+            return render(request, "account-settings.html", {'initial': user, 'status': str(ve)})
 
         # information has been validated, update object
         user.setFirstName(first_name)
@@ -55,4 +55,4 @@ class AccountSettings(View):
         user.save()
 
         updated = "Your profile changes have been successfully saved."
-        return render(request, "profile.html", {'initial': user, 'status': updated})
+        return render(request, "account-settings.html", {'initial': user, 'status': updated})

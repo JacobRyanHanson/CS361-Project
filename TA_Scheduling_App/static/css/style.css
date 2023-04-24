@@ -154,6 +154,7 @@ form[name="section-id"] {
   margin-left: 20px;
   margin-right: 20px;
   flex-basis: 400px;
+  border-radius: 10px;
 }
 
 .table-container {
@@ -313,15 +314,10 @@ form[name="section-id"] {
 
 .dashboard-container {
   display: flex;
-  flex-direction: row;
   align-self: center;
-  gap: 6px;
 }
 
 .dashboard-container .btn {
   height: 100px;
-}
-
-.dashboard-container button {
   font-size: 20px;
 }

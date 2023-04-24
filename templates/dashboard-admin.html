@@ -11,12 +11,23 @@
 <body>
     {% include 'partials/header.html' %}
     <div class="main-container">
-        <h1>Administrator Dashboard</h1>
         <div class="dashboard-container">
             <a href="{% url 'course_creation' %}"><button class="btn btn-primary">Create Course</button></a>
+        </div>
+
+        <div class="dashboard-container">
             <a href="{% url 'section_creation' %}"><button class="btn btn-primary">Create Section</button></a>
+        </div>
+
+        <div class="dashboard-container">
             <a href="{% url 'user_creation' %}"><button class="btn btn-primary">Create User</button></a>
-            <a href="{% url 'ta_assignments' %}"><button class="btn btn-primary">Manage Assignments</button></a>
+        </div>
+
+        <div class="dashboard-container">
+            <a href="{% url 'ta_assignments' %}"><button class="btn btn-primary">Manage Courses</button></a>
+        </div>
+
+        <div class="dashboard-container">
             <a href="{% url 'user_management' %}"><button class="btn btn-primary">Manage Users</button></a>
         </div>
     </div>
