@@ -1,5 +1,3 @@
-{% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Course Management</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    {% load static %}
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
     <style>
         body {
@@ -94,9 +93,9 @@
 <body>
 	<h1>Course Management</h1>
 
-
 	<!-- Course Creation Form -->
 	<h2>Create a Course</h2>
+    <span class="status-message">{{ status }}</span>
 	<form name="createCourse" method="post">
         {% csrf_token %}
 		<label for="course-id">Course ID:</label>

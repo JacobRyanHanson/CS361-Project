@@ -35,4 +35,4 @@ class CourseManagement(View):
 
         course.save()
         context = {'status': "Successful Course Creation"}
-        return render(request, "course-management.html", {context})
+        return render(request, "course-management.html", context)
