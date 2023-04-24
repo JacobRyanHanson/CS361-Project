@@ -11,6 +11,8 @@ body {
   flex-direction: column;
   min-height: 100vh;
   font-family: Helvetica, Arial, sans-serif;
+  word-break: break-word;
+  white-space: normal;
 }
 
 h1 {
@@ -22,14 +24,13 @@ h1 {
 
 .main-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
   flex-grow: 1;
   min-height: calc(100vh - var(--header-height) - var(--footer-height));
   gap: 3rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
+  flex-wrap: wrap;
 }
 
 .table {
@@ -37,24 +38,54 @@ h1 {
 }
 
 /* Hide Bootstrap's bottom border on the last row. */
-tbody > tr:last-child > td {
+tbody>tr:last-child>td {
   border-bottom: 0;
-}
-
-/* Change Bootstrap's table hover color. */
-.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-  background-color: #adb5bd;
 }
 
 /* For status message context variables above forms */
 .status-message {
-
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  display: inline-block;
+  width: 100%;
 }
 
+label {
+  white-space: nowrap;
+  align-self: center;
+  margin: 0px 10px 0px 0px !important;
+}
+
+.form-div {
+  margin-bottom: 30px;
+}
+
+.bottom-form-button {
+  width: 100%;
+}
+
+.form-head {
+  font-size: 24pt;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.form-container {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  flex-basis: 350px;
+  box-shadow: 2px 2px 6px 4px #ccc;
+  height: min-content;
+  align-self: center;
+}
 
 /* ------------------------ Header/Footer ------------------------*/
 
-header, footer {
+header,
+footer {
   display: flex;
   align-items: center;
 }
@@ -72,7 +103,8 @@ footer {
   height: var(--footer-height);
 }
 
-.h-container, .f-container {
+.h-container,
+.f-container {
   width: 100%;
 }
 
@@ -124,10 +156,22 @@ footer {
 
 /* ------------------------ TA Assignments Page ------------------------*/
 
-.table-container, .nested-table-container {
+form[name="course-id"],
+form[name="course-instructor"],
+form[name="section-id"] {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-container,
+.nested-table-container {
   border: solid 1px #dee2e6;
   box-shadow: 2px 2px 6px 4px #ccc;
-  background-color: #ffffff;
+  background-color: white;
+  margin-left: 20px;
+  margin-right: 20px;
+  flex-basis: 400px;
+  border-radius: 10px;
 }
 
 .table-container {
@@ -138,17 +182,23 @@ footer {
   margin: 10px;
 }
 
+.tlabel {
+  margin-right: 10px;
+  align-self: center;
+}
+
 .sub-wrapper {
   padding: 20px;
 }
 
 .nested-table-container {
-  margin: 0px;
+  margin: 0px 0px 20px 0px;
 }
 
 /* Add bottom row back to outer table when tables are nested*/
-.table-container [data-rn="6"],  .table-container [data-rn="8"] {
-   border-bottom: solid 1px #dee2e6;
+.table-container [data-rn="6"],
+.table-container [data-rn="8"] {
+  border-bottom: solid 1px #dee2e6;
 }
 
 .form-btn {
@@ -160,11 +210,20 @@ footer {
   border-bottom: solid 1px #dee2e6;
 }
 
+.multi-row-input-1 {
+  width: 80%;
+}
+
+.multi-row-input-2 {
+  width: 58%;
+  display: inline-block;
+}
+
 .multi-row-container table {
   width: 100%;
 }
 
-.multi-row-container table td{
+.multi-row-container table td {
   padding-right: 96px;
 }
 
@@ -185,39 +244,12 @@ footer {
 }
 
 /* ------------------------ Account Settings/Profile Page ------------------------*/
-
-.profile-form {
-  background-color: white;
-  text-align: center;
-  display: block;
-  padding: 20px;
-  width: 20%;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.profile-form-label {
+  width: 172px;
 }
 
-/* display form elements as block */
 .profile-form input {
-  display: block;
-  padding: 6px 4px;
-  border: solid 1px cornflowerblue;
-  width: 100%;
-  margin-bottom: 10px; /* between input and next element */
-}
-
-.profile-form label {
-  margin-bottom: 5px; /* between label and input */
-}
-
-/* profile form submission button */
-#profile-submit {
-  margin-top: 20px; /* extra spacing for submit button */
-  justify-content: center;
-}
-
-/* text above contact information submission form */
-#profile-header {
-  font-size: 24pt;
+  width: 100% !important;
 }
 
 /* ------------------------ Account User Management Page ------------------------*/
@@ -252,42 +284,23 @@ footer {
 
 /* ------------------------ Login Page ------------------------*/
 
-.centered {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: calc(100vh - var(--header-height) - var(--footer-height));
-}
-
-.login-container {
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  width: 350px;
-  height: 300px;
-  padding: 20px;
-}
-
-.form-element {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 25px;
-}
-
-.center-btn {
-  display: flex;
-  justify-content: center;
+.login-form-label {
+  width: 100px;
 }
 
 /* ------------------------ Dashboard Pages ------------------------*/
 
 .dashboard-container {
   display: flex;
-  flex-direction: row;
-  gap: 6px;
+  align-self: center;
 }
 
-.dashboard-container button {
+.dashboard-container .btn {
+  height: 100px;
   font-size: 20px;
+}
+
+/* ------------------------ Create Course/Course Management Page ------------------------*/
+.course-form-label {
+  width: 287px;
 }

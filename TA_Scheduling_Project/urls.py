@@ -8,15 +8,16 @@ from TA_Scheduling_App.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', Login.as_view(), name="login"),
+    path('', Login.as_view(), name='login'),
+    path('logout/', Login.as_view(), name='logout'),
     path('home/', Home.as_view(), name="home"),
 
-    path('profile/', AccountSettings.as_view(), name="account_settings"),
+    path('account-settings/', AccountSettings.as_view(), name="account_settings"),
     path('dashboard-admin/', DashboardAdmin.as_view(), name="dashboard_admin"),
     path('dashboard-instructor/', DashboardInstructor.as_view(), name="dashboard_instructor"),
     path('dashboard-ta/', DashboardTA.as_view(), name="dashboard_ta"),
 
-    path('course-creation/', CourseManagement.as_view(), name="course_creation"),
+    path('course-creation/', CourseCreation.as_view(), name="course_creation"),
     path('section-creation/', SectionManagement.as_view(), name="section_creation"),
     path('user-creation/', UserCreation.as_view(), name="user_creation"),
 

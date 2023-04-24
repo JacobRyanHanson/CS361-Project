@@ -10,22 +10,22 @@
     </head>
     <body>
         {% include 'partials/header.html' %}
-        <div class="centered">
-            <div class="login-container">
-                <h1>Login</h1>
-                <div class="status-message">{{ status }}</div>
-                <form name="login-form" action="" method="post">
+        <div class="main-container">
+            <div class="form-container">
+                <h5 class="form-head">Login</h5>
+                 <div class="status-message">{{ status }}</div>
+                <form name="login-form" class="d-flex flex-column" action="" method="post">
                     {% csrf_token %}
-                    <div class="form-element">
-                      <label for="email">Email:</label>
-                      <input type="email" name="email" required>
+                    <div class="d-flex form-div">
+                      <label class="login-form-label" for="email">Email:</label>
+                      <input type="email" class="form-control" name="email" required>
                     </div>
-                    <div class="form-element">
-                      <label for="password">Password:</label>
-                      <input type="password" name="password" required>
+                    <div class="d-flex form-div">
+                      <label class="login-form-label" for="password">Password:</label>
+                      <input type="password"  class="form-control" name="password" required>
                     </div>
-                    <div class="center-btn ">
-                        <button class="btn btn-primary center-btn">Log In</button>
+                    <div>
+                        <button class="btn btn-primary bottom-form-button">Log In</button>
                     </div>
                 </form>
             </div>

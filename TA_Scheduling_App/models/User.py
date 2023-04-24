@@ -9,7 +9,7 @@ from django.db.models.base import ModelBase
 
 # Used so that the constructor can distinguish between no input Null()
 # and 'None' given explicitly as input.
-from ..null import Null
+from TA_Scheduling_App.utils.null import Null
 
 
 # Class to resolve inheritance
@@ -73,8 +73,8 @@ class User(IString, models.Model, metaclass=ABCModelMeta):
         if firstName is Null():
             return True
 
-        firstName = self.checkString(firstName, False)
-        if firstName is False:
+        result = self.checkString(firstName, False)
+        if result is False:
             return False
 
         self.FIRST_NAME = firstName
@@ -84,8 +84,8 @@ class User(IString, models.Model, metaclass=ABCModelMeta):
         if lastName is Null():
             return True
 
-        lastName = self.checkString(lastName, False)
-        if lastName is False:
+        result = self.checkString(lastName, False)
+        if result is False:
             return False
 
         self.LAST_NAME = lastName
