@@ -51,6 +51,8 @@ tbody>tr:last-child>td {
   text-align: center;
   margin-bottom: 5px;
   color: #dc3545;
+  display: inline-block;
+  width: 100%;
 }
 
 
@@ -302,8 +304,9 @@ form[name="section-id"] {
   border-radius: 10px;
   box-shadow: 2px 2px 6px 4px #ccc;
   width: 350px;
-  height: 300px;
+  height: 350px;
   padding: 20px;
+  align-self: center;
 }
 
 .form-head {

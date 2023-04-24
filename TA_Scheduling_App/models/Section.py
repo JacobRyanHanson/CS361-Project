@@ -146,6 +146,8 @@ class Section(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         return value
 
     def checkDuplicate(self, number):
+        if number is Null():
+            return False
         # Check if the section number is already in use within the same course
         return Section.objects.filter(COURSE=self.COURSE, SECTION_NUMBER=number).exists()
 

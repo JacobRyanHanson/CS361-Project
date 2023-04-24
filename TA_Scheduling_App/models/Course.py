@@ -184,6 +184,8 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         return value
 
     def checkDuplicate(self, number):
+        if number is Null():
+            return False
         # Check if the course number is already in use within the same department
         return Course.objects.filter(DEPARTMENT=self.DEPARTMENT, COURSE_NUMBER=number).exists()
 

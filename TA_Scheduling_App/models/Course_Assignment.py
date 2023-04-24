@@ -33,7 +33,7 @@ class CourseAssignment(IVerification, models.Model, metaclass=ABCModelMeta):
 
         ta = kwargs.get('TA', Null())
 
-        if ta is None or ta.ROLE != "TA" or (not isinstance(ta, User) and not Null()):
+        if (ta is None) or (not Null() and ta.ROLE != "TA") or (not isinstance(ta, User) and not Null()):
             raise ValueError("Invalid TA")
 
         if ta is not Null():
@@ -57,4 +57,7 @@ class CourseAssignment(IVerification, models.Model, metaclass=ABCModelMeta):
             return False
 
     def checkDuplicate(self, course, ta):
+        if course or ta is Null():
+            return False
+        # Check if the TA is already assigned to the course
         return CourseAssignment.objects.filter(COURSE=course, TA=ta).exists()

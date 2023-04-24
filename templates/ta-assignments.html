@@ -63,6 +63,7 @@
             {# </div>#}
 
 
+        <div class="status-message">{{ status }}</div>
         {# Admin View #}
         {% for course in courses %}
         <div class="table-container">
@@ -72,10 +73,11 @@
                 <tr data-rn="{{ forloop.counter }}">
                     {% if forloop.counter == 1 %}
                     <td>
-                        <form class="input-group" name="course-id" action="/" method="post">
+                        <form class="input-group" name="course-id" action="" method="post">
                             {% csrf_token %}
                             Course ID:
                             {{ course.COURSE_ID }}
+                            <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
                             <span class="input-group-btn">
                                 <button class="btn btn-primary form-btn" type="submit">Delete</button>
                             </span>
@@ -209,3 +211,4 @@
 </body>
 
 </html>
+
