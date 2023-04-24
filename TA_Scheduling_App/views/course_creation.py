@@ -38,7 +38,7 @@ class CourseCreation(View):
                             PREREQUISITES=prerequisites,
                             DEPARTMENT=department)
             course.save()
-            status = "Successful Course Creation"
+            status = "Successfully created the course."
         except User.DoesNotExist:
             status = f'The instructor with id {instructor_id} does not exist.'
         except Exception as e:

@@ -32,6 +32,7 @@ class AccountSettings(View):
 
         _date_of_birth = request.POST["dateOfBirth"]
         birth_date = datetime.date.fromisoformat(_date_of_birth)
+
         try:
             User(FIRST_NAME=first_name,
                  LAST_NAME=last_name,

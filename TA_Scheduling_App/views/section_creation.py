@@ -49,7 +49,7 @@ class SectionCreation(View):
                               SECTION_START=start_time,
                               SECTION_END=end_time)
             section.save()
-            status = "Successful Section Creation"
+            status = "Successfully created the section."
         except Course.DoesNotExist:
             status = f'The course with id {course_id} does not exist.'
         except Exception as e:
