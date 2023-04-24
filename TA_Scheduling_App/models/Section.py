@@ -11,9 +11,11 @@ from django.db.models.base import ModelBase
 # and 'None' given explicitly as input.
 from ..null import Null
 
+
 # Class to resolve inheritance
 class ABCModelMeta(ABCMeta, ModelBase):
     pass
+
 
 class Section(IVerification, IString, models.Model, metaclass=ABCModelMeta):
     SECTION_ID = models.AutoField(primary_key=True)
@@ -148,5 +150,3 @@ class Section(IVerification, IString, models.Model, metaclass=ABCModelMeta):
     def checkDuplicate(self, number):
         # Check if the section number is already in use within the same course
         return Section.objects.filter(COURSE=self.COURSE, SECTION_NUMBER=number).exists()
-
-
