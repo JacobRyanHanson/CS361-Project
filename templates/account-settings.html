@@ -13,8 +13,8 @@
 {% include 'partials/header.html' %}
 {% load formatting_tags %}
 <div class="main-container">
-    <div class="profile-form profile-group">
-        <p id="profile-header">Account Settings</p>
+    <div class="form-container">
+        <h5 class="form-head">Account Settings</h5>
         <div class="status-message">{{ status }}</div>
         <form class="d-flex flex-column" name="updateProfileForm" action="" method="post">
             {% csrf_token %}

@@ -65,6 +65,23 @@ label {
   width: 100%;
 }
 
+.form-head {
+  font-size: 24pt;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.form-container {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  flex-basis: 350px;
+  box-shadow: 2px 2px 6px 4px #ccc;
+  height: min-content;
+  align-self: center;
+}
+
 /* ------------------------ Header/Footer ------------------------*/
 
 header,
@@ -227,36 +244,12 @@ form[name="section-id"] {
 }
 
 /* ------------------------ Account Settings/Profile Page ------------------------*/
-
-.profile-form {
-  background-color: white;
-  text-align: center;
-  padding: 20px;
-  border-radius: 10px;
-  flex-basis: 400px;
-  width: 100%;
-  display: inline-block;
-  box-shadow: 2px 2px 6px 4px #ccc;
-}
-
-.profile-group {
-  margin-left: 20px;
-  margin-right: 20px;
-}
-
 .profile-form-label {
   width: 172px;
-  text-align: left;
 }
 
 .profile-form input {
   width: 100% !important;
-}
-
-/* text above contact information submission form */
-#profile-header {
-  font-size: 24pt;
-  text-align: center;
 }
 
 /* ------------------------ Account User Management Page ------------------------*/
@@ -291,23 +284,8 @@ form[name="section-id"] {
 
 /* ------------------------ Login Page ------------------------*/
 
-.login-container {
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 2px 2px 6px 4px #ccc;
-  flex-basis: 350px;
-  padding: 20px;
-  align-self: center;
-}
-
 .login-form-label {
   width: 100px;
-}
-
-.form-head {
-  font-size: 24pt;
-  text-align: center;
-  margin-top: 10px;
 }
 
 /* ------------------------ Dashboard Pages ------------------------*/
