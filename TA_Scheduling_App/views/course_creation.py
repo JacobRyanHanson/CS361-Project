@@ -9,29 +9,39 @@ class CourseCreation(View):
     def get(self, request):
         if not request.session.get("is_authenticated"):
             return redirect("login")
-        if request.session.get("user_role") not in ["ADMIN", "INSTRUCTOR"]:
-            raise PermissionDenied("You are not permitted to create courses")
+        if request.session.get("user_role") != "ADMIN":
+            # send to home per state machine
+            return redirect("home")
 
-        return render(request, "course_creation.html", {})
+        return render(request, "course-creation.html", {})
 
     def post(self, request):
-        course_number = request.POST['course-number']
-        instructor = request.POST['course-instructor']
-        course_name = request.POST['course-name']
-        course_description = request.POST['course-description']
+        if request.session.get("user_role") != "ADMIN":
+            raise PermissionDenied("You are not permitted to delete users")
+
+        course_number = request.POST['courseNumber']
+        instructor_id = request.POST['instructorID']
+        course_name = request.POST['courseName']
+        course_description = request.POST['courseDescription']
         semester = request.POST['semester']
         prerequisites = request.POST['prerequisites']
         department = request.POST['department']
 
         try:
-            course = Course(COURSE_NUMBER=course_number, INSTRUCTOR=User.objects.get(pk=instructor),
-                            COURSE_NAME=course_name, COURSE_DESCRIPTION=course_description, SEMESTER=semester,
-                            PREREQUISITES=prerequisites, DEPARTMENT=department)
+            instructor = User.objects.get(USER_ID=instructor_id, ROLE="INSTRUCTOR")
 
-        except ValueError as e:
-            context = {'status': str(e)}
-            return render(request, "course_creation.html", context)
+            course = Course(COURSE_NUMBER=course_number,
+                            INSTRUCTOR=instructor,
+                            COURSE_NAME=course_name,
+                            COURSE_DESCRIPTION=course_description,
+                            SEMESTER=semester,
+                            PREREQUISITES=prerequisites,
+                            DEPARTMENT=department)
+            course.save()
+            status = "Successful Course Creation"
+        except User.DoesNotExist:
+            status = f'The instructor with id {instructor_id} does not exist.'
+        except Exception as e:
+            status = e
 
-        course.save()
-        context = {'status': "Successful Course Creation"}
-        return render(request, "course_creation.html", context)
+        return render(request, "course-creation.html", {'status': status})

@@ -6,16 +6,13 @@ from TA_Scheduling_App.models import User
 
 
 class AccountSettings(View):
-    def get_active_user(self, request):
-        return User.objects.get(USER_ID=request.session["user_id"])
-
     def get(self, request):
         # check user is logged in - all users can access their own account settings
         if not request.session.get("is_authenticated"):
             return redirect("login")
 
         # get known profile information for user
-        user = self.get_active_user(request)
+        user = User.objects.get(USER_ID=request.session["user_id"])
         return render(request, "account-settings.html", {'initial': user})
 
     def post(self, request):
@@ -24,7 +21,7 @@ class AccountSettings(View):
         if not request.session.get("is_authenticated"):
             raise PermissionDenied("Not logged in")
 
-        user = self.get_active_user(request)
+        user = User.objects.get(USER_ID=request.session["user_id"])
 
         # validate information provided by user
         first_name = request.POST["firstName"]

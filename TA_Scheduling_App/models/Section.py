@@ -37,8 +37,12 @@ class Section(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         if course is not Null():
             self.COURSE = course
 
-        if not self.setSectionNumber(kwargs.get('SECTION_NUMBER', Null())):
+        result = self.setSectionNumber(kwargs.get('SECTION_NUMBER', Null()))
+
+        if result == False:
             raise ValueError("Invalid section number")
+        elif result == None:
+            raise ValueError("Deplicate section number assignment failed")
 
         if not self.setBuilding(kwargs.get('BUILDING', Null())):
             raise ValueError("Invalid building")
@@ -56,20 +60,23 @@ class Section(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         if number is Null():
             return True
 
-        # Check if the input is an integer
-        if not isinstance(number, int):
+        try:
+            if isinstance(number, float):
+                return False
+            int_value = int(number)
+        except Exception:
             return False
 
         # Check if the input is negative or above the max value
-        if number < 0 or number > 9999:
+        if int_value < 0 or int_value > 9999:
             return False
 
         # Check for duplicate section number
-        if self.checkDuplicate(number):
-            return False
+        if self.checkDuplicate(int_value):
+            return None
 
         # If all checks pass, set the section number
-        self.SECTION_NUMBER = number
+        self.SECTION_NUMBER = int_value
         return True
 
     def setBuilding(self, building):

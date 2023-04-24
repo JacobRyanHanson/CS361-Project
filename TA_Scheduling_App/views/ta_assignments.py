@@ -1,3 +1,4 @@
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 from django.views import View
 from TA_Scheduling_App.models import Course, User, CourseAssignment, Section, SectionAssignment
@@ -7,14 +8,14 @@ class TAAssignments(View):
         # Check if the user is authenticated using the session
         if not request.session.get('is_authenticated'):
             return redirect("login")
+
         courses = Course.objects.all()
 
         return render(request, "ta-assignments.html", {'courses': courses})
 
     def post(self, request):
-        # Check if the user is authenticated using the session
-        if not request.session.get('is_authenticated'):
-            return redirect("login")
+        if not request.session.get("is_authenticated"):
+            raise PermissionDenied("Not logged in")
 
         course_id = request.POST.get('course_id')
         instructor_email = request.POST.get('course_instructor')

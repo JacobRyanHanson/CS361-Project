@@ -12,7 +12,7 @@ urlpatterns = [
     path('logout/', Login.as_view(), name='logout'),
     path('home/', Home.as_view(), name="home"),
 
-    path('profile/', AccountSettings.as_view(), name="account_settings"),
+    path('account-settings/', AccountSettings.as_view(), name="account_settings"),
     path('dashboard-admin/', DashboardAdmin.as_view(), name="dashboard_admin"),
     path('dashboard-instructor/', DashboardInstructor.as_view(), name="dashboard_instructor"),
     path('dashboard-ta/', DashboardTA.as_view(), name="dashboard_ta"),
