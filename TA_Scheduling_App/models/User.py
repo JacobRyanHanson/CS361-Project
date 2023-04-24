@@ -148,7 +148,7 @@ class User(IString, models.Model, metaclass=ABCModelMeta):
         if not any(c.isalnum() for c in new_address):
             return False
 
-        self.address = new_address
+        self.ADDRESS = new_address
         return True
 
     def setBirthDate(self, birthDate):

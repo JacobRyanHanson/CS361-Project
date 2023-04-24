@@ -127,24 +127,6 @@ footer {
   }
 }
 
-/* ------------------------ Home Page ------------------------*/
-
-.page-btn {
-  width: 100%;
-  max-width: 200px;
-  flex: 1;
-  display: flex;
-  /* Add display flex */
-  align-items: center;
-  /* Center the text vertically */
-  justify-content: center;
-  /* Center the text horizontally */
-  white-space: normal;
-  /* Allow the text to wrap if needed */
-  text-align: center;
-  /* Center the text within the button */
-}
-
 /* ------------------------ TA Assignments Page ------------------------*/
 
 form[name="course-id"],
@@ -236,11 +218,13 @@ form[name="section-id"] {
 /* ------------------------ Account Settings/Profile Page ------------------------*/
 
 .profile-form {
+  background-color: white;
   text-align: center;
   display: block;
   padding: 20px;
-  border: solid 2px;
   width: 20%;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* display form elements as block */
@@ -279,20 +263,24 @@ form[name="section-id"] {
 /* Container with all user list tables inside */
 #user-management-user-list {
   display: flex;
-  flex-grow: 1;
   flex-wrap: wrap;
   gap: 1rem;
   width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 /* Styling on each table representing a user */
-.user-management-user-table {}
+.user-management-user-table {
+  background-color: white;
+  display: block;
+}
 
 .user-management-user-table td {
   vertical-align: middle;
 }
 
-#user-delete-form {
+.user-delete-form {
   float: right;
 }
 
@@ -324,10 +312,14 @@ form[name="section-id"] {
   justify-content: center;
 }
 
-/* ------------------------ Dashboard Page ------------------------*/
+/* ------------------------ Dashboard Pages ------------------------*/
 
-.assign-btn {
+.dashboard-container {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+}
+
+.dashboard-container button {
   font-size: 20px;
-  font-weight: 300;
-  padding: 20px 24px;
 }
