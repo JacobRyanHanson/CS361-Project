@@ -50,7 +50,6 @@ tbody>tr:last-child>td {
 .status-message {
   text-align: center;
   margin-bottom: 5px;
-  color: #dc3545;
   display: inline-block;
   width: 100%;
 }

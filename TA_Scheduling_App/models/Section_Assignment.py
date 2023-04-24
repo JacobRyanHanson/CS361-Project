@@ -33,6 +33,16 @@ class SectionAssignment(models.Model):
         if section is not Null() and courseAssignment is not Null() and section.COURSE != courseAssignment.COURSE:
             raise ValueError("Section is not for the same course as the course assignment")
 
+        # Check for duplicate assignment
+        if self.checkDuplicate(courseAssignment, section):
+            raise ValueError("Duplicate assignment failed")
+
+    def checkDuplicate(self, courseAssignment, section):
+        if courseAssignment is Null() or section is Null():
+            return False
+        # Check if the TA is already assigned to the section
+        return SectionAssignment.objects.filter(COURSE_ASSIGNMENT=courseAssignment, SECTION=section).exists()
+
 
 
 
