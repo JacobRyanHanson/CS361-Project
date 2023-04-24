@@ -9,7 +9,6 @@ class TAAssignments(View):
             return redirect("login")
 
         courses = Course.objects.all()
-
         return render(request, "ta-assignments.html", {'courses': courses})
 
     def post(self, request):

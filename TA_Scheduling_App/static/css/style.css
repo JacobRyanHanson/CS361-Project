@@ -154,11 +154,13 @@ footer {
   }
 }
 
-/* ------------------------ TA Assignments Page ------------------------*/
+/* ------------------------ TA Assignments and User Management Page ------------------------*/
 
 form[name="course-id"],
 form[name="course-instructor"],
-form[name="section-id"] {
+form[name="section-id"],
+form[name="user-id"],
+.safe-user {
   justify-content: space-between;
   align-items: center;
 }
