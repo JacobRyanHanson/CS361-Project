@@ -14,7 +14,6 @@
     {% include 'partials/header.html' %}
     <div class="main-container">
         <div class="status-message">{{ status }}</div>
-        <div id="user-management-user-list">
             {% for user in users %}
                 <div class="table-container">
                      <table class="table table-striped">
@@ -78,7 +77,6 @@
                 </div>
             {% endfor %}
         </div>
-    </div>
     {% include 'partials/footer.html' %}
 </body>
 </html>
