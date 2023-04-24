@@ -15,18 +15,18 @@ class CourseManagement(View):
         return render(request, "course-management.html", {})
 
     def post(self, request):
-        COURSE_NUMBER = request.POST['course-number']
-        INSTRUCTOR = request.POST['course-instructor']
-        COURSE_NAME = request.POST['course-name']
-        COURSE_DESCRIPTION = request.POST['course-description']
-        SEMESTER = request.POST['semester']
-        PREREQUISITES = request.POST['prerequisites']
-        DEPARTMENT = request.POST['department']
+        course_number = request.POST['course-number']
+        instructor = request.POST['course-instructor']
+        course_name = request.POST['course-name']
+        course_description = request.POST['course-description']
+        semester = request.POST['semester']
+        prerequisites = request.POST['prerequisites']
+        department = request.POST['department']
 
         try:
-            course = Course(COURSE_NUMBER=COURSE_NUMBER, INSTRUCTOR=User.objects.get(pk=INSTRUCTOR),
-                            COURSE_NAME=COURSE_NAME, COURSE_DESCRIPTION=COURSE_DESCRIPTION, SEMESTER=SEMESTER,
-                            PREREQUISITES=PREREQUISITES, DEPARTMENT=DEPARTMENT)
+            course = Course(COURSE_NUMBER=course_number, INSTRUCTOR=User.objects.get(pk=instructor),
+                            COURSE_NAME=course_name, COURSE_DESCRIPTION=course_description, SEMESTER=semester,
+                            PREREQUISITES=prerequisites, DEPARTMENT=department)
 
         except ValueError as e:
             context = {'status': str(e)}
