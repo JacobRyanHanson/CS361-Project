@@ -9,13 +9,16 @@ class SectionCreation(View):
         if not request.session.get("is_authenticated"):
             return redirect("login")
         if request.session.get("user_role") != "ADMIN":
-            # send to home per state machine
             return redirect("home")
+
         context = {'h_range': range(1, 25),
                    'm_range': range(0, 60)}
+
         return render(request, "section-creation.html", context)
 
     def post(self, request):
+        if not request.session.get("is_authenticated"):
+            raise PermissionDenied("Not logged in.")
         if request.session.get("user_role") != "ADMIN":
             raise PermissionDenied("You are not permitted to create sections.")
 
@@ -55,4 +58,5 @@ class SectionCreation(View):
         context = {'h_range': range(1, 25),
                    'm_range': range(0, 60),
                    'status': status}
+
         return render(request, "section-creation.html", context)

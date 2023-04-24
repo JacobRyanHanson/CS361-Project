@@ -7,7 +7,7 @@ from TA_Scheduling_App.models import User
 class UserManagement(View):
     def get_users(self, request):
         users = User.objects.all()
-        # annotate logged in user with flag so we do not render 'delete' button
+        # annotate logged-in user with flag, so we do not render 'delete' button
         user_id = request.session.get("user_id")
         for user in users:
             user.deletable = user.USER_ID != user_id
@@ -26,6 +26,8 @@ class UserManagement(View):
         return render(request, "user-management.html", {'users': users})
 
     def post(self, request):
+        if not request.session.get("is_authenticated"):
+            raise PermissionDenied("Not logged in.")
         # a user deletion has been requested
         # validate access to this operation
         if request.session.get("user_role") != "ADMIN":

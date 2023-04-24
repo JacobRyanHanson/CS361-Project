@@ -309,6 +309,12 @@ form[name="section-id"] {
 .section-form-label {
   width: 257px;
 }
+
 .section-form-select[name="startTimeH"], .section-form-select[name="endTimeH"] {
   margin-right: 10px;
+}
+
+/* ------------------------ Create User Page ------------------------*/
+.user-form-label {
+  width: 198px;
 }

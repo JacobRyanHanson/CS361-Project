@@ -8,13 +8,18 @@ class UserCreation(View):
     def get(self, request):
         if not request.session.get("is_authenticated"):
             return redirect("login")
-        if request.session.get("user_role") not in ["ADMIN"]:
-            raise PermissionDenied("You are not permitted to create users")
+        if request.session.get("user_role") != "ADMIN":
+            return redirect("home")
 
         return render(request, "user-creation.html", {})
 
     def post(self, request):
-        role = request.POST['userType']
+        if not request.session.get("is_authenticated"):
+            raise PermissionDenied("Not logged in.")
+        if request.session.get("user_role") != "ADMIN":
+            raise PermissionDenied("You are not permitted to create users.")
+
+        role = request.POST['role']
         first_name = request.POST['firstName']
         last_name = request.POST['lastName']
         email = request.POST['email']
