@@ -122,19 +122,6 @@ footer {
   }
 }
 
-/* ------------------------ Home Page ------------------------*/
-
-.page-btn {
-  width: 100%;
-  max-width: 200px;
-  flex: 1;
-  display: flex; /* Add display flex */
-  align-items: center; /* Center the text vertically */
-  justify-content: center; /* Center the text horizontally */
-  white-space: normal; /* Allow the text to wrap if needed */
-  text-align: center; /* Center the text within the button */
-}
-
 /* ------------------------ TA Assignments Page ------------------------*/
 
 .table-container, .nested-table-container {
@@ -289,10 +276,14 @@ footer {
   justify-content: center;
 }
 
-/* ------------------------ Dashboard Page ------------------------*/
+/* ------------------------ Dashboard Pages ------------------------*/
 
-.assign-btn {
+.dashboard-container {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+}
+
+.dashboard-container button {
   font-size: 20px;
-  font-weight: 300;
-  padding: 20px 24px;
 }
