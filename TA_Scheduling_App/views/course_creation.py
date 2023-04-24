@@ -12,12 +12,11 @@ class CourseCreation(View):
         if request.session.get("user_role") != "ADMIN":
             # send to home per state machine
             return redirect("home")
-
         return render(request, "course-creation.html", {})
 
     def post(self, request):
         if request.session.get("user_role") != "ADMIN":
-            raise PermissionDenied("You are not permitted to delete users")
+            raise PermissionDenied("You are not permitted to create courses.")
 
         course_number = request.POST['courseNumber']
         instructor_id = request.POST['instructorID']

@@ -300,7 +300,15 @@ form[name="section-id"] {
   font-size: 20px;
 }
 
-/* ------------------------ Create Course/Course Management Page ------------------------*/
+/* ------------------------ Create Course Page ------------------------*/
 .course-form-label {
   width: 287px;
+}
+
+/* ------------------------ Create Section Page ------------------------*/
+.section-form-label {
+  width: 257px;
+}
+.section-form-select[name="startTimeH"], .section-form-select[name="endTimeH"] {
+  margin-right: 10px;
 }

@@ -15,7 +15,7 @@ class TAAssignments(View):
 
     def post(self, request):
         if not request.session.get("is_authenticated"):
-            raise PermissionDenied("Not logged in")
+            raise PermissionDenied("Not logged in.")
 
         course_id = request.POST.get('course_id')
         instructor_email = request.POST.get('course_instructor')

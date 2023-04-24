@@ -5,7 +5,7 @@ from .dashboard_instructor import DashboardInstructor
 from .dashboard_ta import DashboardTA
 from .home import Home
 from .login import Login
-from .section_management import SectionManagement
+from .section_creation import SectionCreation
 from .ta_assignments import TAAssignments
 from .user_creation import UserCreation
 from .user_management import UserManagement

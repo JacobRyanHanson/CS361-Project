@@ -44,7 +44,7 @@ class CourseAssignment(IVerification, models.Model, metaclass=ABCModelMeta):
 
         # Check for duplicate assignment
         if self.checkDuplicate(course, ta):
-            raise ValueError("Duplicate assignment failed")
+            raise ValueError("Duplicate assignment of TA to course failed")
 
     def setGrader(self, isGrader):
         if isGrader is Null():
