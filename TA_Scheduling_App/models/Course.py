@@ -32,7 +32,7 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         if result == False:
             raise ValueError("Invalid course number")
         elif result == None:
-            raise ValueError("Deplicate course number assignment failed")
+            raise ValueError("Duplicate course number assignment failed")
 
         if not self.setInstructor(kwargs.get('INSTRUCTOR', Null())):
             raise ValueError("Invalid instructor")
