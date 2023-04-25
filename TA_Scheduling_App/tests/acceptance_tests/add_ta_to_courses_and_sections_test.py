@@ -457,12 +457,6 @@ class InvalidDuplicateAssignment(TestCase):
             'course_ta_select': 'true'
         }
 
-        self.other_course_assignment_form_data = {
-            'course_id': 2,
-            'course_ta_email': 'ta@example.com',
-            'course_ta_select': 'true'
-        }
-
         self.section_assignment_form_data = {
             'course_id': 1,
             'section_ta_email': 'ta@example.com',
