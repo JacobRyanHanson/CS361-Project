@@ -124,16 +124,6 @@ class ViewAllSuccess(TestCase):
             }
             self.assertIn(user_data, self.expected_users, f"Unexpected user found: {user_data}")
 
-
-
-
-
-
-
-
-
-
-
 class ViewAllFail(TestCase):
     def setUp(self):
         self.client = Client()
@@ -151,62 +141,104 @@ class ViewAllFail(TestCase):
 
         self.admin.save()
 
+        self.instructor_1 = User.objects.create(
+            ROLE='INSTRUCTOR',
+            FIRST_NAME='Amy',
+            LAST_NAME='Smith',
+            EMAIL='instructor_1@example.com',
+            PHONE_NUMBER='555-987-6543',
+            ADDRESS='456 Elm St',
+            BIRTH_DATE=date(1995, 6, 15)
+        )
+
+        self.instructor_1.save()
+
+        self.instructor_2 = User.objects.create(
+            ROLE='INSTRUCTOR',
+            FIRST_NAME='Alice',
+            LAST_NAME='Smith',
+            EMAIL='instructor_2@example.com',
+            PHONE_NUMBER='555-987-6543',
+            ADDRESS='456 Elm St',
+            BIRTH_DATE=date(1995, 6, 15)
+        )
+
+        self.instructor_2.save()
+
+        self.ta = User.objects.create(
+            ROLE='TA',
+            FIRST_NAME='Tim',
+            LAST_NAME='Smith',
+            EMAIL='ta@example.com',
+            PHONE_NUMBER='555-987-6543',
+            ADDRESS='456 Elm St',
+            BIRTH_DATE=date(2000, 6, 15)
+        )
+
+        self.ta.save()
+
         self.credentials = {
             "email": "admin@example.com",
             "password": "ad_password"
         }
 
-        self.course = Course.objects.create(
-            COURSE_NUMBER=999,
-            INSTRUCTOR=None,
-            COURSE_NAME='Test Course',
-            COURSE_DESCRIPTION='A test course.',
-            SEMESTER='Fall 2023',
-            PREREQUISITES='',
-            DEPARTMENT='Computer Science'
-        )
-
-        self.course.save()
-
-        self.section = Section.objects.create(
-            SECTION_NUMBER=894,
-            COURSE=self.course,
-            BUILDING='Tech Building',
-            ROOM_NUMBER='999',
-            SECTION_START=time(9, 30),
-            SECTION_END=time(10, 20)
-        )
-
-        self.section.save()
-
         self.client.post("/", self.credentials, follow=True)
 
-        self.response = self.client.get("/ta-assignments/", follow=True)
+        self.response = self.client.get("/user-management/", follow=True)
         self.soup = BeautifulSoup(self.response.content, 'html.parser')
 
-    def test_no_courses_in_system_and_none_visible(self):
-        courses = Course.objects.all()
+        self.expected_users = [
+            {
+                'ROLE': 'ADMIN',
+                'FIRST_NAME': 'John',
+                'LAST_NAME': 'Doe',
+                'EMAIL': 'admin@example.com',
+                'PHONE_NUMBER': '555-123-4567',
+                'ADDRESS': '123 Main St',
+            },
+            {
+                'ROLE': 'INSTRUCTOR',
+                'FIRST_NAME': 'Amy',
+                'LAST_NAME': 'Smith',
+                'EMAIL': 'instructor_1@example.com',
+                'PHONE_NUMBER': '555-987-6543',
+                'ADDRESS': '456 Elm St',
+            },
+            {
+                'ROLE': 'INSTRUCTOR',
+                'FIRST_NAME': 'Alice',
+                'LAST_NAME': 'Smith',
+                'EMAIL': 'instructor_2@example.com',
+                'PHONE_NUMBER': '555-987-6543',
+                'ADDRESS': '456 Elm St',
+            },
+            {
+                'ROLE': 'TA',
+                'FIRST_NAME': 'Tim',
+                'LAST_NAME': 'Smith',
+                'EMAIL': 'ta@example.com',
+                'PHONE_NUMBER': '555-987-6543',
+                'ADDRESS': '456 Elm St',
+            }
+        ]
 
-        if len(courses) == 0:
-            self.assertIsNone(self.soup.find(lambda tag: tag.name == "h5" and contains_text(tag, "Course")), "A course was found")
+    def test_no_users_in_system_and_none_visible(self):
+        users = User.objects.all()
 
-    def test_no_sections_in_system_and_none_visible(self):
-        sections = Section.objects.all()
+        if len(users) == 1:  # Only the admin user exists
+            self.assertIsNone(self.soup.find(lambda tag: tag.name == "h5" and contains_text(tag, "User")), "A user was found")
 
-        if len(sections) == 0:
-            self.assertIsNone(self.soup.find(lambda tag: tag.name == "h5" and contains_text(tag, "Section")), "A section was found")
+    def test_user_not_visible_when_deleted(self):
+        self.admin.delete()
+        self.instructor_1.delete()
+        self.instructor_2.delete()
+        self.ta.delete()
 
-    def test_course_not_visible_when_deleted(self):
-        self.course.delete()
-        self.response = self.client.get("/ta-assignments/", follow=True)
+        self.response = self.client.get("/user-management/", follow=True)
         self.soup = BeautifulSoup(self.response.content, 'html.parser')
-        self.assertIsNone(self.soup.find(lambda tag: contains_text(tag, 'Test Course')), "Deleted course was found")
 
-    def test_section_not_visible_when_deleted(self):
-        self.section.delete()
-        self.response = self.client.get("/ta-assignments/", follow=True)
-        self.soup = BeautifulSoup(self.response.content, 'html.parser')
-        self.assertIsNone(self.soup.find(lambda tag: contains_text(tag, '894')), "Deleted section was found")
+        for user in self.expected_users:
+            self.assertIsNone(self.soup.find(lambda tag: contains_text(tag, user['FIRST_NAME'])), "Deleted user was found")
 
 
 
