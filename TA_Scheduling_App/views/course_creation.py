@@ -10,14 +10,14 @@ class CourseCreation(View):
         if not request.session.get("is_authenticated"):
             return redirect("login")
         if request.session.get("user_role") != "ADMIN":
-            # send to home per state machine
             return redirect("home")
-
         return render(request, "course-creation.html", {})
 
     def post(self, request):
+        if not request.session.get("is_authenticated"):
+            raise PermissionDenied("Not logged in.")
         if request.session.get("user_role") != "ADMIN":
-            raise PermissionDenied("You are not permitted to delete users")
+            raise PermissionDenied("You are not permitted to create courses.")
 
         course_number = request.POST['courseNumber']
         instructor_id = request.POST['instructorID']
@@ -38,7 +38,7 @@ class CourseCreation(View):
                             PREREQUISITES=prerequisites,
                             DEPARTMENT=department)
             course.save()
-            status = "Successful Course Creation"
+            status = "Successfully created the course."
         except User.DoesNotExist:
             status = f'The instructor with id {instructor_id} does not exist.'
         except Exception as e:

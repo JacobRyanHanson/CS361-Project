@@ -6,6 +6,7 @@ from abc import ABCMeta
 from ..interfaces.i_verification import IVerification
 from ..interfaces.i_string import IString
 from django.db.models.base import ModelBase
+import time
 
 # Used so that the constructor can distinguish between no input Null()
 # and 'None' given explicitly as input.

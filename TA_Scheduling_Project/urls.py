@@ -10,6 +10,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', Login.as_view(), name='login'),
     path('logout/', Login.as_view(), name='logout'),
+
     path('home/', Home.as_view(), name="home"),
 
     path('account-settings/', AccountSettings.as_view(), name="account_settings"),
@@ -18,7 +19,7 @@ urlpatterns = [
     path('dashboard-ta/', DashboardTA.as_view(), name="dashboard_ta"),
 
     path('course-creation/', CourseCreation.as_view(), name="course_creation"),
-    path('section-creation/', SectionManagement.as_view(), name="section_creation"),
+    path('section-creation/', SectionCreation.as_view(), name="section_creation"),
     path('user-creation/', UserCreation.as_view(), name="user_creation"),
 
     path('ta-assignments/', TAAssignments.as_view(), name="ta_assignments"),

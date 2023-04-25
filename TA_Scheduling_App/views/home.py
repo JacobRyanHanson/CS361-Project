@@ -3,7 +3,6 @@ from django.views import View
 
 class Home(View):
     def get(self, request):
-        # Check if the user is authenticated using the session
         if not request.session.get('is_authenticated'):
             return redirect("login")
         return render(request, "home.html", {})

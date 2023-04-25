@@ -154,11 +154,13 @@ footer {
   }
 }
 
-/* ------------------------ TA Assignments Page ------------------------*/
+/* ------------------------ TA Assignments and User Management Page ------------------------*/
 
 form[name="course-id"],
 form[name="course-instructor"],
-form[name="section-id"] {
+form[name="section-id"],
+form[name="user-id"],
+.safe-user {
   justify-content: space-between;
   align-items: center;
 }
@@ -300,7 +302,21 @@ form[name="section-id"] {
   font-size: 20px;
 }
 
-/* ------------------------ Create Course/Course Management Page ------------------------*/
+/* ------------------------ Create Course Page ------------------------*/
 .course-form-label {
   width: 287px;
+}
+
+/* ------------------------ Create Section Page ------------------------*/
+.section-form-label {
+  width: 257px;
+}
+
+.section-form-select[name="startTimeH"], .section-form-select[name="endTimeH"] {
+  margin-right: 10px;
+}
+
+/* ------------------------ Create User Page ------------------------*/
+.user-form-label {
+  width: 198px;
 }

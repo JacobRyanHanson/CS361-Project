@@ -5,17 +5,15 @@ from TA_Scheduling_App.models import Course, User, CourseAssignment, Section, Se
 
 class TAAssignments(View):
     def get(self, request):
-        # Check if the user is authenticated using the session
         if not request.session.get('is_authenticated'):
             return redirect("login")
 
         courses = Course.objects.all()
-
         return render(request, "ta-assignments.html", {'courses': courses})
 
     def post(self, request):
         if not request.session.get("is_authenticated"):
-            raise PermissionDenied("Not logged in")
+            raise PermissionDenied("Not logged in.")
 
         course_id = request.POST.get('course_id')
         instructor_email = request.POST.get('course_instructor')

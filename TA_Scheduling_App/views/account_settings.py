@@ -19,7 +19,7 @@ class AccountSettings(View):
         # user has requested a profile update
         # verify user is logged in
         if not request.session.get("is_authenticated"):
-            raise PermissionDenied("Not logged in")
+            raise PermissionDenied("Not logged in.")
 
         user = User.objects.get(USER_ID=request.session["user_id"])
 
@@ -32,6 +32,7 @@ class AccountSettings(View):
 
         _date_of_birth = request.POST["dateOfBirth"]
         birth_date = datetime.date.fromisoformat(_date_of_birth)
+
         try:
             User(FIRST_NAME=first_name,
                  LAST_NAME=last_name,
@@ -39,8 +40,8 @@ class AccountSettings(View):
                  PHONE_NUMBER=phone_number,
                  ADDRESS=address,
                  BIRTH_DATE=birth_date)
-        except ValueError as ve:
-            return render(request, "account-settings.html", {'initial': user, 'status': str(ve)})
+        except Exception as e:
+            return render(request, "account-settings.html", {'initial': user, 'status': e})
 
         # information has been validated, update object
         user.setFirstName(first_name)

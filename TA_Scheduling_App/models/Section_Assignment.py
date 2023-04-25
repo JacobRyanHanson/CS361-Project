@@ -42,7 +42,7 @@ class SectionAssignment(IVerification, models.Model, metaclass=ABCModelMeta):
 
         # Check for duplicate assignment
         if self.checkDuplicate(courseAssignment, section):
-            raise ValueError("Duplicate assignment failed")
+            raise ValueError("Duplicate assignment of TA to section failed")
 
     def checkDuplicate(self, courseAssignment, section):
         if courseAssignment is Null() or section is Null():
