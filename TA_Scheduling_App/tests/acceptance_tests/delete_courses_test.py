@@ -55,17 +55,15 @@ class DeleteCourseSuccessTest(TestCase):
         self.client.post("/", self.credentials, follow=True)
 
     def test_delete_course(self):
-        courses = Course.objects.filter(COURSE_NUMBER=self.course.COURSE_NUMBER)
-        self.assertEqual(len(courses), 1)
+        self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.course.COURSE_NUMBER)), 1)
 
         response = self.client.post("/ta-assignments/", {"courseNumber": self.course.delete()})
         self.assertEqual(response.status_code, 200)
 
-        courses = Course.objects.filter(COURSE_NUMBER=self.course.COURSE_NUMBER)
-        self.assertEqual(len(courses), 0)
+        self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.course.COURSE_NUMBER)), 0)
 
 
-class CourseCreationFailTest(TestCase):
+class DeleteCourseFailTest(TestCase):
     def setUp(self):
         self.client = Client()
 
@@ -127,20 +125,17 @@ class CourseCreationFailTest(TestCase):
         self.client.post("/", self.credentials, follow=True)
 
     def test_delete_nonexistent_course(self):
-        courses = Course.objects.filter(COURSE_NUMBER=self.course.COURSE_NUMBER)
-        self.assertEqual(len(courses), 1)
+        self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.course.COURSE_NUMBER)), 1)
 
         response = self.client.post("/ta-assignments/", {"courseNumber": self.course.delete()})
         self.assertEqual(response.status_code, 200)
 
-        courses = Course.objects.filter(COURSE_NUMBER=self.course.COURSE_NUMBER)
-        self.assertEqual(len(courses), 0)
+        self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.course.COURSE_NUMBER)), 0)
 
         with self.assertRaises(ValueError):
             # Attempt to delete course that doesn't exist
             response = self.client.post("/ta-assignments/", {"courseNumber": self.course.delete()})
-            self.assertContains(response, "does not exist", status_code=200)
+            self.assertEqual(response, 'Course does not exist')
 
         # Test that newCourse has not been deleted
-        courses = Course.objects.filter(COURSE_NUMBER=self.newCourse.COURSE_NUMBER)
-        self.assertEqual(len(courses), 1)
+        self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.newCourse.COURSE_NUMBER)), 1)

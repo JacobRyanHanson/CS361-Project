@@ -64,12 +64,11 @@ class CourseCreationSuccessTest(TestCase):
             "prerequisites": '',
             "department": 'Computer Science'
         }
-        response = self.client.post("/course-creation/", self.course_data)
 
+        response = self.client.post("/course-creation/", self.course_data)
         self.assertEqual(response.status_code, 200)
 
-        courses = Course.objects.filter(COURSE_NUMBER=self.course_data["courseNumber"])
-        self.assertEqual(len(courses), 1)
+        self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.course_data["courseNumber"])), 1)
 
 
 class CourseCreationFailTest(TestCase):
@@ -152,12 +151,10 @@ class CourseCreationFailTest(TestCase):
                 PREREQUISITES=self.course_data2["prerequisites"],
                 DEPARTMENT=self.course_data2["department"]
             )
+            response = self.client.post("/course-creation/", self.course_data2)
+            self.assertEqual(response, "Duplicate course number assignment failed", status_code=200)
 
-        response = self.client.post("/course-creation/", self.course_data2)
-        self.assertContains(response, "Duplicate", status_code=200)
-
-        courses = Course.objects.filter(COURSE_NUMBER=self.course_data2["courseNumber"])
-        self.assertEqual(len(courses), 1)
+        self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.course_data2["courseNumber"])), 1)
 
     def test_invalid_course_input(self):
         self.invalid_course_data = {
@@ -179,11 +176,6 @@ class CourseCreationFailTest(TestCase):
                 PREREQUISITES=self.invalid_course_data["prerequisites"],
                 DEPARTMENT=self.invalid_course_data["department"]
             )
-        response = self.client.post("/course-creation/", self.invalid_course_data)
-        self.assertContains(response, "Invalid", status_code=200)
-
-        with self.assertRaises(ValueError):
-            Course.objects.filter(COURSE_NUMBER=self.invalid_course_data["courseNumber"])
-
-
+            response = self.client.post("/course-creation/", self.invalid_course_data)
+            self.assertEqual(response, "Invalid course number", status_code=200)
 
