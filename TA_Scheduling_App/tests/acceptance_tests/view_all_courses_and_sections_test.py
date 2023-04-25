@@ -148,7 +148,7 @@ class ViewAllSuccess(TestCase):
                 self.assertIsNotNone(self.soup.find(lambda tag: contains_text(tag, value)), f"{key} {value} not found")
 
         # Find value of input field (not directly in HTML)
-        self.assertIsNotNone(self.soup.find('input', {'type': 'email', 'value': 'instructor@example.com'}), f"email not found")
+        self.assertIsNotNone(self.soup.find('input', {'type': 'email', 'value': 'instructor@example.com'}), f"Email not found")
 
     def test_no_extra_courses_exist(self):
         # Check for any unexpected courses
