@@ -1,7 +1,7 @@
 from datetime import date
-
 from django.test import TestCase, Client
-from TA_Scheduling_App.models import Course, Section, User
+from TA_Scheduling_App.models import Course, User
+
 
 class InstructorAssignSuccess(TestCase):
     def setUp(self):
@@ -58,7 +58,6 @@ class InstructorAssignSuccess(TestCase):
 
         self.course1.save()
 
-
         self.course2 = Course(
             COURSE_NUMBER=251,
             INSTRUCTOR=self.instructor1,
@@ -70,9 +69,6 @@ class InstructorAssignSuccess(TestCase):
         )
         
         self.course2.save()
-
-
-
 
         self.credentials = {
             "email": "admin@example.com",
@@ -90,8 +86,6 @@ class InstructorAssignSuccess(TestCase):
         response = self.client.post("/ta-assignments/", course_reassignment_form_data, follow=True)
         self.assertEqual(response.context['status'],
                          f'Instructor for course with ID {self.course1.COURSE_ID} has been updated to {self.instructor2.EMAIL}.')
-
-
 
     def test_assign_instructor_to_multiple_courses(self):
         course_reassignment_form_data1 = {
@@ -151,7 +145,6 @@ class InstructorAssignFail(TestCase):
             ADDRESS='120 College Ave',
             BIRTH_DATE=date(1998, 6, 15)
         )
-
 
         self.course = Course(
             COURSE_NUMBER=151,
