@@ -3,7 +3,7 @@ import datetime
 from django.test import TestCase, Client
 from TA_Scheduling_App.models import User
 
-class UserLoginTest(TestCase):
+class UserLoginSuccessTest(TestCase):
     def setUp(self):
         self.client = Client()
 
@@ -101,3 +101,88 @@ class UserLoginTest(TestCase):
         self.assertIsNone(self.client.session.get("is_authenticated"))
         self.assertIsNone(self.client.session.get("user_id"))
         self.assertIsNone(self.client.session.get("user_role"))
+
+class UserLoginFailTest(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.user = User(ROLE='TA',
+                         FIRST_NAME='Jane',
+                         LAST_NAME='Doe',
+                         EMAIL='test@example.com',
+                         PASSWORD_HASH='test_password',
+                         PHONE_NUMBER='555-123-4567',
+                         ADDRESS='1234 Elm St',
+                         BIRTH_DATE=datetime.date(1995, 8, 30))
+        self.user.save()
+
+    def test_invalid_email(self):
+        credentials = {
+            "email": "invalid@example.com",
+            "password": "test_password"
+        }
+
+        response = self.client.post("/", credentials)
+
+        is_authenticated = self.client.session.get('is_authenticated')
+        self.assertFalse(is_authenticated)
+        self.assertEqual(response.context['status'], "Invalid email or password.")
+
+    def test_invalid_password(self):
+        credentials = {
+            "email": "test@example.com",
+            "password": "invalid_password"
+        }
+
+        response = self.client.post("/", credentials)
+
+        is_authenticated = self.client.session.get('is_authenticated')
+        self.assertFalse(is_authenticated)
+        self.assertEqual(response.context['status'], "Invalid email or password.")
+
+    def test_both_email_and_password_invalid(self):
+        credentials = {
+            "email": "invalid@example.com",
+            "password": "invalid_password"
+        }
+
+        response = self.client.post("/", credentials)
+
+        is_authenticated = self.client.session.get('is_authenticated')
+        self.assertFalse(is_authenticated)
+        self.assertEqual(response.context['status'], "Invalid email or password.")
+
+    def test_empty_email_and_password(self):
+        credentials = {
+            "email": "",
+            "password": ""
+        }
+
+        response = self.client.post("/", credentials)
+
+        is_authenticated = self.client.session.get('is_authenticated')
+        self.assertFalse(is_authenticated)
+        self.assertEqual(response.context['status'], "Invalid email or password.")
+
+    def test_empty_email(self):
+        credentials = {
+            "email": "",
+            "password": "test_password"
+        }
+
+        response = self.client.post("/", credentials)
+
+        is_authenticated = self.client.session.get('is_authenticated')
+        self.assertFalse(is_authenticated)
+        self.assertEqual(response.context['status'], "Invalid email or password.")
+
+    def test_empty_password(self):
+        credentials = {
+            "email": "test@example.com",
+            "password": ""
+        }
+
+        response = self.client.post("/", credentials)
+
+        is_authenticated = self.client.session.get('is_authenticated')
+        self.assertFalse(is_authenticated)
+        self.assertEqual(response.context['status'], "Invalid email or password.")
