@@ -35,6 +35,14 @@ class CourseCreationSuccessTest(TestCase):
 
         self.instructor.save()
 
+        # Log the user in
+        self.credentials = {
+            "email": "admin@example.com",
+            "password": "ad_password"
+        }
+        self.client.post("/", self.credentials, follow=True)
+
+    def test_create_course(self):
         self.course = Course(
             COURSE_NUMBER=151,
             INSTRUCTOR=self.instructor,
@@ -56,15 +64,6 @@ class CourseCreationSuccessTest(TestCase):
             "prerequisites": '',
             "department": 'Computer Science'
         }
-
-        # Log the user in
-        self.credentials = {
-            "email": "admin@example.com",
-            "password": "ad_password"
-        }
-        self.client.post("/", self.credentials, follow=True)
-
-    def test_create_course(self):
         response = self.client.post("/course-creation/", self.course_data)
 
         self.assertEqual(response.status_code, 200)
@@ -155,7 +154,7 @@ class CourseCreationFailTest(TestCase):
             )
 
         response = self.client.post("/course-creation/", self.course_data2)
-        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Duplicate", status_code=200)
 
         courses = Course.objects.filter(COURSE_NUMBER=self.course_data2["courseNumber"])
         self.assertEqual(len(courses), 1)
@@ -183,6 +182,8 @@ class CourseCreationFailTest(TestCase):
         response = self.client.post("/course-creation/", self.invalid_course_data)
         self.assertContains(response, "Invalid", status_code=200)
 
+        with self.assertRaises(ValueError):
+            Course.objects.filter(COURSE_NUMBER=self.invalid_course_data["courseNumber"])
 
 
 
