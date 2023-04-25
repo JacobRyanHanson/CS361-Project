@@ -80,6 +80,29 @@ class AddSuccess(TestCase):
             'section_id': 1
         }
 
+        self.other_course = Course(
+            COURSE_NUMBER=178,
+            INSTRUCTOR=self.instructor,
+            COURSE_NAME='New Introduction to Computer Science',
+            COURSE_DESCRIPTION='An introductory course to the world of computer science.',
+            SEMESTER='Fall 2023',
+            PREREQUISITES='',
+            DEPARTMENT='Computer Science'
+        )
+
+        self.other_course.save()
+
+        self.other_section = Section(
+            SECTION_NUMBER=76,
+            COURSE=self.course,
+            BUILDING='Tech Building',
+            ROOM_NUMBER='111',
+            SECTION_START=time(9, 30),
+            SECTION_END=time(10, 20)
+        )
+
+        self.other_section.save()
+
         self.credentials = {
             "email": "admin@example.com",
             "password": "ad_password"
@@ -97,7 +120,30 @@ class AddSuccess(TestCase):
         self.assertEqual(response.context['status'], f'TA {self.ta.FIRST_NAME} {self.ta.LAST_NAME} assigned to section {self.section.SECTION_NUMBER}.')
 
     def test_assign_ta_to_multiple_courses(self):
-        pass
+        response = self.client.post("/ta-assignments/", self.course_assignment_form_data, follow=True)
+
+        other_course_assignment_form_data = {
+            'course_id': 2,
+            'course_ta_email': 'ta@example.com',
+            'course_ta_select': True
+        }
+
+        response = self.client.post("/ta-assignments/", other_course_assignment_form_data, follow=True)
+        self.assertEqual(response.context['status'], f'TA {self.ta.FIRST_NAME} {self.ta.LAST_NAME} assigned to course {self.other_course.COURSE_NAME}.')
+
+
     def test_assign_ta_to_multiple_sections(self):
-        pass
+        response = self.client.post("/ta-assignments/", self.course_assignment_form_data, follow=True)
+        response = self.client.post("/ta-assignments/", self.section_assignment_form_data, follow=True)
+
+        other_section_assignment_form_data = {
+            'course_id': 1,
+            'section_ta_email': 'ta@example.com',
+            'section_id': 2
+        }
+
+        response = self.client.post("/ta-assignments/", other_section_assignment_form_data, follow=True)
+        self.assertEqual(response.context['status'], f'TA {self.ta.FIRST_NAME} {self.ta.LAST_NAME} assigned to section {self.other_section.SECTION_NUMBER}.')
+
+
 
