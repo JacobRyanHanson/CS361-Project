@@ -181,11 +181,8 @@ class CourseCreationFailTest(TestCase):
                 DEPARTMENT=self.invalid_course_data["department"]
             )
         response = self.client.post("/course-creation/", self.invalid_course_data)
-        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Invalid", status_code=200)
 
-        with self.assertRaises(ValueError):
-            courses = Course.objects.filter(COURSE_NUMBER=self.invalid_course_data["courseNumber"])
-            self.assertEqual(len(courses), 1)
 
 
 
