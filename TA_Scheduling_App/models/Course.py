@@ -8,7 +8,7 @@ from django.db.models.base import ModelBase
 
 # Used so that the constructor can distinguish between no input Null()
 # and 'None' given explicitly as input.
-from ..null import Null
+from TA_Scheduling_App.utils.null import Null
 
 # Class to resolve inheritance
 class ABCModelMeta(ABCMeta, ModelBase):
@@ -27,8 +27,12 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        if not self.setCourseNumber(kwargs.get('COURSE_NUMBER', Null())):
+        result = self.setCourseNumber(kwargs.get('COURSE_NUMBER', Null()))
+
+        if result == False:
             raise ValueError("Invalid course number")
+        elif result == None:
+            raise ValueError("Deplicate course number assignment failed")
 
         if not self.setInstructor(kwargs.get('INSTRUCTOR', Null())):
             raise ValueError("Invalid instructor")
@@ -52,20 +56,23 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         if number is Null():
             return True
 
-        # Check if the input is an integer
-        if not isinstance(number, int):
+        try:
+            if isinstance(number, float):
+                return False
+            int_value = int(number)
+        except Exception:
             return False
 
         # Check if the input is negative or above the max value
-        if number < 0 or number > 9999:
+        if int_value < 0 or int_value > 9999:
             return False
 
         # Check for duplicate course number
-        if self.checkDuplicate(number):
-            return False
+        if self.checkDuplicate(int_value):
+            return None
 
         # If all checks pass, set the course number
-        self.COURSE_NUMBER = number
+        self.COURSE_NUMBER = int_value
         return True
 
     def setInstructor(self, instructor):
@@ -88,8 +95,8 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         if courseName is Null():
             return True
 
-        courseName = self.checkString(courseName)
-        if courseName is False:
+        result = self.checkString(courseName)
+        if result is False:
             return False
 
         self.COURSE_NAME = courseName
@@ -99,8 +106,8 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         if courseDescription is Null():
             return True
 
-        courseDescription = self.checkString(courseDescription)
-        if courseDescription is False:
+        result = self.checkString(courseDescription)
+        if result is False:
             return False
 
         self.COURSE_DESCRIPTION = courseDescription
@@ -116,20 +123,16 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         # Trim whitespace from beginning and end of semester string
         semester = semester.strip()
 
+        # Check that semester string is not empty, not only whitespace, and not only numbers
+        if not semester or semester.isspace() or semester.isdigit():
+            return False
+
         # Check that semester string is not too long
         if len(semester) > 255:
             return False
 
-        # Check that semester string is in the format SEASON YEAR
-        semester_parts = semester.split()
-        if len(semester_parts) != 2:
-            return False
-        season, year = semester_parts
-        if not (season.isalpha() and year.replace('-', '').isdigit() and len(year) >= 4):
-            return False
-
-        # Check that semester string contains only valid characters
-        if not all(c.isalpha() or c.isspace() or c.isdigit() or c == '-' for c in semester):
+        # Check that semester string contains only valid characters and is ASCII
+        if not all((c.isalpha() or c.isspace() or c.isdigit() or c == '-') and c.isascii() for c in semester):
             return False
 
         self.SEMESTER = semester
@@ -139,8 +142,8 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         if prerequisites is Null():
             return True
 
-        prerequisites = self.checkString(prerequisites, True, True)
-        if prerequisites is False:
+        result = self.checkString(prerequisites, True, True)
+        if result is False:
             return False
 
         self.PREREQUISITES = prerequisites
@@ -150,8 +153,8 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         if department is Null():
             return True
 
-        department = self.checkString(department, False)
-        if department is False:
+        result = self.checkString(department, False)
+        if result is False:
             return False
 
         self.DEPARTMENT = department
@@ -184,6 +187,8 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
         return value
 
     def checkDuplicate(self, number):
+        if number is Null():
+            return False
         # Check if the course number is already in use within the same department
         return Course.objects.filter(DEPARTMENT=self.DEPARTMENT, COURSE_NUMBER=number).exists()
 

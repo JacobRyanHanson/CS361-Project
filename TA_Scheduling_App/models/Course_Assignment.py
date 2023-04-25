@@ -7,7 +7,7 @@ from django.db.models.base import ModelBase
 
 # Used so that the constructor can distinguish between no input Null()
 # and 'None' given explicitly as input.
-from ..null import Null
+from TA_Scheduling_App.utils.null import Null
 
 # Class to resolve inheritance
 class ABCModelMeta(ABCMeta, ModelBase):
@@ -33,7 +33,7 @@ class CourseAssignment(IVerification, models.Model, metaclass=ABCModelMeta):
 
         ta = kwargs.get('TA', Null())
 
-        if ta is None or ta.ROLE != "TA" or (not isinstance(ta, User) and not Null()):
+        if (ta is None) or (ta is not Null() and ta.ROLE != "TA") or (not isinstance(ta, User) and not Null()):
             raise ValueError("Invalid TA")
 
         if ta is not Null():
@@ -44,7 +44,7 @@ class CourseAssignment(IVerification, models.Model, metaclass=ABCModelMeta):
 
         # Check for duplicate assignment
         if self.checkDuplicate(course, ta):
-            raise ValueError("Duplicate assignment")
+            raise ValueError("Duplicate assignment of TA to course failed")
 
     def setGrader(self, isGrader):
         if isGrader is Null():
@@ -57,4 +57,7 @@ class CourseAssignment(IVerification, models.Model, metaclass=ABCModelMeta):
             return False
 
     def checkDuplicate(self, course, ta):
+        if course is Null() or ta is Null():
+            return False
+        # Check if the TA is already assigned to the course
         return CourseAssignment.objects.filter(COURSE=course, TA=ta).exists()

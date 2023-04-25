@@ -1,7 +1,7 @@
 import os
 import django
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 # Set up the Django settings module for testing
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'TA_Scheduling_Project.settings')
@@ -61,24 +61,29 @@ class TestSectionAssignmentInit(unittest.TestCase):
 
     def test_init_valid_input(self):
         try:
-            SectionAssignment(COURSE_ASSIGNMENT=self.course_assignment, SECTION=self.section)
+            # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
+            with patch.object(SectionAssignment, 'checkDuplicate', return_value=False):
+                SectionAssignment(COURSE_ASSIGNMENT=self.course_assignment, SECTION=self.section)
         except ValueError:
             self.fail("SectionAssignment init failed with valid input values.")
 
     def test_init_invalid_course_assignment(self):
-        with self.assertRaises(ValueError,
-                               msg="SectionAssignment init did not raise ValueError for invalid COURSE_ASSIGNMENT"):
-            SectionAssignment(COURSE_ASSIGNMENT=None, SECTION=self.section.pk)
+        with self.assertRaises(ValueError,  msg="SectionAssignment init did not raise ValueError for invalid COURSE_ASSIGNMENT"):
+            # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
+            with patch.object(SectionAssignment, 'checkDuplicate', return_value=False):
+                SectionAssignment(COURSE_ASSIGNMENT=None, SECTION=self.section.pk)
 
     def test_init_invalid_section(self):
-        with self.assertRaises(ValueError,
-                               msg="SectionAssignment init did not raise ValueError for invalid SECTION"):
-            SectionAssignment(COURSE_ASSIGNMENT=self.course_assignment.pk, SECTION=None)
+        with self.assertRaises(ValueError, msg="SectionAssignment init did not raise ValueError for invalid SECTION"):
+            # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
+            with patch.object(SectionAssignment, 'checkDuplicate', return_value=False):
+                SectionAssignment(COURSE_ASSIGNMENT=self.course_assignment.pk, SECTION=None)
 
     def test_init_course_assignment_section_mismatch_1(self):
-        with self.assertRaises(ValueError,
-                               msg="SectionAssignment init did not raise ValueError for mismatched COURSE_ASSIGNMENT and SECTION"):
-            SectionAssignment(COURSE_ASSIGNMENT=self.other_course_assignment, SECTION=self.section)
+        with self.assertRaises(ValueError, msg="SectionAssignment init did not raise ValueError for mismatched COURSE_ASSIGNMENT and SECTION"):
+            # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
+            with patch.object(SectionAssignment, 'checkDuplicate', return_value=False):
+                SectionAssignment(COURSE_ASSIGNMENT=self.other_course_assignment, SECTION=self.section)
 
     def test_init_course_assignment_section_mismatch_2(self):
         # Mock Section object for the different course
@@ -88,6 +93,7 @@ class TestSectionAssignmentInit(unittest.TestCase):
         different_section._state = MagicMock()
         different_section._state.db = 'default'
 
-        with self.assertRaises(ValueError,
-                               msg="SectionAssignment init did not raise ValueError for mismatched COURSE_ASSIGNMENT and SECTION"):
-            SectionAssignment(COURSE_ASSIGNMENT=self.course_assignment, SECTION=different_section)
+        with self.assertRaises(ValueError, msg="SectionAssignment init did not raise ValueError for mismatched COURSE_ASSIGNMENT and SECTION"):
+            # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
+            with patch.object(SectionAssignment, 'checkDuplicate', return_value=False):
+                SectionAssignment(COURSE_ASSIGNMENT=self.course_assignment, SECTION=different_section)

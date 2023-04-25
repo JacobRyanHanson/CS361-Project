@@ -6,10 +6,22 @@ from TA_Scheduling_App.models import User
 
 
 class Login(View):
+    def __init__(self, logout=False, **kwargs):
+        self.logout = logout
+        super().__init__(**kwargs)
+
     def get(self, request):
-        if request.user.is_authenticated:
-            return redirect("home")
-        return render(request, "login.html", {})
+        action = request.GET.get('action')
+
+        if request.session.get('is_authenticated'):
+            if action == 'logout':
+                # Clear the session and log the user out
+                request.session.flush()
+                return redirect("login")
+            else:
+                return redirect("home")
+
+        return render(request, "login.html", {'hide_navbar': True})
 
     def post(self, request):
         email = request.POST["email"]
@@ -28,5 +40,4 @@ class Login(View):
             request.session['is_authenticated'] = True
             return redirect("home")
         else:
-            context = {'status': "Invalid email or password."}
-            return render(request, "login.html", context)
+            return render(request, "login.html", {'status': "Invalid email or password."})
