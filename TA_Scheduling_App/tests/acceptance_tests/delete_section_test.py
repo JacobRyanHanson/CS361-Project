@@ -73,6 +73,10 @@ class DeleteSectionSuccessTest(TestCase):
 
         self.assertEqual(len(Section.objects.filter(SECTION_NUMBER=self.section.SECTION_NUMBER)), 0)
 
+    def test_delete_section_removes_assignments(self):
+        # Need to complete
+        pass
+
 
 class DeleteSectionFailTest(TestCase):
     def setUp(self):
