@@ -65,6 +65,18 @@ class CreationSuccess(TestCase):
                                                            "endTimeM": '20'}, follow=True)
         self.assertEqual(response.context['status'], 'Successfully created the section.')
 
+    def test_created_updates_database(self):
+        self.monkey.post("/section-creation/", {"sectionNumber": 901,
+                                                "courseID": self.course.COURSE_ID,
+                                                "building": 'Chemistry Building',
+                                                "roomNumber": '190',
+                                                "startTimeH": '9',
+                                                "startTimeM": '30',
+                                                "endTimeH": '10',
+                                                "endTimeM": '20'}, follow=True)
+        section = Section.objects.get(SECTION_NUMBER=901)
+        self.assertEqual(section.COURSE_id, self.course.COURSE_ID)
+
 
 class InvalidSection(TestCase):
     user = None
