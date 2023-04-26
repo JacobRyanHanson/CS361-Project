@@ -155,7 +155,7 @@ class InvalidInputTest(TestCase):
                 PREREQUISITES=self.invalid_course_data["prerequisites"],
                 DEPARTMENT=self.invalid_course_data["department"]
             )
-        response = self.client.post("/course-creation/", self.invalid_course_data)
+        response = self.client.post("/course-creation/", self.invalid_course_data, follow=True)
         self.assertEqual(str(response.context['status']), "Field 'USER_ID' expected a number but got ' '.")
 
     def test_invalid_course_number(self):
@@ -202,7 +202,7 @@ class InvalidInputTest(TestCase):
                 PREREQUISITES=self.invalid_course_data["prerequisites"],
                 DEPARTMENT=self.invalid_course_data["department"]
             )
-        response = self.client.post("/course-creation/", self.invalid_course_data)
+        response = self.client.post("/course-creation/", self.invalid_course_data, follow=True)
         self.assertEqual(response.context['status'], f'The instructor with id -7 does not exist.')
 
     def test_invalid_course_name(self):
@@ -225,7 +225,7 @@ class InvalidInputTest(TestCase):
                 PREREQUISITES=self.invalid_course_data["prerequisites"],
                 DEPARTMENT=self.invalid_course_data["department"]
             )
-        response = self.client.post("/course-creation/", self.invalid_course_data)
+        response = self.client.post("/course-creation/", self.invalid_course_data, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(str(response.context['status']), 'Invalid course name')
 
@@ -249,7 +249,7 @@ class InvalidInputTest(TestCase):
                 PREREQUISITES=self.invalid_course_data["prerequisites"],
                 DEPARTMENT=self.invalid_course_data["department"]
             )
-        response = self.client.post("/course-creation/", self.invalid_course_data)
+        response = self.client.post("/course-creation/", self.invalid_course_data, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(str(response.context['status']), 'Invalid course description')
 
@@ -273,7 +273,7 @@ class InvalidInputTest(TestCase):
                 PREREQUISITES=self.invalid_course_data["prerequisites"],
                 DEPARTMENT=self.invalid_course_data["department"]
             )
-        response = self.client.post("/course-creation/", self.invalid_course_data)
+        response = self.client.post("/course-creation/", self.invalid_course_data, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(str(response.context['status']), 'Invalid semester')
 
@@ -297,7 +297,7 @@ class InvalidInputTest(TestCase):
                 PREREQUISITES=self.invalid_course_data["prerequisites"],
                 DEPARTMENT=self.invalid_course_data["department"]
             )
-        response = self.client.post("/course-creation/", self.invalid_course_data)
+        response = self.client.post("/course-creation/", self.invalid_course_data, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(str(response.context['status']), 'Invalid prerequisites')
 
@@ -321,7 +321,7 @@ class InvalidInputTest(TestCase):
                 PREREQUISITES=self.invalid_course_data["prerequisites"],
                 DEPARTMENT=self.invalid_course_data["department"]
             )
-        response = self.client.post("/course-creation/", self.invalid_course_data)
+        response = self.client.post("/course-creation/", self.invalid_course_data, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(str(response.context['status']), 'Invalid department')
 

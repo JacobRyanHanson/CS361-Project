@@ -82,14 +82,14 @@ class DeleteCourseSuccessTest(TestCase):
     def test_delete_course_from_system(self):
         self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.course.COURSE_NUMBER)), 1)
 
-        self.client.post("/ta-assignments/", {"course_id": self.course.COURSE_ID})
+        self.client.post("/ta-assignments/", {"course_id": self.course.COURSE_ID}, follow=True)
 
         self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.course.COURSE_NUMBER)), 0)
 
     def test_delete_course_removed_from_page(self):
         self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.newCourse.COURSE_NUMBER)), 1)
 
-        response = self.client.post("/ta-assignments/", {"course_id": self.newCourse.COURSE_ID})
+        response = self.client.post("/ta-assignments/", {"course_id": self.newCourse.COURSE_ID}, follow=True)
         self.assertEqual(response.status_code, 200)
 
         soup = BeautifulSoup(response.content, 'html.parser')
@@ -99,7 +99,7 @@ class DeleteCourseSuccessTest(TestCase):
     def test_delete_section_displays_success_message(self):
         self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.thirdCourse.COURSE_NUMBER)), 1)
 
-        response = self.client.post("/ta-assignments/", {"course_id": self.thirdCourse.COURSE_ID})
+        response = self.client.post("/ta-assignments/", {"course_id": self.thirdCourse.COURSE_ID}, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(str(response.context['status']), 'Course with ID 3 has been deleted.')
 
@@ -189,7 +189,7 @@ class DeleteCourseFailTest(TestCase):
 
     def test_delete_course_and_section(self):
         self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.course.COURSE_NUMBER)), 1)
-        self.client.post("/ta-assignments/", {"course_id": self.course.COURSE_ID})
+        self.client.post("/ta-assignments/", {"course_id": self.course.COURSE_ID}, follow=True)
 
         self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.course.COURSE_NUMBER)), 0)
         self.assertEqual(len(Section.objects.filter(SECTION_NUMBER=self.section.SECTION_NUMBER)), 0)
@@ -197,7 +197,7 @@ class DeleteCourseFailTest(TestCase):
     def test_delete_course_sections_removed_from_page(self):
         self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.course.COURSE_NUMBER)), 1)
 
-        response = self.client.post("/ta-assignments/", {"course_id": self.newCourse.COURSE_ID})
+        response = self.client.post("/ta-assignments/", {"course_id": self.newCourse.COURSE_ID}, follow=True)
         self.assertEqual(response.status_code, 200)
 
         soup = BeautifulSoup(response.content, 'html.parser')

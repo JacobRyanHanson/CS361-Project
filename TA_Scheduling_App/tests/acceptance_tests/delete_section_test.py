@@ -111,7 +111,7 @@ class DeleteSectionSuccessTest(TestCase):
     def test_delete_section_displays_success_message(self):
         self.assertEqual(len(Section.objects.filter(SECTION_NUMBER=self.newSection.SECTION_NUMBER)), 1)
 
-        response = self.client.post("/ta-assignments/", {"section_id": self.newSection.SECTION_ID})
+        response = self.client.post("/ta-assignments/", {"section_id": self.newSection.SECTION_ID}, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(str(response.context['status']), 'Section with ID 2 has been deleted.')
 
@@ -217,7 +217,7 @@ class DeleteSectionRemoveRestTest(TestCase):
 
     def test_delete_section_and_assignments(self):
         self.assertEqual(len(Section.objects.filter(SECTION_NUMBER=self.section.SECTION_NUMBER)), 1)
-        self.client.post("/ta-assignments/", {"section_id": self.section.SECTION_ID})
+        self.client.post("/ta-assignments/", {"section_id": self.section.SECTION_ID}, follow=True)
 
         self.assertEqual(len(Section.objects.filter(SECTION_NUMBER=self.section.SECTION_NUMBER)), 0)
         self.assertFalse(SectionAssignment.objects.filter(SECTION=self.section).exists())
@@ -231,7 +231,7 @@ class DeleteSectionRemoveRestTest(TestCase):
         )
         sectionNewAssignment.save()
 
-        response = self.client.post("/ta-assignments/", {"section_id": self.newSection.SECTION_ID})
+        response = self.client.post("/ta-assignments/", {"section_id": self.newSection.SECTION_ID}, follow=True)
         self.assertEqual(response.status_code, 200)
 
         soup = BeautifulSoup(response.content, 'html.parser')
