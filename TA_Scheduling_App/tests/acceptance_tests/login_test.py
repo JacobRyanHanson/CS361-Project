@@ -3,6 +3,7 @@ import datetime
 from django.test import TestCase, Client
 from TA_Scheduling_App.models import User
 
+
 class UserLoginSuccessTest(TestCase):
     def setUp(self):
         self.client = Client()
@@ -101,6 +102,7 @@ class UserLoginSuccessTest(TestCase):
         self.assertIsNone(self.client.session.get("is_authenticated"))
         self.assertIsNone(self.client.session.get("user_id"))
         self.assertIsNone(self.client.session.get("user_role"))
+
 
 class UserLoginFailTest(TestCase):
     def setUp(self):
