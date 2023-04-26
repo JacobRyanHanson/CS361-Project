@@ -1,4 +1,4 @@
-import datetime
+from datetime import date, datetime
 import os
 from unittest.mock import MagicMock
 
@@ -18,28 +18,62 @@ class TestUserCreation(TestCase):
     def setUp(self):
         self.monkey = Client()
 
-    def test_AddNewUser(self):
-        session = self.monkey.session
-        session['session_email'] = 'john.doe@example.com'
-        session.save()
-        response = self.monkey.post('/user-creation/', {'ROLE': "TA",
-                                                        'FIRST_NAME': "Joe",
-                                                        'LAST_NAME': "Smoe",
-                                                        'EMAIL': "joeSmoe@gmail.com",
-                                                        'PHONE_NUMBER': "999-999-9999",
-                                                        'ADDRESS': "101 Drive",
-                                                        'BIRTH_DATE': datetime.date.today()})
-        self.assertTrue(response, "New User was not added correctly")
+        self.admin = User(
+            ROLE='ADMIN',
+            FIRST_NAME='John',
+            LAST_NAME='Doe',
+            EMAIL='admin@example.com',
+            PASSWORD_HASH='ad_password',
+            PHONE_NUMBER='555-123-4567',
+            ADDRESS='123 Main St',
+            BIRTH_DATE=date(1990, 1, 1)
+        )
 
-    def test_InvalidInput(self):
-        session = self.monkey.session
-        session['session_email'] = 'john.doe@example.com'
-        session.save()
-        response = self.monkey.post('/user-creation/', {'ROLE': "TA",
-                                                        'FIRST_NAME': "",
-                                                        'LAST_NAME': "Smoe",
-                                                        'EMAIL': "joeSmoe@gmail.com",
-                                                        'PHONE_NUMBER': "999-999-9999",
-                                                        'ADDRESS': "101 Drive",
-                                                        'BIRTH_DATE': datetime.date.today()})
-        self.assertContains(response, 'This field is required.')
+        self.admin.save()
+
+        self.credentials = {
+            "email": "admin@example.com",
+            "password": "ad_password"
+        }
+
+        self.monkey.post("/", self.credentials, follow=True)
+
+    def test_AddNewTA(self):
+        response = self.monkey.post('/user-creation/', {'role': "TA",
+                                                        'firstName': "Joe",
+                                                        'lastName': "Smoe",
+                                                        'email': "joeSmoe@gmail.com",
+                                                        'phoneNumber': "999-999-9999",
+                                                        'address': "101 Drive",
+                                                        'birthDate': date(1990, 1, 1)})
+        self.assertEqual(response.context['status'], 'Successfully created the user.')
+
+    def test_AddNewInstr(self):
+        response = self.monkey.post('/user-creation/', {'role': "INSTRUCTOR",
+                                                        'firstName': "Jeff",
+                                                        'lastName': "Smoe",
+                                                        'email': "jeffSmoe@gmail.com",
+                                                        'phoneNumber': "999-999-9998",
+                                                        'address': "102 Drive",
+                                                        'birthDate': date(1990, 1, 2)})
+        self.assertEqual(response.context['status'], 'Successfully created the user.')
+
+    def test_InvalidEmail(self):
+        response = self.monkey.post('/user-creation/', {'role': "TA",
+                                                        'firstName': "Joe",
+                                                        'lastName': "Smoe",
+                                                        'email': "admin@example.com",
+                                                        'phoneNumber': "999-999-9999",
+                                                        'address': "101 Drive",
+                                                        'birthDate': date(1990, 1, 1)})
+        self.assertEqual(response.context['status'], 'Users with duplicate emails are not allowed.')
+
+    def test_InvalidRole(self):
+        response = self.monkey.post('/user-creation/', {'role': "",
+                                                        'firstName': "Joe",
+                                                        'lastName': "Smoe",
+                                                        'email': "admin@example.com",
+                                                        'phoneNumber': "999-999-9999",
+                                                        'address': "101 Drive",
+                                                        'birthDate': date(1990, 1, 1)})
+        self.assertEqual(str(response.context['status']), 'Invalid role')
