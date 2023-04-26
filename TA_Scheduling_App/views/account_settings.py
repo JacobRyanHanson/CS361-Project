@@ -31,7 +31,10 @@ class AccountSettings(View):
         address = request.POST["address"]
 
         _date_of_birth = request.POST["dateOfBirth"]
-        birth_date = datetime.date.fromisoformat(_date_of_birth)
+        try:
+            birth_date = datetime.date.fromisoformat(_date_of_birth)
+        except ValueError:
+            return render(request, "account-settings.html", {'initial': user, 'status': 'Invalid birth date'})
 
         try:
             User(FIRST_NAME=first_name,

@@ -8,7 +8,7 @@ from TA_Scheduling_App.models import User
 PAGE = django.urls.reverse("account_settings")
 
 
-def create_example_ta(): # create example user used for all account settings test classes
+def create_example_ta():  # create example user used for all account settings test classes
     user = User(ROLE='TA',
                 FIRST_NAME='Jane',
                 LAST_NAME='Doe',
