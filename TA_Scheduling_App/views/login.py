@@ -40,4 +40,4 @@ class Login(View):
             request.session['is_authenticated'] = True
             return redirect("home")
         else:
-            return render(request, "login.html", {'status': "Invalid email or password."})
+            return render(request, "login.html", {'status': "Invalid email or password.", 'hide_navbar': True})
