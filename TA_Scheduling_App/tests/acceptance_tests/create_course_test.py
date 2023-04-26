@@ -42,7 +42,7 @@ class AddCourseTest(TestCase):
         }
         self.client.post("/", self.credentials, follow=True)
 
-    def test_create_course(self):
+    def test_create_course_in_system(self):
         self.course = Course(
             COURSE_NUMBER=151,
             INSTRUCTOR=self.instructor,
@@ -64,11 +64,37 @@ class AddCourseTest(TestCase):
             "prerequisites": '',
             "department": 'Computer Science'
         }
+        self.client.post("/course-creation/", self.course_data)
+        self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.course_data["courseNumber"])), 1)
+
+    def test_success_message_displayed(self):
+        self.course = Course(
+            COURSE_NUMBER=151,
+            INSTRUCTOR=self.instructor,
+            COURSE_NAME='Introduction to Computer Science',
+            COURSE_DESCRIPTION='An introductory course to the world of computer science.',
+            SEMESTER='Fall 2023',
+            PREREQUISITES='',
+            DEPARTMENT='Computer Science'
+        )
+
+        self.course.save()
+
+        self.course_data = {
+            "courseNumber": 101,
+            "instructorID": self.instructor.USER_ID,
+            "courseName": 'Introduction to Computer Science',
+            "courseDescription": 'An introductory course to the world of computer science.',
+            "semester": 'Fall 2023',
+            "prerequisites": '',
+            "department": 'Computer Science'
+        }
 
         response = self.client.post("/course-creation/", self.course_data)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(str(response.context['status']), 'Successfully created the course.')
 
-        self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.course_data["courseNumber"])), 1)
+
 
 
 class InvalidInputTest(TestCase):
@@ -119,7 +145,7 @@ class InvalidInputTest(TestCase):
             "prerequisites": '',
             "department": ''
         }
-        with self.assertRaises(ValueError, msg="Invalid Inputs"):
+        with self.assertRaises(ValueError, msg="Should not have been created"):
             self.invalid_course = Course(
                 COURSE_NUMBER=self.invalid_course_data["courseNumber"],
                 INSTRUCTOR=self.instructor,
@@ -129,7 +155,8 @@ class InvalidInputTest(TestCase):
                 PREREQUISITES=self.invalid_course_data["prerequisites"],
                 DEPARTMENT=self.invalid_course_data["department"]
             )
-            response = self.client.post("/course-creation/", self.invalid_course_data)
+        response = self.client.post("/course-creation/", self.invalid_course_data)
+        self.assertEqual(str(response.context['status']), "Field 'USER_ID' expected a number but got ' '.")
 
     def test_invalid_course_number(self):
         self.invalid_course_data = {
@@ -141,7 +168,7 @@ class InvalidInputTest(TestCase):
             "prerequisites": '',
             "department": 'Computer Science'
         }
-        with self.assertRaises(ValueError, msg="Invalid course number"):
+        with self.assertRaises(ValueError, msg="Should not have been created"):
             self.invalid_course = Course(
                 COURSE_NUMBER=self.invalid_course_data["courseNumber"],
                 INSTRUCTOR=self.instructor,
@@ -153,6 +180,7 @@ class InvalidInputTest(TestCase):
             )
         response = self.client.post("/course-creation/", self.invalid_course_data)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(str(response.context['status']), 'Invalid course number')
 
     def test_invalid_course_instructor(self):
         self.invalid_course_data = {
@@ -164,7 +192,7 @@ class InvalidInputTest(TestCase):
             "prerequisites": '',
             "department": 'Computer Science'
         }
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ValueError, msg="Should not have been created"):
             self.invalid_course = Course(
                 COURSE_NUMBER=self.invalid_course_data["courseNumber"],
                 INSTRUCTOR=self.invalid_course_data["instructorID"],
@@ -187,7 +215,7 @@ class InvalidInputTest(TestCase):
             "prerequisites": '',
             "department": 'Computer Science'
         }
-        with self.assertRaises(ValueError, msg="Invalid course name"):
+        with self.assertRaises(ValueError, msg="Should not have been created"):
             self.invalid_course = Course(
                 COURSE_NUMBER=self.invalid_course_data["courseNumber"],
                 INSTRUCTOR=self.instructor,
@@ -199,6 +227,7 @@ class InvalidInputTest(TestCase):
             )
         response = self.client.post("/course-creation/", self.invalid_course_data)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(str(response.context['status']), 'Invalid course name')
 
     def test_invalid_course_Description(self):
         self.invalid_course_data = {
@@ -210,7 +239,7 @@ class InvalidInputTest(TestCase):
             "prerequisites": '',
             "department": 'Computer Science'
         }
-        with self.assertRaises(ValueError, msg="Invalid course description"):
+        with self.assertRaises(ValueError, msg="Should not have been created"):
             self.invalid_course = Course(
                 COURSE_NUMBER=self.invalid_course_data["courseNumber"],
                 INSTRUCTOR=self.instructor,
@@ -222,6 +251,7 @@ class InvalidInputTest(TestCase):
             )
         response = self.client.post("/course-creation/", self.invalid_course_data)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(str(response.context['status']), 'Invalid course description')
 
     def test_invalid_course_semester(self):
         self.invalid_course_data = {
@@ -233,7 +263,7 @@ class InvalidInputTest(TestCase):
             "prerequisites": '',
             "department": 'Computer Science'
         }
-        with self.assertRaises(ValueError, msg="Invalid course semester"):
+        with self.assertRaises(ValueError, msg="Should not have been created"):
             self.invalid_course = Course(
                 COURSE_NUMBER=self.invalid_course_data["courseNumber"],
                 INSTRUCTOR=self.instructor,
@@ -245,6 +275,7 @@ class InvalidInputTest(TestCase):
             )
         response = self.client.post("/course-creation/", self.invalid_course_data)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(str(response.context['status']), 'Invalid semester')
 
     def test_invalid_course_prerequisites(self):
         self.invalid_course_data = {
@@ -256,7 +287,7 @@ class InvalidInputTest(TestCase):
             "prerequisites": '4444',
             "department": 'Computer Science'
         }
-        with self.assertRaises(ValueError, msg="Invalid course prerequisites"):
+        with self.assertRaises(ValueError, msg="Should not have been created"):
             self.invalid_course = Course(
                 COURSE_NUMBER=self.invalid_course_data["courseNumber"],
                 INSTRUCTOR=self.instructor,
@@ -268,6 +299,7 @@ class InvalidInputTest(TestCase):
             )
         response = self.client.post("/course-creation/", self.invalid_course_data)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(str(response.context['status']), 'Invalid prerequisites')
 
     def test_invalid_course_department(self):
         self.invalid_course_data = {
@@ -279,7 +311,7 @@ class InvalidInputTest(TestCase):
             "prerequisites": '',
             "department": 'C0mputer Science'
         }
-        with self.assertRaises(ValueError, msg="Invalid course department"):
+        with self.assertRaises(ValueError, msg="Should not have been created"):
             self.invalid_course = Course(
                 COURSE_NUMBER=self.invalid_course_data["courseNumber"],
                 INSTRUCTOR=self.instructor,
@@ -291,6 +323,7 @@ class InvalidInputTest(TestCase):
             )
         response = self.client.post("/course-creation/", self.invalid_course_data)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(str(response.context['status']), 'Invalid department')
 
 
 class DuplicateCreationFailTest(TestCase):
@@ -352,7 +385,7 @@ class DuplicateCreationFailTest(TestCase):
         }
         self.client.post("/", self.credentials, follow=True)
 
-    def test_duplicate_course(self):
+    def test_duplicate_course_display_message(self):
         self.course_data2 = {
             "courseNumber": 151,
             "instructorID": self.instructor.USER_ID,
@@ -373,7 +406,29 @@ class DuplicateCreationFailTest(TestCase):
                 PREREQUISITES=self.course_data2["prerequisites"],
                 DEPARTMENT=self.course_data2["department"]
             )
-            response = self.client.post("/course-creation/", self.course_data2)
-            self.assertEqual(response, "Duplicate course number assignment failed", status_code=200)
+        response = self.client.post("/course-creation/", self.course_data2)
+        self.assertEqual(str(response.context['status']), "Duplicate course number assignment failed")
+
+    def test_duplicate_course_not_in_system(self):
+        self.course_data2 = {
+            "courseNumber": 151,
+            "instructorID": self.instructor.USER_ID,
+            "courseName": 'Introduction to Computer Science',
+            "courseDescription": 'An introductory course to the world of computer science.',
+            "semester": 'Fall 2023',
+            "prerequisites": '',
+            "department": 'Computer Science'
+        }
+
+        with self.assertRaises(ValueError):
+            self.course2 = Course(
+                COURSE_NUMBER=self.course_data2["courseNumber"],
+                INSTRUCTOR=self.instructor,
+                COURSE_NAME=self.course_data2["courseName"],
+                COURSE_DESCRIPTION=self.course_data2["courseDescription"],
+                SEMESTER=self.course_data2["semester"],
+                PREREQUISITES=self.course_data2["prerequisites"],
+                DEPARTMENT=self.course_data2["department"]
+            )
 
         self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.course_data2["courseNumber"])), 1)

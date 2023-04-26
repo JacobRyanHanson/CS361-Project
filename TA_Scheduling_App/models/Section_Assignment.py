@@ -9,9 +9,11 @@ from .Section import Section
 # and 'None' given explicitly as input.
 from TA_Scheduling_App.utils.null import Null
 
+
 # Class to resolve inheritance
 class ABCModelMeta(ABCMeta, ModelBase):
     pass
+
 
 class SectionAssignment(IVerification, models.Model, metaclass=ABCModelMeta):
     SECTION_ASSIGNMENT_ID = models.AutoField(primary_key=True)
@@ -49,9 +51,3 @@ class SectionAssignment(IVerification, models.Model, metaclass=ABCModelMeta):
             return False
         # Check if the TA is already assigned to the section
         return SectionAssignment.objects.filter(COURSE_ASSIGNMENT=courseAssignment, SECTION=section).exists()
-
-
-
-
-
-

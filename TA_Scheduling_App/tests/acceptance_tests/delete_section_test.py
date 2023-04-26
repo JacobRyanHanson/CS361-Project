@@ -1,8 +1,12 @@
 import datetime
 from datetime import date, time
-
+from bs4 import BeautifulSoup
 from django.test import TestCase, Client
-from TA_Scheduling_App.models import User, Course, Section
+from TA_Scheduling_App.models import User, Course, Section, CourseAssignment, SectionAssignment
+
+
+def contains_text(tag, text):
+    return tag.string is not None and text.strip() in tag.string.strip()
 
 
 class DeleteSectionSuccessTest(TestCase):
@@ -51,12 +55,34 @@ class DeleteSectionSuccessTest(TestCase):
             SECTION_NUMBER=1,
             COURSE=self.course,
             BUILDING='Tech Building',
-            ROOM_NUMBER='111',
+            ROOM_NUMBER='105',
             SECTION_START=time(9, 30),
             SECTION_END=time(10, 20)
         )
 
         self.section.save()
+
+        self.newSection = Section(
+            SECTION_NUMBER=7,
+            COURSE=self.course,
+            BUILDING='Tech',
+            ROOM_NUMBER='555',
+            SECTION_START=time(9, 30),
+            SECTION_END=time(10, 20)
+        )
+
+        self.newSection.save()
+
+        self.thirdSection = Section(
+            SECTION_NUMBER=11,
+            COURSE=self.course,
+            BUILDING='Tech',
+            ROOM_NUMBER='555',
+            SECTION_START=time(9, 30),
+            SECTION_END=time(10, 20)
+        )
+
+        self.thirdSection.save()
 
         # Log the user in
         self.credentials = {
@@ -65,20 +91,32 @@ class DeleteSectionSuccessTest(TestCase):
         }
         self.client.post("/", self.credentials, follow=True)
 
-    def test_delete_section(self):
+    def test_delete_section_from_system(self):
         self.assertEqual(len(Section.objects.filter(SECTION_NUMBER=self.section.SECTION_NUMBER)), 1)
 
-        response = self.client.post("/ta-assignments/", {"sectionNumber": self.section.delete()})
-        self.assertEqual(response.status_code, 200)
+        self.client.post("/ta-assignments/", {"section_id": self.section.SECTION_ID})
 
         self.assertEqual(len(Section.objects.filter(SECTION_NUMBER=self.section.SECTION_NUMBER)), 0)
 
-    def test_delete_section_removes_assignments(self):
-        # Need to complete
-        pass
+    def test_delete_section_removed_from_page(self):
+        self.assertEqual(len(Section.objects.filter(SECTION_NUMBER=self.thirdSection.SECTION_NUMBER)), 1)
+
+        response = self.client.post("/ta-assignments/", {"section_id": self.thirdSection.SECTION_ID})
+        self.assertEqual(response.status_code, 200)
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+        self.assertIsNone(soup.find(lambda tag: contains_text(tag, str(self.thirdSection.SECTION_NUMBER))),
+                          f"Deleted section with number 11 was found")
+
+    def test_delete_section_displays_success_message(self):
+        self.assertEqual(len(Section.objects.filter(SECTION_NUMBER=self.newSection.SECTION_NUMBER)), 1)
+
+        response = self.client.post("/ta-assignments/", {"section_id": self.newSection.SECTION_ID})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(str(response.context['status']), 'Section with ID 2 has been deleted.')
 
 
-class DeleteSectionFailTest(TestCase):
+class DeleteSectionRemoveRestTest(TestCase):
     def setUp(self):
         self.client = Client()
 
@@ -108,6 +146,19 @@ class DeleteSectionFailTest(TestCase):
 
         self.instructor.save()
 
+        self.ta = User(
+            ROLE='TA',
+            FIRST_NAME='Jane',
+            LAST_NAME='Smith',
+            EMAIL='ta@example.com',
+            PASSWORD_HASH='add_password',
+            PHONE_NUMBER='555-123-4567',
+            ADDRESS='123 Main St',
+            BIRTH_DATE=date(1990, 1, 1)
+        )
+
+        self.ta.save()
+
         self.course = Course(
             COURSE_NUMBER=151,
             INSTRUCTOR=self.instructor,
@@ -124,7 +175,7 @@ class DeleteSectionFailTest(TestCase):
             SECTION_NUMBER=1,
             COURSE=self.course,
             BUILDING='Tech Building',
-            ROOM_NUMBER='111',
+            ROOM_NUMBER='999',
             SECTION_START=time(9, 30),
             SECTION_END=time(10, 20)
         )
@@ -142,6 +193,21 @@ class DeleteSectionFailTest(TestCase):
 
         self.newSection.save()
 
+        self.courseAssignment = CourseAssignment(
+            COURSE=self.course,
+            TA=self.ta,
+            IS_GRADER=True
+        )
+
+        self.courseAssignment.save()
+
+        self.sectionAssignment = SectionAssignment(
+            COURSE_ASSIGNMENT=self.courseAssignment,
+            SECTION=self.section
+        )
+
+        self.sectionAssignment.save()
+
         # Log the user in
         self.credentials = {
             "email": "admin@example.com",
@@ -149,17 +215,27 @@ class DeleteSectionFailTest(TestCase):
         }
         self.client.post("/", self.credentials, follow=True)
 
-    def test_delete_nonexistent_section(self):
+    def test_delete_section_and_assignments(self):
         self.assertEqual(len(Section.objects.filter(SECTION_NUMBER=self.section.SECTION_NUMBER)), 1)
+        self.client.post("/ta-assignments/", {"section_id": self.section.SECTION_ID})
 
-        response = self.client.post("/ta-assignments/", {"sectionNumber": self.section.delete()})
-        self.assertEqual(response.status_code, 200)
         self.assertEqual(len(Section.objects.filter(SECTION_NUMBER=self.section.SECTION_NUMBER)), 0)
+        self.assertFalse(SectionAssignment.objects.filter(SECTION=self.section).exists())
 
-        with self.assertRaises(ValueError):
-            # Attempt to delete section that doesn't exist
-            self.client.post("/ta-assignments/", {"sectionNumber": self.section.delete()})
-            self.assertEqual(response, 'Section does not exist.')
-
-        # Test that newSection has not been deleted
+    def test_delete_section_assignments_removed_from_page(self):
         self.assertEqual(len(Section.objects.filter(SECTION_NUMBER=self.newSection.SECTION_NUMBER)), 1)
+
+        sectionNewAssignment = SectionAssignment(
+            COURSE_ASSIGNMENT=self.courseAssignment,
+            SECTION=self.newSection
+        )
+        sectionNewAssignment.save()
+
+        response = self.client.post("/ta-assignments/", {"section_id": self.newSection.SECTION_ID})
+        self.assertEqual(response.status_code, 200)
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+        # Check if the assignments has been removed from the page
+        self.assertIsNone(soup.find(lambda tag: contains_text(tag, str(sectionNewAssignment))),
+                          f"TA Assignment for deleted section 7 with TA Jane was found")
+
