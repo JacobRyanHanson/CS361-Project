@@ -1,7 +1,7 @@
 import datetime
 from django.test import TestCase, Client
 
-from TA_Scheduling_App.models import User, Course
+from TA_Scheduling_App.models import User, Course, Section
 
 
 def login_as_admin(client: Client):
@@ -54,7 +54,7 @@ class CreationSuccess(TestCase):
         login_as_admin(self.monkey)
         create_test_objects(self)
 
-    def test_SectionCreated(self):
+    def test_created_updates_status(self):
         response = self.monkey.post("/section-creation/", {"sectionNumber": 901,
                                                            "courseID": self.course.COURSE_ID,
                                                            "building": 'Chemistry Building',
@@ -75,7 +75,7 @@ class InvalidSection(TestCase):
         login_as_admin(self.monkey)
         create_test_objects(self)
 
-    def test_MissingInfo(self):
+    def test_missing_info(self):
         response = self.monkey.post("/section-creation/", {"sectionNumber": 901,
                                                            "courseID": self.course.COURSE_ID,
                                                            "building": '',
@@ -86,7 +86,7 @@ class InvalidSection(TestCase):
                                                            "endTimeM": '20'}, follow=True)
         self.assertEqual(str(response.context['status']), 'Invalid building')
 
-    def test_InvalidSection(self):
+    def test_invalid_section(self):
         response = self.monkey.post("/section-creation/", {"sectionNumber": '',
                                                            "courseID": self.course.COURSE_ID,
                                                            "building": 'Chemistry Building',
@@ -107,7 +107,7 @@ class InvalidAssociatedCourse(TestCase):
         login_as_admin(self.monkey)
         create_test_objects(self)
 
-    def test_BadCourse(self):
+    def test_bad_course_id(self):
         response = self.monkey.post("/section-creation/", {"sectionNumber": 901,
                                                            "courseID": '-2',
                                                            "building": 'Chemistry Building',
@@ -118,7 +118,7 @@ class InvalidAssociatedCourse(TestCase):
                                                            "endTimeM": '20'}, follow=True)
         self.assertEqual(response.context['status'], 'The course with id -2 does not exist.')
 
-    def test_EmptyCourse(self):
+    def test_empty_course_id(self):
         response = self.monkey.post("/section-creation/", {"sectionNumber": 901,
                                                            "courseID": '',
                                                            "building": 'Chemistry Building',
