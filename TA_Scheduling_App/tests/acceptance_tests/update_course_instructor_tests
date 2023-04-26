@@ -184,3 +184,13 @@ class InstructorAssignFail(TestCase):
         response = self.client.post("/ta-assignments/", course_reassignment_form_data, follow=True)
         self.assertEqual(response.context['status'],
                          f'Instructor with email notAUser@example.com does not exist.')
+
+    def test_blank_fields(self):
+        course_reassignment_form_data = {
+            'course_id': '',
+            'course_instructor': ''
+        }
+
+        response = self.client.post("/ta-assignments/", course_reassignment_form_data, follow=True)
+        self.assertEqual(response.context['status'], 'An unexpected error occurred.')
+        
