@@ -39,37 +39,14 @@
 
             <div class="d-flex form-div">
                 <label class="section-form-label">Start Time:</label>
-                <select class="form-control section-form-select" name="startTimeH" required>
-                    <option>Select</option>
-                    {% for i in h_range %}
-                        <option value="{{ i }}">{{ i }}</option>
-                    {% endfor %}
-                </select>
-
-                <select class="form-control section-form-select" name="startTimeM" required>
-                    <option>Select</option>
-                    {% for i in m_range %}
-                        <option value="{{ i }}">{% if i < 10 %}0{% endif %}{{ i }}</option>
-                    {% endfor %}
-                </select>
+               <input class="form-control" type="time" id="startTime" name="startTime" required>
             </div>
 
             <div class="d-flex form-div">
                 <label class="section-form-label">End Time:</label>
-                <select class="form-control section-form-select" name="endTimeH" required>
-                    <option>Select</option>
-                    {% for i in h_range %}
-                        <option value="{{ i }}">{{ i }}</option>
-                    {% endfor %}
-                </select>
-
-                <select class="form-control section-form-select" name="endTimeM" required>
-                    <option>Select</option>
-                    {% for i in m_range %}
-                        <option value="{{ i }}">{% if i < 10 %}0{% endif %}{{ i }}</option>
-                    {% endfor %}
-                </select>
+                <input class="form-control" type="time" id="endTime" name="endTime" required>
             </div>
+            
             <button class="btn btn-primary bottom-form-button" type="submit">Create Section</button>
         </form>
     </div>
