@@ -11,10 +11,7 @@ class SectionCreation(View):
         if request.session.get("user_role") != "ADMIN":
             return redirect("home")
 
-        context = {'h_range': range(1, 25),
-                   'm_range': range(0, 60)}
-
-        return render(request, "section-creation.html", context)
+        return render(request, "section-creation.html")
 
     def post(self, request):
         if not request.session.get("is_authenticated"):
@@ -48,8 +45,6 @@ class SectionCreation(View):
         except Exception as e:
             status = e
 
-        context = {'h_range': range(1, 25),
-                   'm_range': range(0, 60),
-                   'status': status}
+        context = {'status': status}
 
         return render(request, "section-creation.html", context)
