@@ -26,21 +26,14 @@ class SectionCreation(View):
         section_number = request.POST['sectionNumber']
         building = request.POST['building']
         room_number = request.POST['roomNumber']
-        start_time_h = request.POST['startTimeH']
-        start_time_m = request.POST['startTimeM']
-        end_time_h = request.POST['endTimeH']
-        end_time_m = request.POST['endTimeM']
+        start_time = request.POST['startTime']
+        end_time = request.POST['endTime']
 
         try:
             course = Course.objects.get(COURSE_ID=course_id)
-
-            start_time_h = int(start_time_h)
-            start_time_m = int(start_time_m)
-            start_time = time(start_time_h, start_time_m)
-
-            end_time_h = int(end_time_h)
-            end_time_m = int(end_time_m)
-            end_time = time(end_time_h, end_time_m)
+            
+            start_time = datetime.strptime(start_time, '%H:%M').time()
+            end_time = datetime.strptime(end_time, '%H:%M').time()
 
             section = Section(SECTION_NUMBER=section_number,
                               COURSE=course,
