@@ -9,7 +9,8 @@ class TAAssignments(View):
             return redirect("login")
 
         courses = Course.objects.all()
-        return render(request, "ta-assignments.html", {'courses': courses})
+        TAs = User.objects.all()
+        return render(request, "ta-assignments.html", {'courses': courses, 'TAs': TAs})
 
     def post(self, request):
         if not request.session.get("is_authenticated"):
@@ -99,4 +100,5 @@ class TAAssignments(View):
             status = 'An unexpected error occurred.'
 
         courses = Course.objects.all()
-        return render(request, "ta-assignments.html", {'courses': courses, 'status': status})
+        TAs = User.objects.all()
+        return render(request, "ta-assignments.html", {'courses': courses, 'status': status,'TAs': TAs})
