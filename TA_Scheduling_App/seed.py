@@ -44,7 +44,7 @@ def insert_data():
         FIRST_NAME='Alice',
         LAST_NAME='Smith',
         EMAIL='alice.smith@example.com',
-        PASSWORD_HASH='<hashed_password>',
+        PASSWORD_HASH='test2',
         PHONE_NUMBER='555-987-6543',
         ADDRESS='456 Elm St',
         BIRTH_DATE=date(1985, 6, 15)
@@ -55,7 +55,7 @@ def insert_data():
         FIRST_NAME='Emma',
         LAST_NAME='Johnson',
         EMAIL='emma.johnson@example.com',
-        PASSWORD_HASH='<hashed_password>',
+        PASSWORD_HASH='test3',
         PHONE_NUMBER='555-123-4587',
         ADDRESS='789 Oak St',
         BIRTH_DATE=date(1992, 3, 12)
@@ -66,7 +66,7 @@ def insert_data():
         FIRST_NAME='Michael',
         LAST_NAME='Brown',
         EMAIL='michael.brown@example.com',
-        PASSWORD_HASH='<hashed_password>',
+        PASSWORD_HASH='test4',
         PHONE_NUMBER='555-987-6578',
         ADDRESS='321 Pine St',
         BIRTH_DATE=date(1988, 10, 20)
@@ -77,7 +77,7 @@ def insert_data():
         FIRST_NAME='Sophia',
         LAST_NAME='Williams',
         EMAIL='sophia.williams@example.com',
-        PASSWORD_HASH='<hashed_password>',
+        PASSWORD_HASH='test5',
         PHONE_NUMBER='555-123-4599',
         ADDRESS='147 Maple St',
         BIRTH_DATE=date(1994, 7, 25)

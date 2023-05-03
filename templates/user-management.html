@@ -19,7 +19,7 @@
                      <table class="table table-striped">
                          <h5 class="table-header">User</h5>
                          {% if not user.safe %}
-                             <tr data-rn="{{ forloop.counter }}">
+                             <tr>
                                 <td>
                                     <form class="input-group" name="user-id" action="" method="post">
                                         {% csrf_token %}
@@ -33,7 +33,7 @@
                                 </td>
                              </tr>
                          {% else %}
-                             <tr data-rn="{{ forloop.counter }}">
+                             <tr>
                                 <td>
                                      <div class="input-group safe-user">
                                         User ID:
@@ -46,31 +46,31 @@
                              </tr>
                          {% endif %}
 
-                         <tr data-rn="{{ forloop.counter }}">
+                         <tr>
                              <td>Role: {{ user.ROLE }}</td>
                          </tr>
 
-                         <tr data-rn="{{ forloop.counter }}">
+                         <tr>
                              <td>First Name: {{ user.FIRST_NAME }}</td>
                          </tr>
 
-                         <tr data-rn="{{ forloop.counter }}">
+                         <tr>
                              <td>Last Name: {{ user.LAST_NAME }}</td>
                          </tr>
 
-                         <tr data-rn="{{ forloop.counter }}">
+                         <tr>
                               <td>Email: {{ user.EMAIL }}</td>
                          </tr>
 
-                         <tr data-rn="{{ forloop.counter }}">
+                         <tr>
                              <td>Phone Number: {{ user.PHONE_NUMBER }}</td>
                          </tr>
 
-                         <tr data-rn="{{ forloop.counter }}">
+                         <tr>
                               <td>Address: {{ user.ADDRESS }}</td>
                          </tr>
 
-                         <tr data-rn="{{ forloop.counter }}">
+                         <tr>
                              <td>Date of Birth: {{ user.BIRTH_DATE }}</td>
                          </tr>
                      </table>
