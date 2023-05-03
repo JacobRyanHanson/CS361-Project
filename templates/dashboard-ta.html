@@ -11,9 +11,12 @@
 <body>
     {% include 'partials/header.html' %}
     <div class="main-container">
-        <h1>TA Dashboard</h1>
         <div class="dashboard-container">
             <a href="{% url 'ta_assignments' %}"><button class="btn btn-primary">View TA Assignments</button></a>
+        </div>
+
+        <div class="dashboard-container">
+            <a href="{% url 'account_settings' %}"><button class="btn btn-primary">Account Settings</button></a>
         </div>
     </div>
     {% include 'partials/footer.html' %}
