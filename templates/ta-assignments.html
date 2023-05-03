@@ -131,7 +131,13 @@
                             <tr data-rn="9">
                                 <td class="d-flex">
                                     <span class="tlabel">Email:</span>
-                                    <input type="email" name="course_ta_email" class="form-control multi-row-input-1" placeholder="TA Email" required>
+                                    <select type="email" name="course_ta_email" class="form-control multi-row-input-1" placeholder="TA Email" required>
+                                        {% for user in TAs %}
+                                            {% if user.ROLE == 'TA' %}
+                                                <option value="{{ user.EMAIL }}">{{ user.EMAIL }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
                                     <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
                                 </td>
                             </tr>
@@ -176,7 +182,13 @@
                                         <form class="input-group" name="assignment-ta" action="" method="post">
                                             {% csrf_token %}
                                             <span class="tlabel">Email:</span>
-                                            <input type="email" name="section_ta_email" class="form-control" placeholder="TA Email" required>
+                                            <select type="email" name="section_ta_email" class="form-control" placeholder="TA Email" required>
+                                                {% for user in TAs %}
+                                                    {% if user.ROLE == 'TA' %}
+                                                        <option value="{{ user.EMAIL }}">{{ user.EMAIL }}</option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
                                             <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
                                             <input type="hidden" name="section_id" value="{{ section.SECTION_ID }}">
                                             <span class="input-group-btn">
