@@ -10,12 +10,7 @@ from .Section import Section
 from TA_Scheduling_App.utils.null import Null
 
 
-# Class to resolve inheritance
-class ABCModelMeta(ABCMeta, ModelBase):
-    pass
-
-
-class SectionAssignment(IVerification, models.Model, metaclass=ABCModelMeta):
+class SectionAssignment(IVerification):
     SECTION_ASSIGNMENT_ID = models.AutoField(primary_key=True)
     COURSE_ASSIGNMENT = models.ForeignKey(CourseAssignment, on_delete=models.CASCADE)
     SECTION = models.ForeignKey(Section, on_delete=models.CASCADE)

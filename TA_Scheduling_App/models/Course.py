@@ -10,11 +10,8 @@ from django.db.models.base import ModelBase
 # and 'None' given explicitly as input.
 from TA_Scheduling_App.utils.null import Null
 
-# Class to resolve inheritance
-class ABCModelMeta(ABCMeta, ModelBase):
-    pass
 
-class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
+class Course(IString, IVerification):
     COURSE_ID = models.AutoField(primary_key=True)
     COURSE_NUMBER = models.IntegerField()
     COURSE_NAME = models.CharField(max_length=255)
