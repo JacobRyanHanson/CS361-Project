@@ -17,7 +17,7 @@ class ABCModelMeta(ABCMeta, ModelBase):
 class CourseAssignment(IVerification, models.Model, metaclass=ABCModelMeta):
     COURSE_ASSIGNMENT_ID = models.AutoField(primary_key=True)
     COURSE = models.ForeignKey(Course, on_delete=models.CASCADE)
-    TA = models.ForeignKey(User, on_delete=models.CASCADE)
+    USER = models.ForeignKey(User, on_delete=models.CASCADE)
     IS_GRADER = models.BooleanField()
 
     def __init__(self, *args, **kwargs):

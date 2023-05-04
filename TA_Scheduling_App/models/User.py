@@ -27,6 +27,7 @@ class User(IString, models.Model, metaclass=ABCModelMeta):
     PHONE_NUMBER = models.CharField(max_length=20)
     ADDRESS = models.CharField(max_length=255)
     BIRTH_DATE = models.DateField()
+    SKILLS = models.CharField(max_length=255)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -17,7 +17,6 @@ class ABCModelMeta(ABCMeta, ModelBase):
 class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
     COURSE_ID = models.AutoField(primary_key=True)
     COURSE_NUMBER = models.IntegerField()
-    INSTRUCTOR = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     COURSE_NAME = models.CharField(max_length=255)
     COURSE_DESCRIPTION = models.TextField()
     SEMESTER = models.CharField(max_length=255)
@@ -73,22 +72,6 @@ class Course(IVerification, IString, models.Model, metaclass=ABCModelMeta):
 
         # If all checks pass, set the course number
         self.COURSE_NUMBER = int_value
-        return True
-
-    def setInstructor(self, instructor):
-        if instructor is Null():
-            return True
-
-        # Allow setting instructor to None
-        if instructor is not None and not isinstance(instructor, User):
-            return False
-
-        # Check that instructor has the INSTRUCTOR role
-        if instructor is not None and instructor.ROLE != "INSTRUCTOR":
-            return False
-
-        # Set the instructor for the course
-        self.INSTRUCTOR = instructor
         return True
 
     def setCourseName(self, courseName):
