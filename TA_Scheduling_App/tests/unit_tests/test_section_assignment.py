@@ -28,7 +28,7 @@ class TestSectionAssignmentInit(unittest.TestCase):
         self.course_assignment = MagicMock(spec=CourseAssignment)
         self.course_assignment.pk = 1
         self.course_assignment.COURSE = self.course
-        self.course_assignment.TA = self.ta
+        self.course_assignment.USER = self.ta
         self.course_assignment._state = MagicMock()
         self.course_assignment._state.db = 'default'
 
@@ -55,7 +55,7 @@ class TestSectionAssignmentInit(unittest.TestCase):
         self.other_course_assignment = MagicMock(spec=CourseAssignment)
         self.other_course_assignment.pk = 2
         self.other_course_assignment.COURSE = self.other_course
-        self.other_course_assignment.TA = self.other_ta
+        self.other_course_assignment.USER = self.other_ta
         self.other_course_assignment._state = MagicMock()
         self.other_course_assignment._state.db = 'default'
 
