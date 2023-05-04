@@ -14,7 +14,7 @@ class CourseAssignment(IVerification):
     COURSE_ASSIGNMENT_ID = models.AutoField(primary_key=True)
     COURSE = models.ForeignKey(Course, on_delete=models.CASCADE)
     USER = models.ForeignKey(User, on_delete=models.CASCADE)
-    IS_GRADER = models.BooleanField()
+    IS_GRADER = models.BooleanField(null=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
