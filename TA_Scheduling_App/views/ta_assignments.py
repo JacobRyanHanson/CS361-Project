@@ -10,7 +10,7 @@ class TAAssignments(View):
 
         courses = Course.objects.all()
         user = User.objects.get(USER_ID=request.session["user_id"])
-        TAs = User.objects.all()
+        TAs = User.objects.filter(ROLE="TA")
         return render(request, "ta-assignments.html", {'courses': courses, 'role': user.ROLE, 'TAs': TAs})
 
     def post(self, request):
@@ -102,6 +102,6 @@ class TAAssignments(View):
 
         courses = Course.objects.all()
         user = User.objects.get(USER_ID=request.session["user_id"])
-        TAs = User.objects.all()
+        TAs = User.objects.filter(ROLE="TA")
         return render(request, "ta-assignments.html", {'courses': courses, 'status': status, 'role': user.ROLE,
                                                        'TAs': TAs})

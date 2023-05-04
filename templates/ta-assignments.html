@@ -133,9 +133,7 @@
                                     <span class="tlabel">Email:</span>
                                     <select type="email" name="course_ta_email" class="form-control multi-row-input-1" placeholder="TA Email" required>
                                         {% for user in TAs %}
-                                            {% if user.ROLE == 'TA' %}
                                                 <option value="{{ user.EMAIL }}">{{ user.EMAIL }}</option>
-                                            {% endif %}
                                         {% endfor %}
                                     </select>
                                     <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
@@ -184,9 +182,7 @@
                                             <span class="tlabel">Email:</span>
                                             <select type="email" name="section_ta_email" class="form-control" placeholder="TA Email" required>
                                                 {% for user in TAs %}
-                                                    {% if user.ROLE == 'TA' %}
                                                         <option value="{{ user.EMAIL }}">{{ user.EMAIL }}</option>
-                                                    {% endif %}
                                                 {% endfor %}
                                             </select>
                                             <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
