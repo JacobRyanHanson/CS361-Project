@@ -45,6 +45,70 @@ class TestSectionInit(unittest.TestCase):
 #     Please note setters will handle all additional checking on initialization.
 
 
+class TestSetSectionType(unittest.TestCase):
+    def setUp(self):
+        # Mock a course
+        self.course = MagicMock(spec=Course)
+        self.course.pk = 1
+        self.course._state = MagicMock()
+        self.course._state.db = 'default'
+
+        # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
+        with patch.object(Section, 'checkDuplicate', return_value=False):
+            # Create valid section
+            self.section = Section(
+                SECTION_NUMBER=901,
+                COURSE=self.course,
+                BUILDING='Chemistry Building',
+                ROOM_NUMBER='190',
+                SECTION_START=datetime.time(9, 30),
+                SECTION_END=datetime.time(10, 20))
+
+    def test_setSectionType_valid_Lab(self):
+        self.assertTrue(self.section.setSectionType("LAB"), "Valid section type 'LAB' failed to be set.")
+
+    def test_setSectionType_valid_Lecture(self):
+        self.assertTrue(self.section.setSectioType("LECTURE"), "Valid section type 'LECTURE' failed to be set.")
+
+    def test_setSectionType_invalid_empty_string(self):
+        self.assertFalse(self.section.setSectionType(""), "Empty section type string was incorrectly set.")
+
+    def test_setSectionType_invalid_whitespace(self):
+        self.assertFalse(self.section.setSectionType("   "), "Section type with only whitespace was incorrectly set.")
+
+    def test_setSectionType_invalid_lowercase(self):
+        self.assertFalse(self.section.setSectionType("lab"), "Lowercase section type string was incorrectly set.")
+
+    def test_setSectionType_invalid_mixed_case(self):
+        self.assertFalse(self.section.setSectionType("LaB"), "Mixed case section type string was incorrectly set.")
+
+    def test_setSectionType_invalid_numbers(self):
+        self.assertFalse(self.section.setSectionType("1234"), "Section type with numbers was incorrectly set.")
+
+    def test_setSectionType_invalid_special_characters(self):
+        self.assertFalse(self.section.setSectionType("#$%@"), "Section type with special characters was incorrectly set.")
+
+    def test_setSectionType_invalid_other_string(self):
+        self.assertFalse(self.section.setSectionType("LUNCH"), "Invalid section type string was incorrectly set.")
+
+    def test_setSectionType_invalid_spaces_before_after(self):
+        self.assertFalse(self.section.setSectionType("  LAB  "), "Section type with spaces before and after was incorrectly set.")
+
+    def test_setSectionType_invalid_combination(self):
+        self.assertFalse(self.section.setSectionType("LAB123"), "Section type with letters and numbers was incorrectly set.")
+
+    def test_setSectionType_invalid_unicode(self):
+        self.assertFalse(self.section.setSectionType("LÄB"), "Section type with unicode characters was incorrectly set.")
+
+    def test_setSectionType_invalid_long_string(self):
+        self.assertFalse(self.section.setSectionType("A" * 256), "Section type with too long string was incorrectly set.")
+
+    def test_setSectionType_invalid_one_letter(self):
+        self.assertFalse(self.section.setSectionType("A"), "Section type with only one letter was incorrectly set.")
+
+    def test_setSectionType_invalid_null(self):
+        self.assertFalse(self.section.setSectionType(None), "Null section type was incorrectly set.")
+
 class TestSetSectionNumber(unittest.TestCase):
     def setUp(self):
         # Mock a course
