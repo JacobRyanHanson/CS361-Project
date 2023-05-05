@@ -21,7 +21,7 @@ class TestSectionAssignmentInit(unittest.TestCase):
         # Mock User objects
         self.ta = MagicMock(spec=User)
         self.ta.pk = 1
-        self.instructor.ROLE = "TA"
+        self.ta.ROLE = "TA"
         self.ta._state = MagicMock()
         self.ta._state.db = 'default'
 
