@@ -17,34 +17,24 @@
             {% for user in users %}
                 <div class="table-container">
                      <table class="table table-striped">
-                         <h5 class="table-header">User</h5>
-                         {% if not user.safe %}
-                             <tr>
-                                <td>
-                                    <form class="input-group" name="user-id" action="" method="post">
-                                        {% csrf_token %}
-                                        User ID:
-                                        {{ user.USER_ID }}
+                         <tr>
+                            <td>
+                                <form class="input-group" name="course-id" action="" method="post">
+                                    {% csrf_token %}
+                                    <h5 class="table-header">User</h5>
+                                    {% if not user.safe %}
                                         <input type="hidden" name="delete_user_id" value="{{ user.USER_ID }}">
                                         <span class="input-group-btn">
                                             <button class="btn btn-primary form-btn" type="submit">Delete</button>
                                         </span>
-                                    </form>
-                                </td>
-                             </tr>
-                         {% else %}
-                             <tr>
-                                <td>
-                                     <div class="input-group safe-user">
-                                        User ID:
-                                        {{ user.USER_ID }}
+                                    {% else %}
                                         <span class="input-group-btn">
                                             <button disabled class="btn btn-primary form-btn" type="submit">N/A</button>
                                         </span>
-                                    </div>
-                                 </td>
-                             </tr>
-                         {% endif %}
+                                    {% endif %}
+                                </form>
+                            </td>
+                        </tr>
 
                          <tr>
                              <td>Role: {{ user.ROLE }}</td>
