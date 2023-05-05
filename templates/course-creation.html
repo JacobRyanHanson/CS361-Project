@@ -23,8 +23,13 @@
             </div>
 
             <div class="d-flex form-div">
-                <label class="course-form-label" for="instructor">Instructor ID:</label>
-                <input class="form-control" type="number" name="instructorID">
+                <label class="course-form-label" for="courseInstructor">Instructor:</label>
+                <select name="instructorID" class="form-control course-form-select" required>
+                    <option>None</option>
+                    {% for user in instructors %}
+                        <option value="{{ user.USER_ID }}">{{ user.EMAIL }}</option>
+                    {% endfor %}
+                </select>
             </div>
 
             <div class="d-flex form-div">
