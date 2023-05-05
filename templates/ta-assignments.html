@@ -12,215 +12,479 @@
 
 <body>
     {% include 'partials/header.html' %}
-    <div class="main-container">
-        {# TA View #}
-        {# <div class="table-container">#}
-            {# <table class="table table-striped">#}
-                {# <h5 class="table-header">Assignment(s)</h5>#}
-                {# {% for i in '12345678' %}#}
-                {# <tr>#}
-                    {# <td>Content for row {{ forloop.counter }}</td>#}
-                    {# </tr>#}
-                {# {% endfor %}#}
-                {# </table>#}
-            {# </div>#}
 
-
-        {# Instructor View #}
-        {# <div class="table-container">#}
-            {# <table class="table table-striped">#}
-                {# <h5 class="table-header">Course(s)</h5>#}
-                {# {% for i in '123456' %}#}
-                {# <tr data-rn="{{ forloop.counter }}">#}
-                    {# <td>Content for row {{ forloop.counter }}</td>#}
-                    {# </tr>#}
-                {# {% endfor %}#}
-                {# </table>#}
-            {# <div class="sub-wrapper">#}
-                {# <div class="nested-table-container">#}
-                    {# <table class="table table-striped">#}
-                        {# <h5 class="table-header">Assignment(s)</h5>#}
-                        {# {% for i in '12345678' %}#}
-                        {# <tr>#}
-                            {# {% if forloop.counter == 4 %}#}
-                            {# <td>#}
-                                {# <form class="input-group" action="/" method="post">#}
-                                    {# {% csrf_token %}#}
-                                    {# <input type="text" class="form-control" placeholder="Populate">#}
-                                    {# <span class="input-group-btn">#}
-                                        {# <button class="btn btn-primary form-btn" type="submit">Update</button>#}
-                                        {# </span>#}
-                                    {# </form>#}
-                                {# </td>#}
-                            {# {% else %}#}
-                            {# <td>Content for row {{ forloop.counter }}</td>#}
-                            {# {% endif %}#}
-                            {# </tr>#}
-                        {# {% endfor %}#}
-                        {# </table>#}
-                    {# </div>#}
-                {# </div>#}
-            {# </div>#}
-
-        {# Admin View #}
-        {% if role == 'ADMIN' %}
+    {# TA View #}
+    {% if role == 'TA' %}
+        <div class="main-container flex-column align-items-center">
             <div class="status-message">{{ status }}</div>
-            {% for course in courses %}
-            <div class="table-container">
-                <table class="table table-striped">
-                    <h5 class="table-header">Course</h5>
-                    {% for i in '********' %}
-                    <tr data-rn="{{ forloop.counter }}">
-                        {% if forloop.counter == 1 %}
-                        <td>
-                            <form class="input-group" name="course-id" action="" method="post">
-                                {% csrf_token %}
-                                Course ID:
-                                {{ course.COURSE_ID }}
-                                <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-primary form-btn" type="submit">Delete</button>
-                                </span>
-                            </form>
-                        </td>
 
-                        {% elif forloop.counter == 5 %}
-                        <td>
-                            <form class="input-group" name="course-instructor" action="" method="post">
-                                {% csrf_token %}
-                                <span class="tlabel">Email:</span>
-                                <input type="email" class="form-control" name="course_instructor" value="{{ course.INSTRUCTOR.EMAIL }}" required>
-                                <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-primary form-btn" type="submit">Update</button>
-                                </span>
-                            </form>
-                        </td>
-                        {% else %}
-                        <td>
-                            {% if forloop.counter == 2 %}
-                            Department:
-                            {{ course.DEPARTMENT }} {{ course.COURSE_NUMBER }} - {{ course.COURSE_NAME }}
-                            {% elif forloop.counter == 3 %}
-                                Instructor ID:
-                                {{ course.INSTRUCTOR.USER_ID }}
-                            {% elif forloop.counter == 4 %}
-                                Instructor Name:
-                                {{ course.INSTRUCTOR.FIRST_NAME }} {{ course.INSTRUCTOR.LAST_NAME }}
-                            {% elif forloop.counter == 6 %}
+            {# TODO - Iterate through sections this TA is assigned to #}
+            {% for _ in "*" %}
+                <div class="table-container">
+                    <table class="table table-striped">
+                        <tr>
+                            <td>
+                                <h5 class="table-header">Section</h5>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                {# TODO - Get attributes of associated course #}
+                                Course Name:
+                                {{ course.DEPARTMENT }} {{ course.COURSE_NUMBER }} - {{ course.COURSE_NAME }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Section Number:
+                                {{ section.SECTION_NUMBER }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Section Type:
+                                {{ section.SECTION_TYPE }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                TA Name:
+                                 {# TODO - Get name of TA #}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                TA Email:
+                                 {# TODO - Get email of TA #}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Grader Status:
+                                {# TODO - Get grader status of current TA assigned to section #}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Building:
+                                {{ section.BUILDING }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Room Number:
+                                {{ section.ROOM_NUMBER }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Time:
+                                {{ section.SECTION_START }} - {{ section.SECTION_END }}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {# Instructor View #}
+    {% if role == 'INSTRUCTOR' %}
+        <div class="main-container">
+            <div class="status-message">{{ status }}</div>
+
+            {% for course in courses %}
+                <div class="table-container">
+                    <table class="table table-striped">
+                        <tr>
+                            <td>
+                                <h5 class="table-header">Course</h5>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Course Name:
+                                {{ course.DEPARTMENT }} {{ course.COURSE_NUMBER }} - {{ course.COURSE_NAME }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Instructor:
+                                {# TODO - Get from Course Assignment #}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Instructor Email:
+                                {# TODO - Get from Course Assignment #}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
                                 Description:
                                 {{ course.COURSE_DESCRIPTION }}
-                            {% elif forloop.counter == 7 %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
                                 Semester:
                                 {{ course.SEMESTER }}
-                            {% elif forloop.counter == 8 %}
+                            </td>
+                        </tr>
+
+                        <tr class="b-last">
+                            <td>
                                 Prerequisites:
                                 {{ course.PREREQUISITES }}
-                            {% endif %}
-                        </td>
-                        {% endif %}
-                    </tr>
-                    {% endfor %}
+                            </td>
+                        </tr>
+                    </table>
 
-                </table>
+                    <div class="sub-wrapper">
+                        {% for section in course.section_set.all %}
+                            <div class="nested-table-container">
+                                <table class="table table-striped">
+                                    <tr>
+                                        <td>
+                                            <h5 class="table-header">Section</h5>
+                                        </td>
+                                    </tr>
 
-                <div class="multi-row-container">
-                    <form name="course-ta" action="" method="post">
-                        {% csrf_token %}
-                        <table class="table table-striped">
-                            <tr data-rn="9">
-                                <td class="d-flex">
-                                    <span class="tlabel">Email:</span>
-                                    <select type="email" name="course_ta_email" class="form-control multi-row-input-1" placeholder="TA Email" required>
-                                        {% for user in TAs %}
-                                                <option value="{{ user.EMAIL }}">{{ user.EMAIL }}</option>
-                                        {% endfor %}
-                                    </select>
-                                    <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
-                                </td>
-                            </tr>
-                            <tr data-rn="10">
-                                <td>
-                                    <span class="tlabel">Grader Status:</span>
-                                    <select name="course_ta_select" class="form-control multi-row-input-2" required>
-                                        <option value="">Select</option>
-                                        <option value="true">True</option>
-                                        <option value="false">False</option>
-                                    </select>
-                                </td>
-                            </tr>
-                        </table>
-                        <div class="multi-row-btn-container">
-                            <button class="btn btn-primary multi-row-btn" type="submit">Add TA</button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="sub-wrapper">
-                    {% for section in course.section_set.all %}
-                        <div class="nested-table-container">
-                            <table class="table table-striped">
-                                <h5 class="table-header">Section</h5>
-                                {% for i in '*******' %}
-                                <tr>
-                                    {% if forloop.counter == 1 %}
-                                    <td>
-                                        <form name="section-id" class="input-group" action="" method="post">
-                                            {% csrf_token %}
-                                            Section ID:
-                                            {{ section.SECTION_ID }}
-                                            <span class="input-group-btn">
-                                                <input type="hidden" name="section_id" value="{{ section.SECTION_ID }}">
-                                                <button class="btn btn-primary form-btn" type="submit">Delete</button>
-                                            </span>
-                                        </form>
-                                    </td>
-                                    {% elif forloop.counter == 4 %}
-                                    <td>
-                                        <form class="input-group" name="assignment-ta" action="" method="post">
-                                            {% csrf_token %}
-                                            <span class="tlabel">Email:</span>
-                                            <select type="email" name="section_ta_email" class="form-control" placeholder="TA Email" required>
-                                                {% for user in TAs %}
-                                                        <option value="{{ user.EMAIL }}">{{ user.EMAIL }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
-                                            <input type="hidden" name="section_id" value="{{ section.SECTION_ID }}">
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-primary form-btn" type="submit">Add TA</button>
-                                            </span>
-                                        </form>
-                                    </td>
-                                    {% else %}
-                                    <td>
-                                        {% if forloop.counter == 2 %}
+                                    <tr>
+                                        <td>
                                             Section Number:
                                             {{ section.SECTION_NUMBER }}
-                                        {% elif forloop.counter == 3 %}
-                                            Type: Lab
-                                        {% elif forloop.counter == 5 %}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            Section Type:
+                                            {{ section.SECTION_TYPE }}
+                                        </td>
+                                    </tr>
+
+                                    {% if section.SECTION_TYPE == 'LAB' %}
+                                        <tr>
+                                            <td>
+                                               <form class="input-group" name="assignment-ta" action="" method="post">
+                                                    {% csrf_token %}
+                                                    <span class="t-label">TA:</span>
+                                                    <select name="section_ta_email" class="form-control" required>
+                                                        <option value="">Select</option>
+                                                        {# TODO - Get TAs assigned to course #}
+                                                    </select>
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-primary form-btn" type="submit">Update</button>
+                                                    </span>
+                                                </form>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                TA Email:
+                                                {# TODO - Get email of current TA assigned to section #}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                Grader Status:
+                                                {# TODO - Get grader status of current TA assigned to section #}
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+
+                                    {% if section.SECTION_TYPE == 'LECTURE' %}
+                                        <tr>
+                                            <td>
+                                               <form class="input-group" name="assignment-instructor" action="" method="post">
+                                                    {% csrf_token %}
+                                                    <span class="t-label">Instructor:</span>
+                                                    <select name="section_instructor_email" class="form-control" required>
+                                                        <option value="">Select</option>
+                                                        {# TODO - Get instructor assigned to section #}
+                                                    </select>
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-primary form-btn" type="submit">Update</button>
+                                                    </span>
+                                                </form>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                Instructor Email:
+                                                {# TODO - Get email of current instructor assigned to section #}
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+
+                                    <tr>
+                                        <td>
                                             Building:
                                             {{ section.BUILDING }}
-                                        {% elif forloop.counter == 6 %}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
                                             Room Number:
                                             {{ section.ROOM_NUMBER }}
-                                        {% elif forloop.counter == 7 %}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
                                             Time:
                                             {{ section.SECTION_START }} - {{ section.SECTION_END }}
-                                        {% endif %}
-                                    </td>
-                                    {% endif %}
-                                </tr>
-                                {% endfor %}
-                            </table>
-                        </div>
-                    {% endfor %}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
             {% endfor %}
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
+
+    {# Admin View #}
+    {% if role == 'ADMIN' %}
+        <div class="main-container">
+            <div class="status-message">{{ status }}</div>
+
+            {% for course in courses %}
+                <div class="table-container">
+                    <table class="table table-striped">
+                        <tr>
+                            <td>
+                                <form class="input-group" name="course-id" action="" method="post">
+                                    {% csrf_token %}
+                                    <h5 class="table-header">Course</h5>
+                                    <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary form-btn" type="submit">Delete</button>
+                                    </span>
+                                </form>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Course Name:
+                                {{ course.DEPARTMENT }} {{ course.COURSE_NUMBER }} - {{ course.COURSE_NAME }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                               <form class="input-group" name="course-instructor" action="" method="post">
+                                    {% csrf_token %}
+                                    <span class="t-label">Instructor:</span>
+                                    <select name="course_instructor_email" class="form-control" required>
+                                        <option value="">Select</option>
+                                        {# TODO - Get from Course Assignment #}
+                                    </select>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary form-btn" type="submit">Update</button>
+                                    </span>
+                                </form>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Instructor Email:
+                                {# TODO - Get from Course Assignment #}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Description:
+                                {{ course.COURSE_DESCRIPTION }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Semester:
+                                {{ course.SEMESTER }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Prerequisites:
+                                {{ course.PREREQUISITES }}
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="multi-row-container b-last">
+                        <form name="course-ta" action="" method="post">
+                            {% csrf_token %}
+                            <table class="table">
+                                <tr>
+                                    <td class="d-flex">
+                                        <span class="t-label">TA:</span>
+                                        <select name="course_ta_email" class="form-control multi-row-input-1" required>
+                                            <option value="">Select</option>
+                                            {# TODO - Get TAs not assigned to course #}
+                                        </select>
+                                        <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <span class="t-label">Grader Status:</span>
+                                        <select name="course_ta_grader_status" class="form-control multi-row-input-2" required>
+                                            <option value="">Select</option>
+                                            <option value="true">True</option>
+                                            <option value="false">False</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="multi-row-btn-container">
+                                <button class="btn btn-primary multi-row-btn" type="submit">Add TA</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="sub-wrapper">
+                        {% for section in course.section_set.all %}
+                            <div class="nested-table-container">
+                                <table class="table table-striped">
+                                    <tr>
+                                        <td>
+                                            <form class="input-group" name="section-id" action="" method="post">
+                                                {% csrf_token %}
+                                                <h5 class="table-header">Section</h5>
+                                                <input type="hidden" name="section_id" value="{{ section.SECTION_ID }}">
+                                                <span class="input-group-btn">
+                                                    <button class="btn btn-primary form-btn" type="submit">Delete</button>
+                                                </span>
+                                            </form>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            Section Number:
+                                            {{ section.SECTION_NUMBER }}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            Section Type:
+                                            {{ section.SECTION_TYPE }}
+                                        </td>
+                                    </tr>
+
+                                    {% if section.SECTION_TYPE == 'LAB' %}
+                                        <tr>
+                                            <td>
+                                               <form class="input-group" name="assignment-ta" action="" method="post">
+                                                    {% csrf_token %}
+                                                    <span class="t-label">TA:</span>
+                                                    <select name="section_ta_email" class="form-control" required>
+                                                        <option value="">Select</option>
+                                                        {# TODO - Get TAs assigned to course #}
+                                                    </select>
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-primary form-btn" type="submit">Update</button>
+                                                    </span>
+                                                </form>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                TA Email:
+                                                {# TODO - Get email of current TA assigned to section #}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                Grader Status:
+                                                {# TODO - Get grader status of current TA assigned to section #}
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+
+                                    {% if section.SECTION_TYPE == 'LECTURE' %}
+                                        <tr>
+                                            <td>
+                                               <form class="input-group" name="assignment-instructor" action="" method="post">
+                                                    {% csrf_token %}
+                                                    <span class="t-label">Instructor:</span>
+                                                    <select name="section_instructor_email" class="form-control" required>
+                                                        <option value="">Select</option>
+                                                        {# TODO - Get instructor assigned to section #}
+                                                    </select>
+                                                    <span class="input-group-btn">
+                                                        <button class="btn btn-primary form-btn" type="submit">Update</button>
+                                                    </span>
+                                                </form>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                Instructor Email:
+                                                {# TODO - Get email of current instructor assigned to section #}
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+
+                                    <tr>
+                                        <td>
+                                            Building:
+                                            {{ section.BUILDING }}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            Room Number:
+                                            {{ section.ROOM_NUMBER }}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            Time:
+                                            {{ section.SECTION_START }} - {{ section.SECTION_END }}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
     {% include 'partials/footer.html' %}
 </body>
 
