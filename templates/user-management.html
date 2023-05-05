@@ -73,6 +73,12 @@
                          <tr>
                              <td>Date of Birth: {{ user.BIRTH_DATE }}</td>
                          </tr>
+
+                        {% if user.ROLE == 'TA' %}
+                            <tr>
+                                <td>Skills: {{ user.SKILLS|default:'Not Provided' }}</td>
+                            </tr>
+                        {% endif %}
                      </table>
                 </div>
             {% endfor %}
