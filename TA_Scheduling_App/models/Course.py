@@ -30,9 +30,6 @@ class Course(IString, IVerification):
         elif result == None:
             raise ValueError("Duplicate course number assignment failed")
 
-        if not self.setInstructor(kwargs.get('INSTRUCTOR', Null())):
-            raise ValueError("Invalid instructor")
-
         if not self.setCourseName(kwargs.get('COURSE_NAME', Null())):
             raise ValueError("Invalid course name")
 

@@ -19,7 +19,8 @@ class TestCourseInit(unittest.TestCase):
                     COURSE_NAME='Advanced Chemistry',
                     COURSE_DESCRIPTION='A study of advanced topics in chemistry.',
                     SEMESTER='Spring 2024',
-                    PREREQUISITES='Basic Chemistry', DEPARTMENT='Computer Science')
+                    PREREQUISITES='Basic Chemistry',
+                    DEPARTMENT='Computer Science')
         except ValueError:
             self.fail("Course init failed with valid input values.")
 
