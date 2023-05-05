@@ -70,6 +70,27 @@
                                 {# TODO - Get grader status of current TA assigned to section #}
                             </td>
                         </tr>
+
+                        <tr>
+                            <td>
+                                Building:
+                                {{ section.BUILDING }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Room Number:
+                                {{ section.ROOM_NUMBER }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Time:
+                                {{ section.SECTION_START }} - {{ section.SECTION_END }}
+                            </td>
+                        </tr>
                     </table>
                 </div>
             {% endfor %}
