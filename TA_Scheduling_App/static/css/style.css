@@ -48,7 +48,7 @@ tbody>tr:last-child>td {
   margin-top: 1rem;
   margin-bottom: 1rem;
   display: inline-block;
-  width: 100%;
+  width: 90%;
 }
 
 label {
@@ -171,7 +171,7 @@ form[name="user-id"],
   background-color: white;
   margin-left: 20px;
   margin-right: 20px;
-  flex-basis: 400px;
+  max-width: 360px;
 }
 
 .table-container {
@@ -208,7 +208,7 @@ form[name="user-id"],
   width: 80px;
 }
 
-.multi-row-container {
+.b-last {
   border-bottom: solid 1px #dee2e6;
 }
 
