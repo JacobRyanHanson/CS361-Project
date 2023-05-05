@@ -2,7 +2,7 @@
 
 :root {
   --header-height: 6rem;
-  --footer-height: 3rem;
+  --footer-height: 4rem;
 }
 
 body {
@@ -73,7 +73,6 @@ label {
 
 .form-container {
   background-color: white;
-  border-radius: 10px;
   padding: 20px;
   text-align: center;
   flex-basis: 350px;
@@ -173,7 +172,6 @@ form[name="user-id"],
   margin-left: 20px;
   margin-right: 20px;
   flex-basis: 400px;
-  border-radius: 10px;
 }
 
 .table-container {
@@ -181,10 +179,10 @@ form[name="user-id"],
 }
 
 .table-header {
-  margin: 10px;
+  margin-bottom: 0px;
 }
 
-.tlabel {
+.t-label {
   margin-right: 10px;
   align-self: center;
 }
@@ -197,10 +195,12 @@ form[name="user-id"],
   margin: 0px 0px 20px 0px;
 }
 
-/* Add bottom row back to outer table when tables are nested*/
-.table-container [data-rn="6"],
-.table-container [data-rn="8"] {
-  border-bottom: solid 1px #dee2e6;
+.multi-row-container tr:nth-of-type(odd) {
+  background-color: white;
+}
+
+.multi-row-container tr:nth-of-type(even) {
+  background-color: rgba(0,0,0,.05);
 }
 
 .form-btn {
@@ -213,11 +213,11 @@ form[name="user-id"],
 }
 
 .multi-row-input-1 {
-  width: 80%;
+  width: 88%;
 }
 
 .multi-row-input-2 {
-  width: 58%;
+  width: 59%;
   display: inline-block;
 }
 
@@ -310,10 +310,6 @@ form[name="user-id"],
 /* ------------------------ Create Section Page ------------------------*/
 .section-form-label {
   width: 257px;
-}
-
-.section-form-select[name="startTimeH"], .section-form-select[name="endTimeH"] {
-  margin-right: 10px;
 }
 
 /* ------------------------ Create User Page ------------------------*/
