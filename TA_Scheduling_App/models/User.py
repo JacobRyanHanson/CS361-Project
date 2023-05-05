@@ -12,12 +12,7 @@ from django.db.models.base import ModelBase
 from TA_Scheduling_App.utils.null import Null
 
 
-# Class to resolve inheritance
-class ABCModelMeta(ABCMeta, ModelBase):
-    pass
-
-
-class User(IString, models.Model, metaclass=ABCModelMeta):
+class User(IString):
     USER_ID = models.AutoField(primary_key=True)
     ROLE = models.CharField(max_length=10)
     FIRST_NAME = models.CharField(max_length=255)
@@ -27,6 +22,7 @@ class User(IString, models.Model, metaclass=ABCModelMeta):
     PHONE_NUMBER = models.CharField(max_length=20)
     ADDRESS = models.CharField(max_length=255)
     BIRTH_DATE = models.DateField()
+    SKILLS = models.CharField(max_length=255, null=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

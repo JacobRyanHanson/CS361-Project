@@ -11,44 +11,29 @@ from TA_Scheduling_App.models import Course, User
 
     
 class TestCourseInit(unittest.TestCase):
-    def setUp(self):
-        # Mock User object
-        self.instructor = MagicMock(spec=User)
-        self.instructor.pk = 1
-        self.instructor.ROLE = "INSTRUCTOR"
-        self.instructor._state = MagicMock()
-        self.instructor._state.db = 'default'
-    
     def test_init_valid_input(self):
         try:
             # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
             with patch.object(Course, 'checkDuplicate', return_value=False):
                 Course(COURSE_NUMBER=101,
-                    INSTRUCTOR=self.instructor,
                     COURSE_NAME='Advanced Chemistry',
                     COURSE_DESCRIPTION='A study of advanced topics in chemistry.',
                     SEMESTER='Spring 2024',
-                    PREREQUISITES='Basic Chemistry', DEPARTMENT='Computer Science')
+                    PREREQUISITES='Basic Chemistry',
+                    DEPARTMENT='Computer Science')
         except ValueError:
             self.fail("Course init failed with valid input values.")
 
 #     Please note setters will handle all additional checking on initialization.
 
+
 class TestSetCourseNumber(unittest.TestCase):
     def setUp(self):
-        # Mock User object
-        self.instructor = MagicMock(spec=User)
-        self.instructor.pk = 1
-        self.instructor.ROLE = "INSTRUCTOR"
-        self.instructor._state = MagicMock()
-        self.instructor._state.db = 'default'
-
         # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
         with patch.object(Course, 'checkDuplicate', return_value=False):
             # Create Course object with mocked User
             self.course_1 = Course(
                 COURSE_NUMBER=901,
-                INSTRUCTOR=self.instructor,
                 COURSE_NAME='Introduction to Computer Science',
                 COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
                 SEMESTER='Fall 2023',
@@ -98,77 +83,13 @@ class TestSetCourseNumber(unittest.TestCase):
             self.assertFalse(self.course_1.setCourseNumber(10000), "Course number was set above max value")
 
 
-class TestSetInstructor(unittest.TestCase):
-    def setUp(self):
-        # Mock User objects
-        self.instructor = MagicMock(spec=User)
-        self.instructor.pk = 1
-        self.instructor.ROLE = "INSTRUCTOR"
-        self.instructor._state = MagicMock()
-        self.instructor._state.db = 'default'
-
-        self.ta = MagicMock(spec=User)
-        self.ta.pk = 2
-        self.ta.ROLE = "TA"
-        self.ta._state = MagicMock()
-        self.ta._state.db = 'default'
-
-        self.admin = MagicMock(spec=User)
-        self.admin.pk = 3
-        self.admin.ROLE = "ADMIN"
-        self.admin._state = MagicMock()
-        self.admin._state.db = 'default'
-
-        # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
-        with patch.object(Course, 'checkDuplicate', return_value=False):
-            # Create Course object with mocked User
-            self.course = Course(
-                COURSE_NUMBER=101,
-                INSTRUCTOR=self.instructor,
-                COURSE_NAME='Introduction to Computer Science',
-                COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
-                SEMESTER='Fall 2023',
-                PREREQUISITES='None',
-                DEPARTMENT='Computer Science'
-            )
-
-    def test_setInstructor_valid(self):
-        self.assertTrue(self.course.setInstructor(self.instructor),
-                "Valid instructor failed to be set.")
-
-    def test_setInstructor_valid_null(self):
-        self.assertTrue(self.course.setInstructor(None),
-        "Valid null instructor failed to be set.")
-
-    def test_setInstructor_invalid_non_user_object(self):
-        non_user_object = "Not a User object"
-        self.assertFalse(self.course.setInstructor(non_user_object),
-        "Non-User object was incorrectly set as instructor.")
-    
-    def test_wrong_role_ta(self):
-        self.assertFalse(self.course.setInstructor(self.ta),
-        "User was incorrectly set as instructor.")
-
-    def test_wrong_role_admin(self):
-        self.assertFalse(self.course.setInstructor(self.admin),
-        "User was incorrectly set as instructor.")
-
-
 class TestSetCourseName(unittest.TestCase):
     def setUp(self):
-        # Mock User object
-        self.instructor = MagicMock(spec=User)
-        self.instructor.pk = 1
-        self.instructor.ROLE = "INSTRUCTOR"
-        self.instructor._state = MagicMock()
-        self.instructor._state.db = 'default'
-
         # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
         with patch.object(Course, 'checkDuplicate', return_value=False):
             # Create Course object with mocked User
             self.course = Course(
                 COURSE_NUMBER=101,
-                INSTRUCTOR=self.instructor,
                 COURSE_NAME='Introduction to Computer Science',
                 COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
                 SEMESTER='Fall 2023',
@@ -235,19 +156,11 @@ class TestSetCourseName(unittest.TestCase):
 
 class TestSetCourseDescription(unittest.TestCase):
     def setUp(self):
-        # Mock User object
-        self.instructor = MagicMock(spec=User)
-        self.instructor.pk = 1
-        self.instructor.ROLE = "INSTRUCTOR"
-        self.instructor._state = MagicMock()
-        self.instructor._state.db = 'default'
-
         # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
         with patch.object(Course, 'checkDuplicate', return_value=False):
             # Create Course object with mocked User
             self.course = Course(
                 COURSE_NUMBER=101,
-                INSTRUCTOR=self.instructor,
                 COURSE_NAME='Introduction to Computer Science',
                 COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
                 SEMESTER='Fall 2023',
@@ -301,19 +214,11 @@ class TestSetCourseDescription(unittest.TestCase):
 
 class TestSetSemester(unittest.TestCase):
     def setUp(self):
-        # Mock User object
-        self.instructor = MagicMock(spec=User)
-        self.instructor.pk = 1
-        self.instructor.ROLE = "INSTRUCTOR"
-        self.instructor._state = MagicMock()
-        self.instructor._state.db = 'default'
-
         # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
         with patch.object(Course, 'checkDuplicate', return_value=False):
             # Create Course object with mocked User
             self.course = Course(
                 COURSE_NUMBER=101,
-                INSTRUCTOR=self.instructor,
                 COURSE_NAME='Introduction to Computer Science',
                 COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
                 SEMESTER='Fall 2023',
@@ -353,19 +258,11 @@ class TestSetSemester(unittest.TestCase):
 
 class TestSetPrerequisites(unittest.TestCase):
     def setUp(self):
-        # Mock User object
-        self.instructor = MagicMock(spec=User)
-        self.instructor.pk = 1
-        self.instructor.ROLE = "INSTRUCTOR"
-        self.instructor._state = MagicMock()
-        self.instructor._state.db = 'default'
-
         # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
         with patch.object(Course, 'checkDuplicate', return_value=False):
             # Create Course object with mocked User
             self.course = Course(
                 COURSE_NUMBER=101,
-                INSTRUCTOR=self.instructor,
                 COURSE_NAME='Introduction to Computer Science',
                 COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
                 SEMESTER='Fall 2023',
@@ -409,19 +306,11 @@ class TestSetPrerequisites(unittest.TestCase):
 
 class TestSetDepartment(unittest.TestCase):
     def setUp(self):
-        # Mock User object
-        self.instructor = MagicMock(spec=User)
-        self.instructor.pk = 1
-        self.instructor.ROLE = "INSTRUCTOR"
-        self.instructor._state = MagicMock()
-        self.instructor._state.db = 'default'
-
         # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
         with patch.object(Course, 'checkDuplicate', return_value=False):
             # Create Course object with mocked User
             self.course = Course(
                 COURSE_NUMBER=101,
-                INSTRUCTOR=self.instructor,
                 COURSE_NAME='Introduction to Computer Science',
                 COURSE_DESCRIPTION='A beginner\'s course in computer science, covering programming fundamentals.',
                 SEMESTER='Fall 2023',

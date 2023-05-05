@@ -9,16 +9,12 @@ from django.db.models.base import ModelBase
 # and 'None' given explicitly as input.
 from TA_Scheduling_App.utils.null import Null
 
-# Class to resolve inheritance
-class ABCModelMeta(ABCMeta, ModelBase):
-    pass
 
-
-class CourseAssignment(IVerification, models.Model, metaclass=ABCModelMeta):
+class CourseAssignment(IVerification):
     COURSE_ASSIGNMENT_ID = models.AutoField(primary_key=True)
     COURSE = models.ForeignKey(Course, on_delete=models.CASCADE)
-    TA = models.ForeignKey(User, on_delete=models.CASCADE)
-    IS_GRADER = models.BooleanField()
+    USER = models.ForeignKey(User, on_delete=models.CASCADE)
+    IS_GRADER = models.BooleanField(null=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

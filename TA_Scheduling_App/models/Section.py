@@ -13,13 +13,9 @@ import time
 from TA_Scheduling_App.utils.null import Null
 
 
-# Class to resolve inheritance
-class ABCModelMeta(ABCMeta, ModelBase):
-    pass
-
-
-class Section(IVerification, IString, models.Model, metaclass=ABCModelMeta):
+class Section(IString, IVerification):
     SECTION_ID = models.AutoField(primary_key=True)
+    SECTION_TYPE = models.CharField(max_length=10)
     SECTION_NUMBER = models.IntegerField()
     COURSE = models.ForeignKey(Course, on_delete=models.CASCADE)
     BUILDING = models.CharField(max_length=255)
