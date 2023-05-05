@@ -41,35 +41,30 @@ class TestCourseAssignmentInit(unittest.TestCase):
         try:
             # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
             with patch.object(CourseAssignment, 'checkDuplicate', return_value=False):
-                CourseAssignment(COURSE=self.course, TA=self.ta, IS_GRADER=False)
-                CourseAssignment(COURSE=self.course, TA=self.ta, IS_GRADER=True)
+                CourseAssignment(COURSE=self.course, USER=self.ta, IS_GRADER=False)
+                CourseAssignment(COURSE=self.course, USER=self.ta, IS_GRADER=True)
         except ValueError:
             self.fail("CourseAssignment init failed with valid input values.")
 
     def test_init_invalid_course(self):
         with self.assertRaises(ValueError, msg="CourseAssignment created with invalid course"):
             with patch.object(CourseAssignment, 'checkDuplicate', return_value=False):
-                CourseAssignment(COURSE=None, TA=self.ta, IS_GRADER=False)
+                CourseAssignment(COURSE=None, USER=self.ta, IS_GRADER=False)
 
-    def test_init_invalid_ta(self):
-        with self.assertRaises(ValueError, msg="CourseAssignment created with invalid TA"):
+    def test_init_invalid_user(self):
+        with self.assertRaises(ValueError, msg="CourseAssignment created with invalid user: None"):
             with patch.object(CourseAssignment, 'checkDuplicate', return_value=False):
-                CourseAssignment(COURSE=self.course, TA=None, IS_GRADER=False)
+                CourseAssignment(COURSE=self.course, USER=None, IS_GRADER=False)
 
-    def test_init_invalid_is_grader(self):
+    def test_init_valid_is_grader(self):
         with self.assertRaises(ValueError, msg="CourseAssignment created with invalid isGrader"):
             with patch.object(CourseAssignment, 'checkDuplicate', return_value=False):
-                CourseAssignment(COURSE=self.course, TA=self.ta, IS_GRADER=None)
-
-    def test_wrong_role_instructor(self):
-        with self.assertRaises(ValueError, msg="CourseAssignment created with invalid user"):
-            with patch.object(CourseAssignment, 'checkDuplicate', return_value=False):
-                CourseAssignment(COURSE=self.course, TA=self.instructor, IS_GRADER=False)
+                CourseAssignment(COURSE=self.course, USER=self.ta, IS_GRADER=None)
 
     def test_wrong_role_admin(self):
-        with self.assertRaises(ValueError, msg="CourseAssignment created with invalid user"):
+        with self.assertRaises(ValueError, msg="CourseAssignment created with invalid user: ADMIN"):
             with patch.object(CourseAssignment, 'checkDuplicate', return_value=False):
-                CourseAssignment(COURSE=self.course, TA=self.admin, IS_GRADER=False)
+                CourseAssignment(COURSE=self.course, USER=self.admin, IS_GRADER=False)
 
 
 class TestCourseAssignmentSetGrader(unittest.TestCase):
@@ -90,8 +85,8 @@ class TestCourseAssignmentSetGrader(unittest.TestCase):
         # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
         with patch.object(CourseAssignment, 'checkDuplicate', return_value=False):
             # Create CourseAssignment object with mocked Courses and Users
-            self.course_assignment_1 = CourseAssignment(COURSE=self.course, TA=self.ta, IS_GRADER=False)
-            self.course_assignment_2 = CourseAssignment(COURSE=self.course, TA=self.ta, IS_GRADER=True)
+            self.course_assignment_1 = CourseAssignment(COURSE=self.course, USER=self.ta, IS_GRADER=False)
+            self.course_assignment_2 = CourseAssignment(COURSE=self.course, USER=self.ta, IS_GRADER=True)
 
     def test_setGrader_valid_true(self):
         result = self.course_assignment_1.setGrader(True)

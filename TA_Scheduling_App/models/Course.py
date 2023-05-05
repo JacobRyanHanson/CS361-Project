@@ -20,33 +20,33 @@ class Course(IString, IVerification):
     PREREQUISITES = models.CharField(max_length=255, null=True)
     DEPARTMENT = models.CharField(max_length=255)
 
-    # def __init__(self, *args, **kwargs):
-    #     super().__init__(*args, **kwargs)
-    #
-    #     result = self.setCourseNumber(kwargs.get('COURSE_NUMBER', Null()))
-    #
-    #     if result == False:
-    #         raise ValueError("Invalid course number")
-    #     elif result == None:
-    #         raise ValueError("Duplicate course number assignment failed")
-    #
-    #     if not self.setInstructor(kwargs.get('INSTRUCTOR', Null())):
-    #         raise ValueError("Invalid instructor")
-    #
-    #     if not self.setCourseName(kwargs.get('COURSE_NAME', Null())):
-    #         raise ValueError("Invalid course name")
-    #
-    #     if not self.setCourseDescription(kwargs.get('COURSE_DESCRIPTION', Null())):
-    #         raise ValueError("Invalid course description")
-    #
-    #     if not self.setSemester(kwargs.get('SEMESTER', Null())):
-    #         raise ValueError("Invalid semester")
-    #
-    #     if not self.setPrerequisites(kwargs.get('PREREQUISITES', Null())):
-    #         raise ValueError("Invalid prerequisites")
-    #
-    #     if not self.setDepartment(kwargs.get('DEPARTMENT', Null())):
-    #         raise ValueError("Invalid department")
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        result = self.setCourseNumber(kwargs.get('COURSE_NUMBER', Null()))
+
+        if result == False:
+            raise ValueError("Invalid course number")
+        elif result == None:
+            raise ValueError("Duplicate course number assignment failed")
+
+        if not self.setInstructor(kwargs.get('INSTRUCTOR', Null())):
+            raise ValueError("Invalid instructor")
+
+        if not self.setCourseName(kwargs.get('COURSE_NAME', Null())):
+            raise ValueError("Invalid course name")
+
+        if not self.setCourseDescription(kwargs.get('COURSE_DESCRIPTION', Null())):
+            raise ValueError("Invalid course description")
+
+        if not self.setSemester(kwargs.get('SEMESTER', Null())):
+            raise ValueError("Invalid semester")
+
+        if not self.setPrerequisites(kwargs.get('PREREQUISITES', Null())):
+            raise ValueError("Invalid prerequisites")
+
+        if not self.setDepartment(kwargs.get('DEPARTMENT', Null())):
+            raise ValueError("Invalid department")
 
     def setCourseNumber(self, number):
         if number is Null():
