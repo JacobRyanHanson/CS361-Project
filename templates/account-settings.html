@@ -48,6 +48,13 @@
                 <input class="form-control" type="date" name="dateOfBirth" id="dateOfBirth" value="{{ initial.BIRTH_DATE|html_date }}" required>
             </div>
 
+            {% if initial.ROLE == 'TA' %}
+                <div class="d-flex form-div">
+                    <label class="profile-form-label" for="skills">Skills:</label>
+                    <input class="form-control" type="text" name="skills" id="skills" value="{{ initial.SKILLS }}" >
+                </div>
+            {% endif %}
+
             <button id="profile-submit" class="btn btn-primary bottom-form-button" type="submit">Update Information</button>
         </form>
     </div>
