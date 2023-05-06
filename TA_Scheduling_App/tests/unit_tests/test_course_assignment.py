@@ -103,7 +103,7 @@ class TestCourseAssignmentSetGrader(unittest.TestCase):
         self.assertFalse(result, "setGrader was updated to true but should always be None for instructors.")
 
     def test_setGrader_invalid_false_instructor(self):
-        result = self.course_assignment_2.setGrader(False)
+        result = self.course_assignment_3.setGrader(False)
         self.assertFalse(result, "setGrader was updated to false but should always be None for instructors.")
 
     def test_setGrader_invalid_non_boolean(self):
