@@ -34,6 +34,9 @@ class Section(IString, IVerification):
         if course is not Null():
             self.COURSE = course
 
+        if not self.setSectionType(kwargs.get('SECTION_TYPE', Null())):
+            raise ValueError("Invalid section type")
+
         result = self.setSectionNumber(kwargs.get('SECTION_NUMBER', Null()))
 
         if result == False:
