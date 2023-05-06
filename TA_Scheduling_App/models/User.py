@@ -57,7 +57,7 @@ class User(IString):
             raise ValueError("Invalid birth date")
 
         if not self.setSkills(kwargs.get('SKILLS', Null())):
-            raise ValueError("Invalid skills")
+            raise ValueError("Invalid list of skills")
 
     def setRole(self, role):
         if role is Null():

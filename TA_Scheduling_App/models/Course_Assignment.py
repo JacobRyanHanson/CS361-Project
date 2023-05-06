@@ -52,8 +52,8 @@ class CourseAssignment(IVerification):
         else:
             return False
 
-    def checkDuplicate(self, course, ta):
-        if course is Null() or ta is Null():
+    def checkDuplicate(self, course, user):
+        if course is Null() or user is Null():
             return False
         # Check if the TA is already assigned to the course
-        return CourseAssignment.objects.filter(COURSE=course, TA=ta).exists()
+        return CourseAssignment.objects.filter(COURSE=course, USER=user).exists()

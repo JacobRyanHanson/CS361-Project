@@ -53,6 +53,15 @@ class Section(IString, IVerification):
         if not self.setSectionEnd(kwargs.get('SECTION_END', Null())):
             raise ValueError("Invalid section end time")
 
+    def setSectionType(self, sectionType):
+        if sectionType is Null():
+            return True
+
+        if sectionType in ["LAB", "LECTURE"]:
+            self.SECTION_TYPE = sectionType
+            return True
+        return False
+
     def setSectionNumber(self, number):
         if number is Null():
             return True
