@@ -11,12 +11,9 @@ urlpatterns = [
     path('', Login.as_view(), name='login'),
     path('logout/', Login.as_view(), name='logout'),
 
-    path('home/', Home.as_view(), name="home"),
 
     path('account-settings/', AccountSettings.as_view(), name="account_settings"),
-    path('dashboard-admin/', DashboardAdmin.as_view(), name="dashboard_admin"),
-    path('dashboard-instructor/', DashboardInstructor.as_view(), name="dashboard_instructor"),
-    path('dashboard-ta/', DashboardTA.as_view(), name="dashboard_ta"),
+    path('dashboard/', Dashboard.as_view(), name="dashboard"),
 
     path('course-creation/', CourseCreation.as_view(), name="course_creation"),
     path('section-creation/', SectionCreation.as_view(), name="section_creation"),
@@ -26,6 +23,6 @@ urlpatterns = [
     path('user-management/', UserManagement.as_view(), name="user_management"),
 
     # Missing/future templates
-    path('search-contact-information/', Home.as_view(), name='search_contact_information'),
-    path('send-notifications/', Home.as_view(), name='send_notifications'),
+    #path('search-contact-information/', Home.as_view(), name='search_contact_information'),
+    #path('send-notifications/', Home.as_view(), name='send_notifications'),
 ]
