@@ -116,7 +116,7 @@ class TestSetFirstName(unittest.TestCase):
 
     def test_setFirstName_valid_spaces_before_after(self):
         self.assertTrue(self.user.setFirstName("  John  "),
-                         "Valid first name with spaces before and after failed to be set.")
+                        "Valid first name with spaces before and after failed to be set.")
 
     def test_setFirstName_invalid_only_numbers(self):
         self.assertFalse(self.user.setFirstName("1234"), "First name with only numbers was incorrectly set.")
@@ -171,7 +171,7 @@ class TestSetLastName(unittest.TestCase):
 
     def test_setLastName_valid_spaces_before_after(self):
         self.assertTrue(self.user.setLastName("  Smith  "),
-                         "Valid last name with spaces before and after failed to be set.")
+                        "Valid last name with spaces before and after failed to be set.")
 
     def test_setLastName_invalid_only_numbers(self):
         self.assertFalse(self.user.setLastName("1234"), "Last name with only numbers was incorrectly set.")
@@ -234,7 +234,7 @@ class TestSetEmail(unittest.TestCase):
 
     def test_setEmail_invalid_unicode(self):
         self.assertFalse(self.user1.setEmail("jane.åström@gmail.com"),
-                        "Invalid email with unicode characters set.")
+                         "Invalid email with unicode characters set.")
 
     def test_setEmail_valid_subdomain(self):
         self.assertTrue(self.user1.setEmail("jane.doe@mail.hive.com"),
@@ -272,7 +272,7 @@ class TestSetPhoneNumber(unittest.TestCase):
 
     def test_setPhoneNumber_invalid_with_country_code(self):
         self.assertFalse(self.user.setPhoneNumber("+1-555-987-6543"),
-                        "Invalid phone number with country code set.")
+                         "Invalid phone number with country code set.")
 
     def test_setPhoneNumber_invalid_empty_string(self):
         self.assertFalse(self.user.setPhoneNumber(""), "Empty phone number was incorrectly set.")
@@ -440,3 +440,64 @@ class TestSetBirthDate(unittest.TestCase):
 
     def test_setBirthDate_invalid_null(self):
         self.assertFalse(self.user.setBirthDate(None), "Set birth date to null value")
+    # MAKE SURE TO FIX NAMES
+
+
+class TestSetSkills(unittest.TestCase):
+    def setUp(self):
+        self.user = User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
+                         PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE=datetime.date(1995, 8, 30),
+                         SKILLS='Management, ')
+
+    def test_setSkills_valid(self):
+        self.assertTrue(self.user.setSkills("Java, Python, Django "), "Valid skills failed to be set.")
+
+    def test_setSkills_valid_singular(self):
+        self.assertTrue(self.user.setSkills("Java"), "Singular skill failed to be set.")
+
+    def test_setSkills_valid_uppercase(self):
+        self.assertTrue(self.user.setSkills("SQL, MANAGEMENT"), "Valid uppercase skills failed to be set.")
+
+    def test_setSkills_valid_lowercase(self):
+        self.assertTrue(self.user.setSkills("sql, java"), "Valid lowercase skills failed to be set.")
+
+    def test_setSkills_valid_with_apostrophe(self):
+        self.assertTrue(self.user.setSkills("Bash's Command Line Interface, C"), "Valid skills with apostrophe failed "
+                                                                                 "to be set.")
+
+    def test_setSkills_valid_combination(self):
+        self.assertTrue(self.user.setSkills("HTML5, CSS"), "Skills with numbers and letters failed to be set.")
+
+    def test_setSkills_valid_one_letter(self):
+        self.assertTrue(self.user.setSkills("C"), "Valid skill with only one letter failed to be set.")
+
+    def test_setSkills_valid_null(self):
+        self.assertTrue(self.user.setSkills(None), "Null skills failed to be set.")
+
+    def test_setSkills_valid_empty_string(self):
+        self.assertTrue(self.user.setSkills(""), "Empty skills failed to be set.")
+
+    def test_setSkills_valid_mixed_case(self):
+        self.assertTrue(self.user.setSkills("JavaScriPT, MatLAb"), "Valid skills with mixed case failed to be set.")
+
+    def test_setSkills_invalid_whitespace(self):
+        self.assertTrue(self.user.setSkills("   "), "Skills with only whitespace was incorrectly set.")
+
+    def test_setSkills_invalid_special_characters(self):
+        self.assertFalse(self.user.setSkills("#$%@"), "Skills with special characters was incorrectly set.")
+
+    def test_setSkills_invalid_only_numbers(self):
+        self.assertFalse(self.user.setSkills("1234"), "Skills with only numbers was incorrectly set.")
+
+    def test_setSkills_invalid_unicode(self):
+        self.assertFalse(self.user.setSkills("JÅvÅ, Pythön"), "Invalid skills with unicode characters set.")
+
+    def test_setSkills_valid_spaces_before_after(self):
+        self.assertTrue(self.user.setSkills("  HTML,      CSS,    Javascript  "),
+                        "Valid skills with spaces before and after failed to be set.")
+
+    def test_setSkills_invalid_long_string(self):
+        self.assertFalse(self.user.setSkills("a" * 256), "Skill that is too long was incorrectly set.")
+
+    def test_setSkills_invalid_only_commas(self):
+        self.assertFalse(self.user.setSkills(",,,,,,,,,,"), "Skill with only was incorrectly set.")

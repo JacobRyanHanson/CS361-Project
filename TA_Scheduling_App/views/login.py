@@ -19,7 +19,7 @@ class Login(View):
                 request.session.flush()
                 return redirect("login")
             else:
-                return redirect("home")
+                return redirect("dashboard")
 
         return render(request, "login.html", {'hide_navbar': True})
 
@@ -38,6 +38,6 @@ class Login(View):
             request.session['user_id'] = user.USER_ID
             request.session['user_role'] = user.ROLE
             request.session['is_authenticated'] = True
-            return redirect("home")
+            return redirect("dashboard")
         else:
             return render(request, "login.html", {'status': "Invalid email or password.", 'hide_navbar': True})
