@@ -37,6 +37,14 @@ class SectionAssignment(IVerification):
         if section is not Null() and courseAssignment is not Null() and section.COURSE != courseAssignment.COURSE:
             raise ValueError("Section is not for the same course as the course assignment")
 
+        # Check if instructor is assigned to a lab section
+        if section.SECTION_TYPE == 'LAB' and courseAssignment.USER.ROLE == 'INSTRUCTOR':
+            raise ValueError("Instructors cannot be assigned to lab sections")
+
+        # Check if ta is assigned to a lecture section
+        if section.SECTION_TYPE == 'LECTURE' and courseAssignment.USER.ROLE == 'TA':
+            raise ValueError("TAs cannot be assigned to lecture sections")
+
         # Check for duplicate assignment
         if self.checkDuplicate(courseAssignment, section):
             raise ValueError("Duplicate assignment of TA to section failed")
