@@ -406,9 +406,13 @@
                                                <form class="input-group" name="assignment-ta" action="" method="post">
                                                     {% csrf_token %}
                                                     <span class="t-label">TA:</span>
-                                                    <select name="section_ta_email" class="form-control" required>
+                                                    <select name="section_ta_email" class="form-control ta-select" required>
                                                         <option value="">Select</option>
-                                                        {# TODO - Get TAs assigned to course #}
+                                                        {% for assignment in course.assigned_tas %}
+                                                            <option title="{{ assignment.USER.EMAIL }} &middot; {{ assignment.USER.SKILLS }}" value="{{ assignment.USER.EMAIL }}" >
+                                                                {{ assignment.USER.FIRST_NAME }} {{ assignment.USER.LAST_NAME }}
+                                                            </option>
+                                                        {% endfor %}
                                                     </select>
                                                     <span class="input-group-btn">
                                                         <button class="btn btn-primary form-btn" type="submit">Update</button>

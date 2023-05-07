@@ -1,17 +1,27 @@
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 from django.views import View
+from django.db.models import Prefetch
 from TA_Scheduling_App.models import Course, User, CourseAssignment, Section, SectionAssignment
 
 class TAAssignments(View):
+    def context(self, request, status=""):
+        user = User.objects.get(USER_ID=request.session["user_id"])
+
+        ta_prefetch = Prefetch('courseassignment_set', queryset=CourseAssignment.objects.filter(USER__ROLE='TA'), to_attr='assigned_tas')
+        courses = Course.objects.prefetch_related(ta_prefetch).all()
+
+        return {
+            'role': user.ROLE,
+            'courses': courses,
+            'status': status
+        }
+
     def get(self, request):
         if not request.session.get('is_authenticated'):
             return redirect("login")
 
-        courses = Course.objects.all()
-        user = User.objects.get(USER_ID=request.session["user_id"])
-        TAs = User.objects.filter(ROLE="TA")
-        return render(request, "ta-assignments.html", {'courses': courses, 'role': user.ROLE, 'TAs': TAs})
+        return render(request, "ta-assignments.html", self.context(request))
 
     def post(self, request):
         if not request.session.get("is_authenticated"):
@@ -100,8 +110,4 @@ class TAAssignments(View):
         else:
             status = 'An unexpected error occurred.'
 
-        courses = Course.objects.all()
-        user = User.objects.get(USER_ID=request.session["user_id"])
-        TAs = User.objects.filter(ROLE="TA")
-        return render(request, "ta-assignments.html", {'courses': courses, 'status': status, 'role': user.ROLE,
-                                                       'TAs': TAs})
+        return render(request, "ta-assignments.html", self.context(request, status))

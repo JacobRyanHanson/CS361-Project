@@ -197,13 +197,13 @@ def insert_data():
 
     # Assign a TA to course 1, section 2
     section_assignment2 = SectionAssignment.objects.create(
-        COURSE_ASSIGNMENT=course_assignment_1,
+        COURSE_ASSIGNMENT=course_assignment_2,
         SECTION=section_2
     )
 
     # Assign a TA to course 3, section 3
     section_assignment3 = SectionAssignment.objects.create(
-        COURSE_ASSIGNMENT=course_assignment_3,
+        COURSE_ASSIGNMENT=course_assignment_4,
         SECTION=section_3
     )
 
