@@ -51,7 +51,7 @@
             {% if initial.ROLE == 'TA' %}
                 <div class="d-flex form-div">
                     <label class="profile-form-label" for="skills">Skills:</label>
-                    <input class="form-control" type="text" name="skills" id="skills" value="{{ initial.SKILLS }}" >
+                    <textarea class="form-control" name="skills" id="skills">{{ initial.SKILLS }}</textarea>
                 </div>
             {% endif %}
 
