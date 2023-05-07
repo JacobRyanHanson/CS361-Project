@@ -27,24 +27,28 @@ class CourseAssignment(IVerification):
         if course is not Null():
             self.COURSE = course
 
-        ta = kwargs.get('TA', Null())
+        user = kwargs.get('USER', Null())
 
-        if (ta is None) or (ta is not Null() and ta.ROLE != "TA") or (not isinstance(ta, User) and not Null()):
-            raise ValueError("Invalid TA")
+        if (user is None) or (user is not Null() and user.ROLE == "ADMIN") or (not isinstance(user, User) and not Null()):
+            raise ValueError("Invalid User")
 
-        if ta is not Null():
-            self.TA = ta
+        if user is not Null():
+            self.TA = user
 
         if not self.setGrader(kwargs.get('IS_GRADER', Null())):
             raise ValueError("Invalid isGrader")
 
         # Check for duplicate assignment
-        if self.checkDuplicate(course, ta):
+        if self.checkDuplicate(course, user):
             raise ValueError("Duplicate assignment of TA to course failed")
 
     def setGrader(self, isGrader):
         if isGrader is Null():
             return True
+
+        # Check if the user is an instructor or admin
+        if self.USER.ROLE in ['INSTRUCTOR', 'ADMIN']:
+            return False
 
         if isinstance(isGrader, bool):
             self.IS_GRADER = isGrader
@@ -52,8 +56,8 @@ class CourseAssignment(IVerification):
         else:
             return False
 
-    def checkDuplicate(self, course, ta):
-        if course is Null() or ta is Null():
+    def checkDuplicate(self, course, user):
+        if course is Null() or user is Null():
             return False
         # Check if the TA is already assigned to the course
-        return CourseAssignment.objects.filter(COURSE=course, TA=ta).exists()
+        return CourseAssignment.objects.filter(COURSE=course, USER=user).exists()

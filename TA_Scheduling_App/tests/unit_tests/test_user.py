@@ -447,7 +447,7 @@ class TestSetSkills(unittest.TestCase):
     def setUp(self):
         self.user = User(ROLE='TA', FIRST_NAME='Jane', LAST_NAME='Doe', EMAIL='jane.doe@example.com',
                          PHONE_NUMBER='555-123-4567', ADDRESS='1234 Elm St', BIRTH_DATE=datetime.date(1995, 8, 30),
-                         SKILLS='Management, ')
+                         SKILLS='Management')
 
     def test_setSkills_valid(self):
         self.assertTrue(self.user.setSkills("Java, Python, Django "), "Valid skills failed to be set.")

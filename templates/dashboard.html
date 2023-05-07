@@ -10,8 +10,22 @@
 </head>
 <body>
     {% include 'partials/header.html' %}
-    {% if role == 'ADMIN' %}
-        <div class="main-container">
+     <div class="main-container">
+        {# Buttons every user has. #}
+         <div class="dashboard-container">
+             <a href="{% url 'account_settings' %}"><button class="btn btn-primary">Account Settings</button></a>
+         </div>
+
+         <div class="dashboard-container">
+             <a href="{% url 'ta_assignments' %}"><button class="btn btn-primary">Manage Courses</button></a>
+         </div>
+
+        {# Admin only buttons. #}
+         {% if role == 'ADMIN' %}
+             <div class="dashboard-container">
+                <a href="{% url 'user_management' %}"><button class="btn btn-primary">Manage Users</button></a>
+            </div>
+
             <div class="dashboard-container">
                 <a href="{% url 'course_creation' %}"><button class="btn btn-primary">Create Course</button></a>
             </div>
@@ -23,42 +37,8 @@
             <div class="dashboard-container">
                 <a href="{% url 'user_creation' %}"><button class="btn btn-primary">Create User</button></a>
             </div>
-
-            <div class="dashboard-container">
-                <a href="{% url 'ta_assignments' %}"><button class="btn btn-primary">Manage Courses</button></a>
-            </div>
-
-            <div class="dashboard-container">
-                <a href="{% url 'user_management' %}"><button class="btn btn-primary">Manage Users</button></a>
-            </div>
-
-            <div class="dashboard-container">
-                <a href="{% url 'account_settings' %}"><button class="btn btn-primary">Account Settings</button></a>
-            </div>
-        </div>
-    {% endif %}
-    {% if role == 'INSTRUCTOR' %}
-        <div class="main-container">
-            <div class="dashboard-container">
-                <a href="{% url 'ta_assignments' %}"><button class="btn btn-primary">Manage Courses</button></a>
-            </div>
-
-            <div class="dashboard-container">
-                <a href="{% url 'account_settings' %}"><button class="btn btn-primary">Account Settings</button></a>
-            </div>
-        </div>
-    {% endif %}
-    {% if role == 'TA' %}
-        <div class="main-container">
-            <div class="dashboard-container">
-                <a href="{% url 'ta_assignments' %}"><button class="btn btn-primary">Manage Courses</button></a>
-            </div>
-
-            <div class="dashboard-container">
-                <a href="{% url 'account_settings' %}"><button class="btn btn-primary">Account Settings</button></a>
-            </div>
-        </div>
-    {% endif %}
+        {% endif %}
+     </div>
     {% include 'partials/footer.html' %}
 </body>
 </html>

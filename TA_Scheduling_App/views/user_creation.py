@@ -11,7 +11,7 @@ class UserCreation(View):
         if not request.session.get("is_authenticated"):
             return redirect("login")
         if request.session.get("user_role") != "ADMIN":
-            return redirect("home")
+            return redirect("dashboard")
 
         return render(request, "user-creation.html", {})
 

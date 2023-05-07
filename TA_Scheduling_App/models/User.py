@@ -56,6 +56,9 @@ class User(IString):
         if not self.setBirthDate(kwargs.get('BIRTH_DATE', Null())):
             raise ValueError("Invalid birth date")
 
+        if not self.setSkills(kwargs.get('SKILLS', Null())):
+            raise ValueError("Invalid list of skills")
+
     def setRole(self, role):
         if role is Null():
             return True
@@ -162,7 +165,18 @@ class User(IString):
         self.BIRTH_DATE = birthDate
         return True
 
-    def checkString(self, value, allowPartialNumeric=True, allowEmpty=False):
+    def setSkills(self, skills):
+        if skills is Null():
+            return True
+
+        result = self.checkString(skills, True, True, True)
+        if result is False:
+            return False
+
+        self.SKILLS = skills
+        return True
+
+    def checkString(self, value, allowPartialNumeric=True, allowEmpty=False, commaSeparatedList=False):
         if (value is None or not isinstance(value, str) or not value.strip()) and not allowEmpty:
             return False
 
@@ -185,5 +199,16 @@ class User(IString):
         allowed_chars = set(string.ascii_letters + (string.digits if allowPartialNumeric else "") + " -'.:,")
         if not all(c in allowed_chars for c in value):
             return False
+
+        # Check for comma separated list if the flag is set
+        if commaSeparatedList:
+            values = value.split(',')
+            stripped_values = []
+            for val in values:
+                val = val.strip()
+                if not val or not all(c in allowed_chars for c in val):
+                    return False
+                stripped_values.append(val)
+            return ', '.join(stripped_values)
 
         return value

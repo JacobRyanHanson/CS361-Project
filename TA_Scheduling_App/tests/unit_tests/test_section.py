@@ -68,7 +68,7 @@ class TestSetSectionType(unittest.TestCase):
         self.assertTrue(self.section.setSectionType("LAB"), "Valid section type 'LAB' failed to be set.")
 
     def test_setSectionType_valid_Lecture(self):
-        self.assertTrue(self.section.setSectioType("LECTURE"), "Valid section type 'LECTURE' failed to be set.")
+        self.assertTrue(self.section.setSectionType("LECTURE"), "Valid section type 'LECTURE' failed to be set.")
 
     def test_setSectionType_invalid_empty_string(self):
         self.assertFalse(self.section.setSectionType(""), "Empty section type string was incorrectly set.")

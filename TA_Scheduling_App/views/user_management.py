@@ -11,7 +11,7 @@ class UserManagement(View):
             return redirect("login")
         # check user is admin - restricted access page
         if request.session.get("user_role") != "ADMIN":
-            return redirect("home")
+            return redirect("dashboard")
 
         user_id = request.session.get("user_id")
         users = User.objects.all()
