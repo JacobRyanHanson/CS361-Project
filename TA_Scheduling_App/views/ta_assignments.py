@@ -1,24 +1,77 @@
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, redirect
 from django.views import View
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Subquery, F
 from TA_Scheduling_App.models import Course, User, CourseAssignment, Section, SectionAssignment
 
 class TAAssignments(View):
     def context(self, request, status=""):
         user = User.objects.get(USER_ID=request.session["user_id"])
 
-        ta_prefetch = Prefetch('courseassignment_set', queryset=CourseAssignment.objects.filter(USER__ROLE='TA'), to_attr='assigned_tas')
-        courses = Course.objects.prefetch_related(ta_prefetch).all()
+        instructor_prefetch = Prefetch(
+            'courseassignment_set',
+            queryset=CourseAssignment.objects.filter(USER__ROLE='INSTRUCTOR'),
+            to_attr='assigned_instructor'
+        )
+
+        ta_prefetch_assigned_course = Prefetch(
+            'courseassignment_set',
+            queryset=CourseAssignment.objects.filter(USER__ROLE='TA'),
+            to_attr='assigned_tas'
+        )
+
+        section_prefetch = Prefetch(
+            'section_set',
+            queryset=Section.objects.all(),
+            to_attr='sections'
+        )
+
+        # ta_prefetch_assigned_section = Prefetch(
+        #     'courseassignment_set__sectionassignment_set',
+        #     queryset=SectionAssignment.objects.filter(COURSE_ASSIGNMENT__USER__ROLE='TA'),
+        #     to_attr='section_assigned_ta'
+        # )
+
+        # Append Instructor and TAs assigned to each course.
+        courses = Course.objects.prefetch_related(
+            instructor_prefetch,
+            ta_prefetch_assigned_course,
+            section_prefetch,
+            # ta_prefetch_assigned_section
+        ).all()
+
+        for course in courses:
+            # Get instructor from list.
+            if course.assigned_instructor:
+                course.assigned_instructor = course.assigned_instructor[0]
+            # Append TAs Not assigned to each course.
+            course.unassigned_tas = User.objects.filter(ROLE="TA")\
+                .exclude(USER_ID__in=[ta.USER.USER_ID for ta in course.assigned_tas])
+
+            # Get ta from list.
+            sections = course.sections
+            # for section in sections:
+            #     if section.assigned_ta:
+            #         section.assigned_ta = section.assigned_ta[0]
+
+
+
+
+
+        # ta_prefetch_assigned_section = Prefetch(
+        #     'sectionassignment_set',
+        #     queryset=User.objects.filter(ROLE='TA'),
+        #     to_attr='assigned_ta'
+        # )
+
         course_assignments = CourseAssignment.objects.all()
         instructors = User.objects.filter(ROLE="INSTRUCTOR")
 
         return {
             'role': user.ROLE,
             'courses': courses,
+            'instructors': instructors,
             'status': status,
-            'course_assignments' : course_assignments,
-            'instructors' : instructors
         }
 
     def get(self, request):
@@ -38,8 +91,6 @@ class TAAssignments(View):
         section_id = request.POST.get('section_id')
         section_ta_email = request.POST.get('section_ta_email')
 
-        status = ''
-
         if instructor_id:
             try:
                 course = Course.objects.get(COURSE_ID=course_id)
@@ -53,7 +104,7 @@ class TAAssignments(View):
                     instructor = User.objects.get(USER_ID=instructor_id)
                     course_assignment = CourseAssignment(COURSE=course, USER=instructor)
                     course_assignment.save()
-                 
+
                 status = f'Instructor for course with ID {course_id} has been updated to {instructor_email}.'
             except Course.DoesNotExist:
                 status = f'Course with instructor email {instructor_email} does not exist.'

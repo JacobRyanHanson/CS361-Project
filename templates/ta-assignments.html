@@ -155,7 +155,7 @@
                     </table>
 
                     <div class="sub-wrapper">
-                        {% for section in course.section_set.all %}
+                        {% for section in course.sections %}
                             <div class="nested-table-container">
                                 <table class="table table-striped">
                                     <tr>
@@ -185,8 +185,12 @@
                                                     {% csrf_token %}
                                                     <span class="t-label">TA:</span>
                                                     <select name="section_ta_email" class="form-control" required>
-                                                        <option value="">Select</option>
-                                                        {# TODO - Get TAs assigned to course #}
+                                                        <option value="">None</option>
+                                                        {% for assignment in course.assigned_tas %}
+                                                            <option title="{{ assignment.USER.EMAIL }}" value="{{ assignment.USER.USER_ID }}" >
+                                                                {{ assignment.USER.FIRST_NAME }} {{ assignment.USER.LAST_NAME }}
+                                                            </option>
+                                                        {% endfor %}
                                                     </select>
                                                     <span class="input-group-btn">
                                                         <button class="btn btn-primary form-btn" type="submit">Update</button>
@@ -299,9 +303,11 @@
                                     <span class="t-label">Instructor:</span>
                                     <select name="course_instructor_id" class="form-control" required>
                                         <option>None</option>
-                                            {% for user in instructors %}
-                                                <option value="{{ user.USER_ID }}">{{ user.FIRST_NAME }} {{ user.LAST_NAME }}</option>
-                                            {% endfor %}
+                                        {% for user in instructors %}
+                                            <option title="{{ user.EMAIL }}" value="{{ user.USER_ID }}">
+                                                {{ user.FIRST_NAME }} {{ user.LAST_NAME }}
+                                            </option>
+                                        {% endfor %}
                                     </select>
                                     <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
                                     <span class="input-group-btn">
@@ -314,13 +320,7 @@
                         <tr>
                             <td>
                                 Instructor Email:
-                                {% for assignment in course_assignments %}
-                                    {% if assignment.COURSE == course %}
-                                        {% if assignment.USER.ROLE == 'INSTRUCTOR' %}
-                                            {{ assignment.USER.EMAIL }}
-                                        {% endif %}
-                                    {% endif %}
-                                {% endfor %}
+
                             </td>
                         </tr>
 
@@ -355,7 +355,11 @@
                                         <span class="t-label">TA:</span>
                                         <select name="course_ta_email" class="form-control multi-row-input-1" required>
                                             <option value="">Select</option>
-                                            {# TODO - Get TAs not assigned to course #}
+                                            {% for user in course.unassigned_tas %}
+                                                <option title="{{ user.EMAIL }} &middot; {{ user.SKILLS }}" value="{{ user.USER_ID }}" >
+                                                    {{ user.FIRST_NAME }} {{ user.LAST_NAME }}
+                                                </option>
+                                            {% endfor %}
                                         </select>
                                         <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
                                     </td>
@@ -379,7 +383,7 @@
                     </div>
 
                     <div class="sub-wrapper">
-                        {% for section in course.section_set.all %}
+                        {% for section in course.sections %}
                             <div class="nested-table-container">
                                 <table class="table table-striped">
                                     <tr>
@@ -416,11 +420,17 @@
                                                     {% csrf_token %}
                                                     <span class="t-label">TA:</span>
                                                     <select name="section_ta_email" class="form-control ta-select" required>
-                                                        <option value="">Select</option>
+                                                        <option value="">None</option>
                                                         {% for assignment in course.assigned_tas %}
-                                                            <option title="{{ assignment.USER.EMAIL }} &middot; {{ assignment.USER.SKILLS }}" value="{{ assignment.USER.EMAIL }}" >
-                                                                {{ assignment.USER.FIRST_NAME }} {{ assignment.USER.LAST_NAME }}
-                                                            </option>
+ d                                                            {% if section %}
+                                                                <option title="{{ assignment.USER.EMAIL }}" value="{{ assignment.USER.USER_ID }}" selected="selected">
+                                                                    {{ assignment.USER.FIRST_NAME }} {{ assignment.USER.LAST_NAME }}
+                                                                </option>
+                                                            {% else %}
+                                                                <option title="{{ assignment.USER.EMAIL }}" value="{{ assignment.USER.USER_ID }}" >
+                                                                    {{ assignment.USER.FIRST_NAME }} {{ assignment.USER.LAST_NAME }}
+                                                                </option>
+                                                            {% endif %}
                                                         {% endfor %}
                                                     </select>
                                                     <span class="input-group-btn">
@@ -452,8 +462,12 @@
                                                     {% csrf_token %}
                                                     <span class="t-label">Instructor:</span>
                                                     <select name="section_instructor_email" class="form-control" required>
-                                                        <option value="">Select</option>
-                                                        {# TODO - Get instructor assigned to section #}
+                                                        <option value="">None</option>
+                                                        {% if course.assigned_instructor %}
+                                                            <option title="{{ course.assigned_instructor.USER.EMAIL }}" value="{{ course.assigned_instructor.USER.USER_ID }}" selected="selected">
+                                                                {{ course.assigned_instructor.USER.FIRST_NAME }} {{ course.assigned_instructor.USER.LAST_NAME }}
+                                                            </option>
+                                                        {%  endif %}
                                                     </select>
                                                     <span class="input-group-btn">
                                                         <button class="btn btn-primary form-btn" type="submit">Update</button>
@@ -465,7 +479,11 @@
                                         <tr>
                                             <td>
                                                 Instructor Email:
-                                                {# TODO - Get email of current instructor assigned to section #}
+                                                {% if course.assigned_instructor %}
+                                                    {{ course.assigned_instructor.USER.EMAIL }}
+                                                {% else %}
+                                                    N/A
+                                                {%  endif %}
                                             </td>
                                         </tr>
                                     {% endif %}
