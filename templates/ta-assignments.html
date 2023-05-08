@@ -297,10 +297,13 @@
                                <form class="input-group" name="course-instructor" action="" method="post">
                                     {% csrf_token %}
                                     <span class="t-label">Instructor:</span>
-                                    <select name="course_instructor_email" class="form-control" required>
-                                        <option value="">Select</option>
-                                        {# TODO - Get from Course Assignment #}
+                                    <select name="course_instructor_id" class="form-control" required>
+                                        <option>Select</option>
+                                            {% for user in instructors %}
+                                                <option value="{{ user.USER_ID }}">{{ user.FIRST_NAME }} {{ user.LAST_NAME }}</option>
+                                            {% endfor %}
                                     </select>
+                                    <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
                                     <span class="input-group-btn">
                                         <button class="btn btn-primary form-btn" type="submit">Update</button>
                                     </span>
@@ -311,7 +314,11 @@
                         <tr>
                             <td>
                                 Instructor Email:
-                                {# TODO - Get from Course Assignment #}
+                                {% for assignment in course_assignments %}
+                                    {% if assignment.COURSE == course %}
+                                        {{ assignment.USER.EMAIL }}
+                                    {% endif %}
+                                {% endfor %}
                             </td>
                         </tr>
 
