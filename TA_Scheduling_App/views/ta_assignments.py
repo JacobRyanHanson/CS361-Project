@@ -10,11 +10,15 @@ class TAAssignments(View):
 
         ta_prefetch = Prefetch('courseassignment_set', queryset=CourseAssignment.objects.filter(USER__ROLE='TA'), to_attr='assigned_tas')
         courses = Course.objects.prefetch_related(ta_prefetch).all()
+        course_assignments = CourseAssignment.objects.all()
+        instructors = User.objects.filter(ROLE="INSTRUCTOR")
 
         return {
             'role': user.ROLE,
             'courses': courses,
-            'status': status
+            'status': status,
+            'course_assignments' : course_assignments,
+            'instructors' : instructors
         }
 
     def get(self, request):
@@ -28,7 +32,7 @@ class TAAssignments(View):
             raise PermissionDenied("Not logged in.")
 
         course_id = request.POST.get('course_id')
-        instructor_email = request.POST.get('course_instructor')
+        instructor_id = request.POST.get('course_instructor_id')
         course_ta_email = request.POST.get('course_ta_email')
         course_ta_select = request.POST.get('course_ta_select') == 'true'
         section_id = request.POST.get('section_id')
@@ -36,13 +40,19 @@ class TAAssignments(View):
 
         status = ''
 
-        if instructor_email:
+        if instructor_id:
             try:
-                instructor = User.objects.get(EMAIL=instructor_email, ROLE="INSTRUCTOR")
+                instructor = User.objects.get(USER_ID=instructor_id)
                 course = Course.objects.get(COURSE_ID=course_id)
 
-                course.setInstructor(instructor)
-                course.save()
+                course_assignment = CourseAssignment.objects.filter(COURSE=course)
+                for c in course_assignment:
+                    if(c.USER.ROLE == 'INSTRUCTOR'):
+                        c.delete()
+
+                course_assignment = CourseAssignment(COURSE=course, USER=instructor)
+                course_assignment.save()
+
 
                 status = f'Instructor for course with ID {course_id} has been updated to {instructor_email}.'
             except Course.DoesNotExist:
