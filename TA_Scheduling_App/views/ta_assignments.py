@@ -16,6 +16,9 @@ class TAAssignments(View):
             # If the user is a TA, only return sections to which they are assigned.
             # select_related to join/preload foreign key linked objects that we will use data from
             sections = SectionAssignment.objects.select_related('COURSE_ASSIGNMENT', 'SECTION', 'COURSE_ASSIGNMENT__USER').filter(COURSE_ASSIGNMENT__USER=user)
+            if len(sections) == 0:
+                status += '\nThere are no assigned sections to display.'
+
         else:
             # Otherwise, full courses are returned for display.
             # prefetch for TAs assigned to each course
@@ -40,7 +43,7 @@ class TAAssignments(View):
                 courses = [c for c in courses if c.instructor and c.instructor.USER == user]
 
             if len(courses) == 0:
-                status += '\nThere are no courses/sections to display.'
+                status += '\nThere are no courses to display.'
 
             instructors = User.objects.filter(ROLE='INSTRUCTOR')
 
