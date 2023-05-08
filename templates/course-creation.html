@@ -27,7 +27,7 @@
                 <select name="instructorID" class="form-control course-form-select" required>
                     <option>None</option>
                     {% for user in instructors %}
-                        <option value="{{ user.USER_ID }}">{{ user.EMAIL }}</option>
+                        <option value="{{ user.USER_ID }}">{{ user.FIRST_NAME }} {{ user.LAST_NAME }}</option>
                     {% endfor %}
                 </select>
             </div>
