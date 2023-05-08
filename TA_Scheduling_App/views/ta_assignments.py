@@ -42,7 +42,6 @@ class TAAssignments(View):
 
         if instructor_id:
             try:
-                instructor = User.objects.get(USER_ID=instructor_id)
                 course = Course.objects.get(COURSE_ID=course_id)
 
                 course_assignment = CourseAssignment.objects.filter(COURSE=course)
@@ -50,10 +49,11 @@ class TAAssignments(View):
                     if(c.USER.ROLE == 'INSTRUCTOR'):
                         c.delete()
 
-                course_assignment = CourseAssignment(COURSE=course, USER=instructor)
-                course_assignment.save()
-
-
+                if instructor_id != 'None':
+                    instructor = User.objects.get(USER_ID=instructor_id)
+                    course_assignment = CourseAssignment(COURSE=course, USER=instructor)
+                    course_assignment.save()
+                 
                 status = f'Instructor for course with ID {course_id} has been updated to {instructor_email}.'
             except Course.DoesNotExist:
                 status = f'Course with instructor email {instructor_email} does not exist.'
