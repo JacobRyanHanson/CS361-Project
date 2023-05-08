@@ -20,7 +20,7 @@ class SectionAssignment(IVerification):
 
         courseAssignment = kwargs.get('COURSE_ASSIGNMENT', Null())
 
-        if courseAssignment is None or (not isinstance(courseAssignment, str) and not Null()):
+        if courseAssignment is None or (not isinstance(courseAssignment, CourseAssignment) and not Null()):
             raise ValueError("Invalid course assignment")
 
         if courseAssignment is not Null():
@@ -28,7 +28,7 @@ class SectionAssignment(IVerification):
 
         section = kwargs.get('SECTION', Null())
 
-        if section is None or (not isinstance(section, str) and not Null()):
+        if section is None or (not isinstance(section, Section) and not Null()):
             raise ValueError("Invalid course assignment")
 
         if section is not Null():
