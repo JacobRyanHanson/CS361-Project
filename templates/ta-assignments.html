@@ -298,7 +298,7 @@
                                     {% csrf_token %}
                                     <span class="t-label">Instructor:</span>
                                     <select name="course_instructor_id" class="form-control" required>
-                                        <option>Select</option>
+                                        <option>None</option>
                                             {% for user in instructors %}
                                                 <option value="{{ user.USER_ID }}">{{ user.FIRST_NAME }} {{ user.LAST_NAME }}</option>
                                             {% endfor %}
