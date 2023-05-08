@@ -4,16 +4,51 @@ from django.views import View
 from django.db.models import Prefetch
 from TA_Scheduling_App.models import Course, User, CourseAssignment, Section, SectionAssignment
 
+
 class TAAssignments(View):
     def context(self, request, status=""):
         user = User.objects.get(USER_ID=request.session["user_id"])
 
-        ta_prefetch = Prefetch('courseassignment_set', queryset=CourseAssignment.objects.filter(USER__ROLE='TA'), to_attr='assigned_tas')
-        courses = Course.objects.prefetch_related(ta_prefetch).all()
+        courses = None
+        sections = None
+        instructors = None
+        if user.ROLE == 'TA':
+            # If the user is a TA, only return sections to which they are assigned.
+            # select_related to join/preload foreign key linked objects that we will use data from
+            sections = SectionAssignment.objects.select_related('COURSE_ASSIGNMENT', 'SECTION', 'COURSE_ASSIGNMENT__USER').filter(COURSE_ASSIGNMENT__USER=user)
+        else:
+            # Otherwise, full courses are returned for display.
+            # prefetch for TAs assigned to each course
+            ta_prefetch = Prefetch('courseassignment_set', queryset=CourseAssignment.objects.filter(USER__ROLE='TA'),
+                                   to_attr='assigned_tas')
+            courses = Course.objects.prefetch_related(ta_prefetch).all()
+
+            for course in courses:
+                # get CourseAssignment for each course (assignment may not exist)
+                # TODO: could be optimized by getting all Courses and left joining CourseAssignments.
+                course.instructor = CourseAssignment.objects.filter(COURSE=course).exclude(USER__ROLE='TA').first()
+                # course.assigned_tas
+                course.sections = Section.objects.filter(COURSE=course)
+                for section in course.sections:
+                    section.assignment = SectionAssignment.objects.filter(SECTION=section).first()
+
+            if user.ROLE == 'ADMIN':
+                # If user is admin, all courses should be displayed.
+                pass
+            elif user.ROLE == 'INSTRUCTOR':
+                # If the user is an instructor, only return courses to which they are assigned
+                courses = [c for c in courses if c.instructor and c.instructor.USER == user]
+
+            if len(courses) == 0:
+                status += '\nThere are no courses/sections to display.'
+
+            instructors = User.objects.filter(ROLE='INSTRUCTOR')
 
         return {
             'role': user.ROLE,
             'courses': courses,
+            'sections': sections,
+            'instructors': instructors,
             'status': status
         }
 
