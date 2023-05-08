@@ -33,7 +33,7 @@ class CourseAssignment(IVerification):
             raise ValueError("Invalid User")
 
         if user is not Null():
-            self.TA = user
+            self.USER = user
 
         if not self.setGrader(kwargs.get('IS_GRADER', Null())):
             raise ValueError("Invalid isGrader")
