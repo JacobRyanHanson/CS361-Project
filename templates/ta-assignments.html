@@ -316,7 +316,9 @@
                                 Instructor Email:
                                 {% for assignment in course_assignments %}
                                     {% if assignment.COURSE == course %}
-                                        {{ assignment.USER.EMAIL }}
+                                        {% if assignment.USER.ROLE == 'INSTRUCTOR' %}
+                                            {{ assignment.USER.EMAIL }}
+                                        {% endif %}
                                     {% endif %}
                                 {% endfor %}
                             </td>
