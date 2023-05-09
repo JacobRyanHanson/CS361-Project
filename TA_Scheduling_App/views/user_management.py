@@ -25,10 +25,8 @@ class UserManagement(View):
     def post(self, request):
         if not request.session.get("is_authenticated"):
             raise PermissionDenied("Not logged in.")
-        # a user deletion has been requested
-        # validate access to this operation
         if request.session.get("user_role") != "ADMIN":
-            raise PermissionDenied("You are not permitted to delete users")
+            raise PermissionDenied("You are not permitted to delete users.")
 
         user_id = request.session.get("user_id")
         delete_user_id = request.POST.get('delete_user_id')
@@ -37,9 +35,9 @@ class UserManagement(View):
             user = User.objects.get(USER_ID=delete_user_id)
             user.delete()
 
-            status = f'User with ID {delete_user_id} has been deleted.'
+            status = f'User {user.FIRST_NAME} {user.LAST_NAME} has been deleted.'
         except User.DoesNotExist:
-            status = f'User with ID {delete_user_id} does not exist.'
+            status = f'User does not exist.'
         except Exception as e:
             status = e
 
