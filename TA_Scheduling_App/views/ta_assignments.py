@@ -8,19 +8,25 @@ class TAAssignments(View):
     def context(self, request, status=""):
         user = User.objects.get(USER_ID=request.session["user_id"])
 
-        instructor_prefetch = Prefetch(
+        instructor_prefetch_course = Prefetch(
             'courseassignment_set',
             queryset=CourseAssignment.objects.filter(USER__ROLE='INSTRUCTOR'),
             to_attr='assigned_instructor'
         )
 
-        ta_prefetch_assigned_course = Prefetch(
+        ta_prefetch_course = Prefetch(
             'courseassignment_set',
             queryset=CourseAssignment.objects.filter(USER__ROLE='TA'),
             to_attr='assigned_tas'
         )
 
-        ta_prefetch_assigned_section = Prefetch(
+        instructor_prefetch_section = Prefetch(
+            'sectionassignment_set',
+            queryset=SectionAssignment.objects.filter(COURSE_ASSIGNMENT__USER__ROLE='INSTRUCTOR'),
+            to_attr='assigned_instructor'
+        )
+
+        ta_prefetch_section = Prefetch(
             'sectionassignment_set',
             queryset=SectionAssignment.objects.filter(COURSE_ASSIGNMENT__USER__ROLE='TA'),
             to_attr='assigned_ta'
@@ -28,14 +34,14 @@ class TAAssignments(View):
 
         section_prefetch = Prefetch(
             'section_set',
-            queryset=Section.objects.prefetch_related(ta_prefetch_assigned_section).all(),
+            queryset=Section.objects.prefetch_related(instructor_prefetch_section, ta_prefetch_section).all(),
             to_attr='sections'
         )
 
         # Append Instructor and TAs assigned to each course.
         courses = Course.objects.prefetch_related(
-            instructor_prefetch,
-            ta_prefetch_assigned_course,
+            instructor_prefetch_course,
+            ta_prefetch_course,
             section_prefetch,
         ).all()
 
@@ -49,7 +55,10 @@ class TAAssignments(View):
 
             sections = course.sections
             for section in sections:
-                # Get ta from list (should only be one).
+                # Get instructor from list (should only be one).
+                if section.assigned_instructor:
+                    section.assigned_instructor = section.assigned_instructor[0].COURSE_ASSIGNMENT
+                # Get TA from list (should only be one).
                 if section.assigned_ta:
                     section.assigned_ta = section.assigned_ta[0].COURSE_ASSIGNMENT
 
@@ -77,6 +86,7 @@ class TAAssignments(View):
         course_ta_email = request.POST.get('course_ta_email')
         course_ta_select = request.POST.get('course_ta_select') == 'true'
         section_id = request.POST.get('section_id')
+        section_instructor_id = request.POST.get('section_instructor_id')
         section_ta_id = request.POST.get('section_ta_id')
 
         status = ""
@@ -102,26 +112,63 @@ class TAAssignments(View):
         #         status = f'Instructor with email {instructor_email} does not exist.'
         #     except Exception as e:
         #         status = e
-        # elif course_ta_email and isinstance(course_ta_select, bool):
-        #     try:
-        #         ta = User.objects.get(EMAIL=course_ta_email, ROLE="TA")
-        #         course = Course.objects.get(COURSE_ID=course_id)
-        #
-        #         course_assignment = CourseAssignment(COURSE=course, TA=ta, IS_GRADER=course_ta_select)
-        #         course_assignment.save()
-        #
-        #         status = f'TA {ta.FIRST_NAME} {ta.LAST_NAME} assigned to course {course.COURSE_NAME}.'
-        #     except Course.DoesNotExist:
-        #         status = f'Course with number {course.COURSE_NUMBER} does not exist.'
-        #     except User.DoesNotExist:
-        #         status = f'TA with email {course_ta_email} does not exist.'
-        #     except Exception as e:
-        #         status = e
-        #
-        #
-        #
 
-        if section_ta_id:
+
+
+
+
+
+        if course_ta_email and isinstance(course_ta_select, bool):
+            try:
+                ta = User.objects.get(EMAIL=course_ta_email, ROLE="TA")
+                course = Course.objects.get(COURSE_ID=course_id)
+
+                course_assignment = CourseAssignment(COURSE=course, TA=ta, IS_GRADER=course_ta_select)
+                course_assignment.save()
+
+                status = f'TA {ta.FIRST_NAME} {ta.LAST_NAME} assigned to course {course.COURSE_NAME}.'
+            except Course.DoesNotExist:
+                status = f'Course with number {course.COURSE_NUMBER} does not exist.'
+            except User.DoesNotExist:
+                status = f'TA with email {course_ta_email} does not exist.'
+            except Exception as e:
+                status = e
+
+
+
+
+
+        elif section_instructor_id:
+            try:
+                section = Section.objects.get(SECTION_ID=section_id)
+
+                old_section_exists = SectionAssignment.objects.filter(SECTION=section).exists()
+
+                if old_section_exists:
+                    old_section_assignment = SectionAssignment.objects.get(SECTION=section)
+
+                if section_instructor_id != "Null":
+                    instructor = User.objects.get(USER_ID=section_instructor_id, ROLE="INSTRUCTOR")
+                    course = Course.objects.get(COURSE_ID=course_id)
+                    course_assignment = CourseAssignment.objects.get(COURSE=course, USER=instructor)
+
+                    section_assignment = SectionAssignment(COURSE_ASSIGNMENT=course_assignment, SECTION=section)
+                    section_assignment.save()
+
+                    status = f'Instructor: {instructor.FIRST_NAME} {instructor.LAST_NAME} assigned to section.'
+
+                # Delete old assignment (if it exists) when instructor is None or new assignment is successfully created.
+                if old_section_exists:
+                    old_section_assignment.delete()
+                    status = f'Instructor was removed from the section.'
+
+
+            except Exception as e:
+                status = e
+
+
+
+        elif section_ta_id:
             try:
                 section = Section.objects.get(SECTION_ID=section_id)
 
@@ -140,11 +187,10 @@ class TAAssignments(View):
 
                     status = f'TA: {ta.FIRST_NAME} {ta.LAST_NAME} assigned to section.'
 
-                # Delete old assignment when TA is None or new assignment is successful if it exists.
+                # Delete old assignment (if it exists) when TA is None or new assignment is successfully created.
                 if old_section_exists:
                     old_section_assignment.delete()
                     status = f'TA was removed from the section.'
-
             except User.DoesNotExist:
                 status = f'TA does not exist.'
             except Course.DoesNotExist:
@@ -155,6 +201,7 @@ class TAAssignments(View):
                 status = f'The TA is not assigned to the course.'
             except Exception as e:
                 status = e
+
         elif section_id:
             try:
                 section = Section.objects.get(SECTION_ID=section_id)
@@ -165,6 +212,7 @@ class TAAssignments(View):
                 status = f'Section does not exist.'
             except Exception as e:
                 status = e
+
         elif course_id:
             try:
                 course = Course.objects.get(COURSE_ID=course_id)
@@ -175,6 +223,7 @@ class TAAssignments(View):
                 status = f'Course does not exist.'
             except Exception as e:
                 status = e
+
         else:
             status = 'An unexpected error occurred.'
 

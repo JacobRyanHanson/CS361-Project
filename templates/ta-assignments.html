@@ -261,11 +261,17 @@
                                                 <td>
                                                    <form class="input-group" name="assignment-instructor" action="" method="post">
                                                         {% csrf_token %}
+                                                        <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
+                                                        <input type="hidden" name="section_id" value="{{ section.SECTION_ID }}">
                                                         <span class="t-label">Instructor:</span>
-                                                        <select name="section_instructor_email" class="form-control" required>
+                                                        <select name="section_instructor_id" class="form-control" required>
                                                             <option value="">Select</option>
-                                                            {% if course.assigned_instructor %}
-                                                                <option title="{{ course.assigned_instructor.USER.EMAIL }}" value="{{ course.assigned_instructor.USER.USER_ID }}" selected="selected">
+                                                            {% if section.assigned_instructor %}
+                                                                <option title="{{ section.assigned_instructor.USER.EMAIL }}" value="{{ section.assigned_instructor.USER.USER_ID }}" selected="selected">
+                                                                    {{ section.assigned_instructor.USER.FIRST_NAME }} {{ section.assigned_instructor.USER.LAST_NAME }}
+                                                                </option>
+                                                            {% else %}
+                                                                <option title="{{ course.assigned_instructor.USER.EMAIL }}" value="{{ course.assigned_instructor.USER.USER_ID }}">
                                                                     {{ course.assigned_instructor.USER.FIRST_NAME }} {{ course.assigned_instructor.USER.LAST_NAME }}
                                                                 </option>
                                                             {% endif %}
@@ -280,8 +286,8 @@
                                             <tr>
                                                 <td>
                                                     Instructor Email:
-                                                    {% if course.assigned_instructor %}
-                                                        {{ course.assigned_instructor.USER.EMAIL }}
+                                                    {% if section.assigned_instructor %}
+                                                        {{ section.assigned_instructor.USER.EMAIL }}
                                                     {% else %}
                                                         N/A
                                                     {% endif %}
@@ -529,11 +535,17 @@
                                             <td>
                                                <form class="input-group" name="assignment-instructor" action="" method="post">
                                                     {% csrf_token %}
+                                                    <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
+                                                    <input type="hidden" name="section_id" value="{{ section.SECTION_ID }}">
                                                     <span class="t-label">Instructor:</span>
-                                                    <select name="section_instructor_email" class="form-control" required>
+                                                    <select name="section_instructor_id" class="form-control" required>
                                                         <option value="Null">None</option>
-                                                        {% if course.assigned_instructor %}
-                                                            <option title="{{ course.assigned_instructor.USER.EMAIL }}" value="{{ course.assigned_instructor.USER.USER_ID }}" selected="selected">
+                                                        {% if section.assigned_instructor %}
+                                                            <option title="{{ section.assigned_instructor.USER.EMAIL }}" value="{{ section.assigned_instructor.USER.USER_ID }}" selected="selected">
+                                                                {{ section.assigned_instructor.USER.FIRST_NAME }} {{ section.assigned_instructor.USER.LAST_NAME }}
+                                                            </option>
+                                                        {% else %}
+                                                            <option title="{{ course.assigned_instructor.USER.EMAIL }}" value="{{ course.assigned_instructor.USER.USER_ID }}">
                                                                 {{ course.assigned_instructor.USER.FIRST_NAME }} {{ course.assigned_instructor.USER.LAST_NAME }}
                                                             </option>
                                                         {% endif %}
@@ -548,8 +560,8 @@
                                         <tr>
                                             <td>
                                                 Instructor Email:
-                                                {% if course.assigned_instructor %}
-                                                    {{ course.assigned_instructor.USER.EMAIL }}
+                                                {% if section.assigned_instructor %}
+                                                    {{ section.assigned_instructor.USER.EMAIL }}
                                                 {% else %}
                                                     N/A
                                                 {%  endif %}
