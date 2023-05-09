@@ -15,84 +15,100 @@
 
     {# TA View #}
     {% if user.ROLE == 'TA' %}
-        <div class="main-container flex-column align-items-center">
+        <div class="main-container">
             <div class="status-message">{{ status }}</div>
 
-            {# TODO - Iterate through sections this TA is assigned to #}
-            {% for _ in "*" %}
-                <div class="table-container">
-                    <table class="table table-striped">
-                        <tr>
-                            <td>
-                                <h5 class="table-header">Section</h5>
-                            </td>
-                        </tr>
+            {% for course in courses %}
+                {% for section in course.sections %}
+                    {# Only show sections to which the TA is assigned. #}
+                    {% if section.assigned_ta.USER == user %}
+                        <div class="table-container">
+                            <table class="table table-striped">
+                                <tr>
+                                    <td>
+                                        <h5 class="table-header">Section</h5>
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                {# TODO - Get attributes of associated course #}
-                                Course Name:
-                                {{ course.DEPARTMENT }} {{ course.COURSE_NUMBER }} - {{ course.COURSE_NAME }}
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>
+                                        Course Name:
+                                        {{ course.DEPARTMENT }} {{ course.COURSE_NUMBER }} - {{ course.COURSE_NAME }}
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                Section Number:
-                                {{ section.SECTION_NUMBER }}
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>
+                                        Section Number:
+                                        {{ section.SECTION_NUMBER }}
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                Section Type:
-                                {{ section.SECTION_TYPE }}
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>
+                                        Section Type:
+                                        {{ section.SECTION_TYPE }}
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                TA Name:
-                                 {# TODO - Get name of TA #}
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>
+                                        TA Name:
+                                        {% if section.assigned_ta %}
+                                            {{ section.assigned_ta.USER.FIRST_NAME }}
+                                            {{ section.assigned_ta.USER.LAST_NAME }}
+                                        {% else %}
+                                            N/A
+                                        {%  endif %}
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                TA Email:
-                                 {# TODO - Get email of TA #}
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>
+                                        TA Email:
+                                        {% if section.assigned_ta %}
+                                            {{ section.assigned_ta.USER.EMAIL }}
+                                        {% else %}
+                                            N/A
+                                        {%  endif %}
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                Grader Status:
-                                {# TODO - Get grader status of current TA assigned to section #}
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>
+                                        Grader Status:
+                                        {% if section.assigned_ta %}
+                                            {{ section.assigned_ta.IS_GRADER }}
+                                        {% else %}
+                                            N/A
+                                        {%  endif %}
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                Building:
-                                {{ section.BUILDING }}
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>
+                                        Building:
+                                        {{ section.BUILDING }}
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                Room Number:
-                                {{ section.ROOM_NUMBER }}
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>
+                                        Room Number:
+                                        {{ section.ROOM_NUMBER }}
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                Time:
-                                {{ section.SECTION_START }} - {{ section.SECTION_END }}
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                                <tr>
+                                    <td>
+                                        Time:
+                                        {{ section.SECTION_START }} - {{ section.SECTION_END }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
         </div>
     {% endif %}
