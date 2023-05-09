@@ -19,8 +19,9 @@
             {% csrf_token %}
             
             <div class="d-flex form-div">
-                <label class="section-form-label" for="courseNumber">Course:</label>
-                <select name="courseID" class="form-control section-form-select" required>
+                <label class="section-form-label" for="course_id">Course:</label>
+                <select name="course_id" class="form-control section-form-select" required>
+                    <option value="">Select</option>
                     {% for course in courses %}
                         <option value="{{ course.COURSE_ID }}">{{ course.DEPARTMENT }} {{ course.COURSE_NUMBER }}</option>
                     {% endfor %}
@@ -28,16 +29,17 @@
             </div>
 
             <div class="d-flex form-div">
-                <label class="section-form-label" for="sectionType">Section Type:</label>
-                <select name="sectionType" class="form-control section-form-select" required>
-                    <option value="lecture">Lecture</option>
-                    <option value="lab">Lab</option>
+                <label class="section-form-label" for="section_type">Section Type:</label>
+                <select name="section_type" class="form-control section-form-select" required>
+                    <option value="">Select</option>
+                    <option value="LAB">Lab</option>
+                    <option value="LECTURE">Lecture</option>
                 </select>
             </div>
 
             <div class="d-flex form-div">
-                <label class="section-form-label" for="sectionNumber">Section Number:</label>
-                <input class="form-control" type="number" name="sectionNumber">
+                <label class="section-form-label" for="section-number">Section Number:</label>
+                <input class="form-control" type="number" name="section_number">
             </div>
 
             <div class="d-flex form-div">
@@ -46,18 +48,18 @@
             </div>
 
             <div class="d-flex form-div">
-                <label class="section-form-label" for="roomNumber">Room Number:</label>
-                <input class="form-control" type="text" name="roomNumber" required>
+                <label class="section-form-label" for="room_number">Room Number:</label>
+                <input class="form-control" type="text" name="room_number" required>
             </div>
 
             <div class="d-flex form-div">
                 <label class="section-form-label">Start Time:</label>
-               <input class="form-control" type="time" id="startTime" name="startTime" required>
+               <input class="form-control" type="time" id="start_time" name="start_time" required>
             </div>
 
             <div class="d-flex form-div">
                 <label class="section-form-label">End Time:</label>
-                <input class="form-control" type="time" id="endTime" name="endTime" required>
+                <input class="form-control" type="time" id="end_time" name="end_time" required>
             </div>
             
             <button class="btn btn-primary bottom-form-button" type="submit">Create Section</button>

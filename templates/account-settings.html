@@ -51,7 +51,8 @@
             {% if user.ROLE == 'TA' %}
                 <div class="d-flex form-div">
                     <label class="profile-form-label" for="skills">Skills:</label>
-                    <textarea class="form-control" name="skills" id="skills">{{ user.SKILLS }}</textarea>
+                    {# Added spaces in the HTML are reflected in the page so this line is longer. #}
+                    <textarea class="form-control" name="skills" id="skills">{% if user.SKILLS is not None %}{{ user.SKILLS }}{% endif %}</textarea>
                 </div>
             {% else %}
                 <input type="hidden" name="skills" value="">

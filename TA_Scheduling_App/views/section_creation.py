@@ -23,13 +23,13 @@ class SectionCreation(View):
         if request.session.get("user_role") != "ADMIN":
             raise PermissionDenied("You are not permitted to create sections.")
 
-        section_type = request.POST['sectionType']
-        course_id = request.POST['courseID']
-        section_number = request.POST['sectionNumber']
+        section_type = request.POST['section_type']
+        course_id = request.POST['course_id']
+        section_number = request.POST['section_number']
         building = request.POST['building']
-        room_number = request.POST['roomNumber']
-        start_time = request.POST['startTime']
-        end_time = request.POST['endTime']
+        room_number = request.POST['room_number']
+        start_time = request.POST['start_time']
+        end_time = request.POST['end_time']
 
         try:
             course = Course.objects.get(COURSE_ID=course_id)
@@ -37,7 +37,7 @@ class SectionCreation(View):
             start_time = datetime.strptime(start_time, '%H:%M').time()
             end_time = datetime.strptime(end_time, '%H:%M').time()
 
-            section = Section(SECTION_TYPE = section_type,
+            section = Section(SECTION_TYPE=section_type,
                               SECTION_NUMBER=section_number,
                               COURSE=course,
                               BUILDING=building,
@@ -47,7 +47,7 @@ class SectionCreation(View):
             section.save()
             status = "Successfully created the section."
         except Course.DoesNotExist:
-            status = f'The course with id {course_id} does not exist.'
+            status = f'The course does not exist.'
         except Exception as e:
             status = e
 
