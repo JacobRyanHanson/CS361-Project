@@ -41,7 +41,6 @@ class DeleteSectionSuccessTest(TestCase):
 
         self.course = Course(
             COURSE_NUMBER=151,
-            INSTRUCTOR=self.instructor,
             COURSE_NAME='Introduction to Computer Science',
             COURSE_DESCRIPTION='An introductory course to the world of computer science.',
             SEMESTER='Fall 2023',
@@ -113,7 +112,7 @@ class DeleteSectionSuccessTest(TestCase):
 
         response = self.client.post("/ta-assignments/", {"section_id": self.newSection.SECTION_ID}, follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(str(response.context['status']), 'Section with ID 2 has been deleted.')
+        self.assertEqual(str(response.context['status']), 'Section has been deleted.')
 
 
 class DeleteSectionRemoveRestTest(TestCase):
@@ -161,7 +160,6 @@ class DeleteSectionRemoveRestTest(TestCase):
 
         self.course = Course(
             COURSE_NUMBER=151,
-            INSTRUCTOR=self.instructor,
             COURSE_NAME='Introduction to Computer Science',
             COURSE_DESCRIPTION='An introductory course to the world of computer science.',
             SEMESTER='Fall 2023',
@@ -195,7 +193,7 @@ class DeleteSectionRemoveRestTest(TestCase):
 
         self.courseAssignment = CourseAssignment(
             COURSE=self.course,
-            TA=self.ta,
+            USER=self.ta,
             IS_GRADER=True
         )
 
