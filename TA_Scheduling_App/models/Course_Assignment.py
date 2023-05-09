@@ -40,7 +40,7 @@ class CourseAssignment(IVerification):
 
         # Check for duplicate assignment
         if self.checkDuplicate(course, user):
-            raise ValueError("Duplicate assignment of TA to course failed.")
+            raise ValueError("Duplicate assignment of user to course failed.")
 
     def setGrader(self, isGrader):
         if isGrader is Null():

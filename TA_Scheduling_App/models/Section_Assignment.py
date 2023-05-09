@@ -48,7 +48,7 @@ class SectionAssignment(IVerification):
 
         # Check for duplicate assignment
         if self.checkDuplicate(courseAssignment, section):
-            raise ValueError("Duplicate assignment of TA to section failed.")
+            raise ValueError("Duplicate assignment of user to section failed.")
 
     def checkDuplicate(self, courseAssignment, section):
         if courseAssignment is Null() or section is Null():

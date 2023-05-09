@@ -214,7 +214,7 @@
                                                         <input type="hidden" name="section_id" value="{{ section.SECTION_ID }}">
                                                         <span class="t-label">TA:</span>
                                                         <select name="section_ta_id" class="form-control" required>
-                                                            <option value="Null">None</option>
+                                                            <option value="None">None</option>
                                                             {% for assignment in course.assigned_tas %}
                                                                 {# If the current user is the TA assigned to the section select them. #}
                                                                 {% if section.assigned_ta.USER == assignment.USER %}
@@ -359,7 +359,7 @@
                                     {% csrf_token %}
                                     <span class="t-label">Instructor:</span>
                                     <select name="course_instructor_id" class="form-control" required>
-                                        <option value="Null">None</option>
+                                        <option value="None">None</option>
                                         {% for user in instructors %}
                                             {# If the current user is the instructor assigned to the course then select them. #}
                                             {% if course.assigned_instructor.USER == user %}
@@ -419,7 +419,7 @@
                                 <tr>
                                     <td class="d-flex">
                                         <span class="t-label">TA:</span>
-                                        <select name="course_ta_email" class="form-control multi-row-input-1" required>
+                                        <select name="course_ta_id" class="form-control multi-row-input-1" required>
                                             <option value="">Select</option>
                                             {% for user in course.unassigned_tas %}
                                                 <option title="{{ user.EMAIL }} &middot; {{ user.SKILLS }}" value="{{ user.USER_ID }}" >
@@ -436,8 +436,8 @@
                                         <span class="t-label">Grader Status:</span>
                                         <select name="course_ta_grader_status" class="form-control multi-row-input-2" required>
                                             <option value="">Select</option>
-                                            <option value="true">True</option>
-                                            <option value="false">False</option>
+                                            <option value="True">True</option>
+                                            <option value="False">False</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -488,7 +488,7 @@
                                                     <input type="hidden" name="section_id" value="{{ section.SECTION_ID }}">
                                                     <span class="t-label">TA:</span>
                                                     <select name="section_ta_id" class="form-control ta-select" required>
-                                                        <option value="Null">None</option>
+                                                        <option value="None">None</option>
                                                         {% for assignment in course.assigned_tas %}
                                                             {# If the current user is the TA assigned to the section select them. #}
                                                             {% if section.assigned_ta.USER == assignment.USER %}
@@ -539,12 +539,12 @@
                                                     <input type="hidden" name="section_id" value="{{ section.SECTION_ID }}">
                                                     <span class="t-label">Instructor:</span>
                                                     <select name="section_instructor_id" class="form-control" required>
-                                                        <option value="Null">None</option>
+                                                        <option value="None">None</option>
                                                         {% if section.assigned_instructor %}
                                                             <option title="{{ section.assigned_instructor.USER.EMAIL }}" value="{{ section.assigned_instructor.USER.USER_ID }}" selected="selected">
                                                                 {{ section.assigned_instructor.USER.FIRST_NAME }} {{ section.assigned_instructor.USER.LAST_NAME }}
                                                             </option>
-                                                        {% else %}
+                                                        {% elif course.assigned_instructor %}
                                                             <option title="{{ course.assigned_instructor.USER.EMAIL }}" value="{{ course.assigned_instructor.USER.USER_ID }}">
                                                                 {{ course.assigned_instructor.USER.FIRST_NAME }} {{ course.assigned_instructor.USER.LAST_NAME }}
                                                             </option>

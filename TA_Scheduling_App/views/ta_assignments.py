@@ -82,61 +82,62 @@ class TAAssignments(View):
             raise PermissionDenied("Not logged in.")
 
         course_id = request.POST.get('course_id')
-        course_instructor_id = request.POST.get('course_instructor_id')
-        course_ta_email = request.POST.get('course_ta_email')
-        course_ta_select = request.POST.get('course_ta_select') == 'true'
         section_id = request.POST.get('section_id')
+
+        course_instructor_id = request.POST.get('course_instructor_id')
+
+        course_ta_id = request.POST.get('course_ta_id')
+        course_ta_grader_status = request.POST.get('course_ta_grader_status') == 'True'
+
         section_instructor_id = request.POST.get('section_instructor_id')
         section_ta_id = request.POST.get('section_ta_id')
 
         status = ""
 
-        # if course_instructor_id:
-        #     try:
-        #         course = Course.objects.get(COURSE_ID=course_id)
-        #
-        #         course_assignment = CourseAssignment.objects.filter(COURSE=course)
-        #         for c in course_assignment:
-        #             if(c.USER.ROLE == 'INSTRUCTOR'):
-        #                 c.delete()
-        #
-        #         if instructor_id != 'None':
-        #             instructor = User.objects.get(USER_ID=instructor_id)
-        #             course_assignment = CourseAssignment(COURSE=course, USER=instructor)
-        #             course_assignment.save()
-        #
-        #         status = f'Instructor for course with ID {course_id} has been updated to {instructor_email}.'
-        #     except Course.DoesNotExist:
-        #         status = f'Course with instructor email {instructor_email} does not exist.'
-        #     except User.DoesNotExist:
-        #         status = f'Instructor with email {instructor_email} does not exist.'
-        #     except Exception as e:
-        #         status = e
-
-
-
-
-
-
-        if course_ta_email and isinstance(course_ta_select, bool):
+        if course_instructor_id:
             try:
-                ta = User.objects.get(EMAIL=course_ta_email, ROLE="TA")
                 course = Course.objects.get(COURSE_ID=course_id)
 
-                course_assignment = CourseAssignment(COURSE=course, TA=ta, IS_GRADER=course_ta_select)
+                old_course_exists = CourseAssignment.objects.filter(COURSE=course, USER__ROLE="INSTRUCTOR").exists()
+
+                if old_course_exists:
+                    old_course_assignment = CourseAssignment.objects.get(COURSE=course, USER__ROLE="INSTRUCTOR")
+
+                if course_instructor_id != "None":
+                    instructor = User.objects.get(USER_ID=course_instructor_id, ROLE="INSTRUCTOR")
+                    course_assignment = CourseAssignment(COURSE=course, USER=instructor)
+                    course_assignment.save()
+
+                    status = f'Instructor {instructor.FIRST_NAME} {instructor.LAST_NAME} assigned to course {course.COURSE_NAME}.'
+
+                # Delete old assignment (if it exists) when instructor is None or new assignment is successfully created.
+                if old_course_exists:
+                    old_course_assignment.delete()
+                    # Only update status if it was empty.
+                    if status == "":
+                        status = f'Instructor was removed from the section.'
+            except Course.DoesNotExist:
+                status = f'Course does not exist.'
+            except User.DoesNotExist:
+                status = f'Instructor does not exist.'
+            except Exception as e:
+                status = e
+
+        elif course_ta_id and isinstance(course_ta_grader_status, bool):
+            try:
+                ta = User.objects.get(USER_ID=course_ta_id, ROLE="TA")
+                course = Course.objects.get(COURSE_ID=course_id)
+
+                course_assignment = CourseAssignment(COURSE=course, USER=ta, IS_GRADER=course_ta_grader_status)
                 course_assignment.save()
 
                 status = f'TA {ta.FIRST_NAME} {ta.LAST_NAME} assigned to course {course.COURSE_NAME}.'
             except Course.DoesNotExist:
-                status = f'Course with number {course.COURSE_NUMBER} does not exist.'
+                status = f'Course does not exist.'
             except User.DoesNotExist:
-                status = f'TA with email {course_ta_email} does not exist.'
+                status = f'TA does not exist.'
             except Exception as e:
                 status = e
-
-
-
-
 
         elif section_instructor_id:
             try:
@@ -147,7 +148,7 @@ class TAAssignments(View):
                 if old_section_exists:
                     old_section_assignment = SectionAssignment.objects.get(SECTION=section)
 
-                if section_instructor_id != "Null":
+                if section_instructor_id != "None":
                     instructor = User.objects.get(USER_ID=section_instructor_id, ROLE="INSTRUCTOR")
                     course = Course.objects.get(COURSE_ID=course_id)
                     course_assignment = CourseAssignment.objects.get(COURSE=course, USER=instructor)
@@ -155,18 +156,24 @@ class TAAssignments(View):
                     section_assignment = SectionAssignment(COURSE_ASSIGNMENT=course_assignment, SECTION=section)
                     section_assignment.save()
 
-                    status = f'Instructor: {instructor.FIRST_NAME} {instructor.LAST_NAME} assigned to section.'
+                    status = f'Instructor {instructor.FIRST_NAME} {instructor.LAST_NAME} assigned to section.'
 
                 # Delete old assignment (if it exists) when instructor is None or new assignment is successfully created.
                 if old_section_exists:
                     old_section_assignment.delete()
-                    status = f'Instructor was removed from the section.'
-
-
+                    # Only update status if it was empty.
+                    if status == "":
+                        status = f'Instructor was removed from the section.'
+            except User.DoesNotExist:
+                status = f'Instructor does not exist.'
+            except Course.DoesNotExist:
+                status = f'Course does not exist.'
+            except Section.DoesNotExist:
+                status = f'Section does not exist.'
+            except CourseAssignment.DoesNotExist:
+                status = f'The instructor is not assigned to the course.'
             except Exception as e:
                 status = e
-
-
 
         elif section_ta_id:
             try:
@@ -177,7 +184,7 @@ class TAAssignments(View):
                 if old_section_exists:
                     old_section_assignment = SectionAssignment.objects.get(SECTION=section)
 
-                if section_ta_id != "Null":
+                if section_ta_id != "None":
                     ta = User.objects.get(USER_ID=section_ta_id, ROLE="TA")
                     course = Course.objects.get(COURSE_ID=course_id)
                     course_assignment = CourseAssignment.objects.get(COURSE=course, USER=ta)
@@ -185,12 +192,14 @@ class TAAssignments(View):
                     section_assignment = SectionAssignment(COURSE_ASSIGNMENT=course_assignment, SECTION=section)
                     section_assignment.save()
 
-                    status = f'TA: {ta.FIRST_NAME} {ta.LAST_NAME} assigned to section.'
+                    status = f'TA {ta.FIRST_NAME} {ta.LAST_NAME} assigned to section.'
 
                 # Delete old assignment (if it exists) when TA is None or new assignment is successfully created.
                 if old_section_exists:
                     old_section_assignment.delete()
-                    status = f'TA was removed from the section.'
+                    # Only update status if it was empty.
+                    if status == "":
+                        status = f'TA was removed from the section.'
             except User.DoesNotExist:
                 status = f'TA does not exist.'
             except Course.DoesNotExist:
@@ -218,7 +227,7 @@ class TAAssignments(View):
                 course = Course.objects.get(COURSE_ID=course_id)
                 course.delete()
 
-                status = f'Course: {course.COURSE_NAME} has been deleted.'
+                status = f'Course {course.COURSE_NAME} has been deleted.'
             except Course.DoesNotExist:
                 status = f'Course does not exist.'
             except Exception as e:
