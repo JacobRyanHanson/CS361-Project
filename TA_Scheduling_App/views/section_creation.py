@@ -11,7 +11,11 @@ class SectionCreation(View):
         if request.session.get("user_role") != "ADMIN":
             return redirect("dashboard")
 
-        return render(request, "section-creation.html")
+        courses = Course.objects.all()
+
+        context = {'courses': courses}
+
+        return render(request, "section-creation.html", context)
 
     def post(self, request):
         if not request.session.get("is_authenticated"):
@@ -19,6 +23,7 @@ class SectionCreation(View):
         if request.session.get("user_role") != "ADMIN":
             raise PermissionDenied("You are not permitted to create sections.")
 
+        section_type = request.POST['sectionType']
         course_id = request.POST['courseID']
         section_number = request.POST['sectionNumber']
         building = request.POST['building']
@@ -32,7 +37,8 @@ class SectionCreation(View):
             start_time = datetime.strptime(start_time, '%H:%M').time()
             end_time = datetime.strptime(end_time, '%H:%M').time()
 
-            section = Section(SECTION_NUMBER=section_number,
+            section = Section(SECTION_TYPE = section_type,
+                              SECTION_NUMBER=section_number,
                               COURSE=course,
                               BUILDING=building,
                               ROOM_NUMBER=room_number,
@@ -45,6 +51,8 @@ class SectionCreation(View):
         except Exception as e:
             status = e
 
-        context = {'status': status}
+        courses = Course.objects.all()
+
+        context = {'status': status, 'courses': courses}
 
         return render(request, "section-creation.html", context)
