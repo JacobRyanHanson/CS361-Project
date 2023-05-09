@@ -397,7 +397,7 @@ class DuplicateCreationFailTest(TestCase):
         }
 
         with self.assertRaises(ValueError):
-            self.course2 = Course(
+            self.course_2 = Course(
                 COURSE_NUMBER=self.course_data2["courseNumber"],
                 INSTRUCTOR=self.instructor,
                 COURSE_NAME=self.course_data2["courseName"],
@@ -421,7 +421,7 @@ class DuplicateCreationFailTest(TestCase):
         }
 
         with self.assertRaises(ValueError):
-            self.course2 = Course(
+            self.course_2 = Course(
                 COURSE_NUMBER=self.course_data2["courseNumber"],
                 INSTRUCTOR=self.instructor,
                 COURSE_NAME=self.course_data2["courseName"],
