@@ -31,6 +31,8 @@ class SectionCreation(View):
         start_time = request.POST['start_time']
         end_time = request.POST['end_time']
 
+        status = ""
+
         try:
             course = Course.objects.get(COURSE_ID=course_id)
             

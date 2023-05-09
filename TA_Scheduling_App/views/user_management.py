@@ -31,6 +31,8 @@ class UserManagement(View):
         user_id = request.session.get("user_id")
         delete_user_id = request.POST.get('delete_user_id')
 
+        status = ""
+
         try:
             user = User.objects.get(USER_ID=delete_user_id)
             user.delete()
