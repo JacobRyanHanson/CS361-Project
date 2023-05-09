@@ -304,7 +304,12 @@
                                     <select name="course_instructor_id" class="form-control" required>
                                         <option>None</option>
                                         {% for user in instructors %}
-                                            <option title="{{ user.EMAIL }}" value="{{ user.USER_ID }}">
+                                            {# If the current user is the instructor assigned to the course then select them. #}
+                                            {% if course.assigned_instructor.USER == user %}
+                                                <option title="{{ user.EMAIL }}" value="{{ user.USER_ID }}"selected="selected">
+                                            {% else %}
+                                                <option title="{{ user.EMAIL }}" value="{{ user.USER_ID }}">
+                                            {% endif %}
                                                 {{ user.FIRST_NAME }} {{ user.LAST_NAME }}
                                             </option>
                                         {% endfor %}
@@ -320,7 +325,11 @@
                         <tr>
                             <td>
                                 Instructor Email:
-
+                                {% if course.assigned_instructor %}
+                                    {{ course.assigned_instructor.USER.EMAIL }}
+                                {% else %}
+                                    N/A
+                                {%  endif %}
                             </td>
                         </tr>
 
@@ -422,15 +431,14 @@
                                                     <select name="section_ta_email" class="form-control ta-select" required>
                                                         <option value="">None</option>
                                                         {% for assignment in course.assigned_tas %}
- d                                                            {% if section %}
+                                                            {# If the current user is the TA assigned to the section select them. #}
+                                                            {% if section.assigned_ta.USER == assignment.USER %}
                                                                 <option title="{{ assignment.USER.EMAIL }}" value="{{ assignment.USER.USER_ID }}" selected="selected">
-                                                                    {{ assignment.USER.FIRST_NAME }} {{ assignment.USER.LAST_NAME }}
-                                                                </option>
                                                             {% else %}
                                                                 <option title="{{ assignment.USER.EMAIL }}" value="{{ assignment.USER.USER_ID }}" >
+                                                            {% endif %}
                                                                     {{ assignment.USER.FIRST_NAME }} {{ assignment.USER.LAST_NAME }}
                                                                 </option>
-                                                            {% endif %}
                                                         {% endfor %}
                                                     </select>
                                                     <span class="input-group-btn">
@@ -443,14 +451,22 @@
                                         <tr>
                                             <td>
                                                 TA Email:
-                                                {# TODO - Get email of current TA assigned to section #}
+                                                {% if section.assigned_ta %}
+                                                    {{ section.assigned_ta.USER.EMAIL }}
+                                                {% else %}
+                                                    N/A
+                                                {%  endif %}
                                             </td>
                                         </tr>
 
                                         <tr>
                                             <td>
                                                 Grader Status:
-                                                {# TODO - Get grader status of current TA assigned to section #}
+                                                {% if section.assigned_ta %}
+                                                    {{ section.assigned_ta.IS_GRADER }}
+                                                {% else %}
+                                                    N/A
+                                                {%  endif %}
                                             </td>
                                         </tr>
                                     {% endif %}
@@ -467,7 +483,7 @@
                                                             <option title="{{ course.assigned_instructor.USER.EMAIL }}" value="{{ course.assigned_instructor.USER.USER_ID }}" selected="selected">
                                                                 {{ course.assigned_instructor.USER.FIRST_NAME }} {{ course.assigned_instructor.USER.LAST_NAME }}
                                                             </option>
-                                                        {%  endif %}
+                                                        {% endif %}
                                                     </select>
                                                     <span class="input-group-btn">
                                                         <button class="btn btn-primary form-btn" type="submit">Update</button>

@@ -20,12 +20,25 @@ class TAAssignments(View):
             to_attr='assigned_tas'
         )
 
+        ta_prefetch_assigned_section = Prefetch(
+            'sectionassignment_set',
+            queryset=SectionAssignment.objects.filter(COURSE_ASSIGNMENT__USER__ROLE='TA'),
+            to_attr='assigned_ta'
+        )
+
         section_prefetch = Prefetch(
             'section_set',
-            queryset=Section.objects.all(),
+            queryset=Section.objects.prefetch_related(ta_prefetch_assigned_section).all(),
             to_attr='sections'
         )
 
+
+        # section_prefetch = Prefetch(
+        #     'section_set',
+        #     queryset=Section.objects.all(),
+        #     to_attr='sections'
+        # )
+        #
         # ta_prefetch_assigned_section = Prefetch(
         #     'courseassignment_set__sectionassignment_set',
         #     queryset=SectionAssignment.objects.filter(COURSE_ASSIGNMENT__USER__ROLE='TA'),
@@ -37,7 +50,6 @@ class TAAssignments(View):
             instructor_prefetch,
             ta_prefetch_assigned_course,
             section_prefetch,
-            # ta_prefetch_assigned_section
         ).all()
 
         for course in courses:
@@ -48,21 +60,11 @@ class TAAssignments(View):
             course.unassigned_tas = User.objects.filter(ROLE="TA")\
                 .exclude(USER_ID__in=[ta.USER.USER_ID for ta in course.assigned_tas])
 
-            # Get ta from list.
             sections = course.sections
-            # for section in sections:
-            #     if section.assigned_ta:
-            #         section.assigned_ta = section.assigned_ta[0]
-
-
-
-
-
-        # ta_prefetch_assigned_section = Prefetch(
-        #     'sectionassignment_set',
-        #     queryset=User.objects.filter(ROLE='TA'),
-        #     to_attr='assigned_ta'
-        # )
+            for section in sections:
+                # Get ta from list.
+                if section.assigned_ta:
+                    section.assigned_ta = section.assigned_ta[0].COURSE_ASSIGNMENT
 
         course_assignments = CourseAssignment.objects.all()
         instructors = User.objects.filter(ROLE="INSTRUCTOR")
