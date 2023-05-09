@@ -32,19 +32,6 @@ class TAAssignments(View):
             to_attr='sections'
         )
 
-
-        # section_prefetch = Prefetch(
-        #     'section_set',
-        #     queryset=Section.objects.all(),
-        #     to_attr='sections'
-        # )
-        #
-        # ta_prefetch_assigned_section = Prefetch(
-        #     'courseassignment_set__sectionassignment_set',
-        #     queryset=SectionAssignment.objects.filter(COURSE_ASSIGNMENT__USER__ROLE='TA'),
-        #     to_attr='section_assigned_ta'
-        # )
-
         # Append Instructor and TAs assigned to each course.
         courses = Course.objects.prefetch_related(
             instructor_prefetch,
@@ -70,7 +57,7 @@ class TAAssignments(View):
         instructors = User.objects.filter(ROLE="INSTRUCTOR")
 
         return {
-            'role': user.ROLE,
+            'user': user,
             'courses': courses,
             'instructors': instructors,
             'status': status,
