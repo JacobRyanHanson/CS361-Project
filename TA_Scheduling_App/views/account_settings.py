@@ -61,8 +61,6 @@ class AccountSettings(View):
             user.save()
 
             status = "Your profile changes have been saved."
-        except ValueError as e:
-            status = e
         except IntegrityError:
             status = "The email is already taken."
         except Exception as e:

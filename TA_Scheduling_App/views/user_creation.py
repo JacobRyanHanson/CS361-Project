@@ -44,9 +44,6 @@ class UserCreation(View):
                         BIRTH_DATE=birth_date)
             user.save()
             status = "Successfully created the user."
-
-        except ValueError as e:
-            status = e
         except IntegrityError:
             status = "Users with duplicate emails are not allowed."
         except Exception as e:

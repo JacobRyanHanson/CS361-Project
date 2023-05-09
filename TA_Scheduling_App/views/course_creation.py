@@ -33,6 +33,8 @@ class CourseCreation(View):
         prerequisites = request.POST['prerequisites']
         department = request.POST['department']
 
+        status = ""
+
         try:
             course = Course(COURSE_NUMBER=course_number,
                             COURSE_NAME=course_name,
