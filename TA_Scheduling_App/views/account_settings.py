@@ -55,5 +55,5 @@ class AccountSettings(View):
         user.setBirthDate(birth_date)
         user.save()
 
-        updated = "Your profile changes have been successfully saved."
+        updated = "Your profile changes have been saved."
         return render(request, "account-settings.html", {'initial': user, 'status': updated})

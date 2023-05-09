@@ -265,7 +265,7 @@
                                                         <input type="hidden" name="section_id" value="{{ section.SECTION_ID }}">
                                                         <span class="t-label">Instructor:</span>
                                                         <select name="section_instructor_id" class="form-control" required>
-                                                            <option value="">Select</option>
+                                                            <option value="None">None</option>
                                                             {% if section.assigned_instructor %}
                                                                 <option title="{{ section.assigned_instructor.USER.EMAIL }}" value="{{ section.assigned_instructor.USER.USER_ID }}" selected="selected">
                                                                     {{ section.assigned_instructor.USER.FIRST_NAME }} {{ section.assigned_instructor.USER.LAST_NAME }}
