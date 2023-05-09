@@ -18,14 +18,14 @@
         <form class="d-flex flex-column" name="createCourse" action="" method="post">
             {% csrf_token %}
             <div class="d-flex form-div">
-                <label class="course-form-label" for="courseNumber">Course Number:</label>
-                <input class="form-control" type="number" name="courseNumber" required>
+                <label class="course-form-label" for="course_number">Course Number:</label>
+                <input class="form-control" type="number" name="course_number" required>
             </div>
 
             <div class="d-flex form-div">
-                <label class="course-form-label" for="courseInstructor">Instructor:</label>
-                <select name="instructorID" class="form-control course-form-select" required>
-                    <option>None</option>
+                <label class="course-form-label" for="instructor_id">Instructor:</label>
+                <select name="instructor_id" class="form-control course-form-select" required>
+                    <option value="">Select</option>
                     {% for user in instructors %}
                         <option value="{{ user.USER_ID }}">{{ user.FIRST_NAME }} {{ user.LAST_NAME }}</option>
                     {% endfor %}
@@ -33,13 +33,13 @@
             </div>
 
             <div class="d-flex form-div">
-                <label class="course-form-label" for="courseName">Course Name:</label>
-                <input class="form-control" type="text" name="courseName" required>
+                <label class="course-form-label" for="course_name">Course Name:</label>
+                <input class="form-control" type="text" name="course_name" required>
             </div>
 
             <div class="d-flex form-div">
-                <label class="course-form-label" for="courseDescription">Course Description:</label>
-                <input class="form-control" type="text" name="courseDescription" required>
+                <label class="course-form-label" for="course_description">Course Description:</label>
+                <input class="form-control" type="text" name="course_description" required>
             </div>
 
             <div class="d-flex form-div">
