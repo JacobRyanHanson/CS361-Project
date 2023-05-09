@@ -29,10 +29,11 @@ class AccountSettings(View):
         email = request.POST["email"]
         phone_number = request.POST["phoneNumber"]
         address = request.POST["address"]
+        skills = request.POST["skills"]
 
-        _date_of_birth = request.POST["dateOfBirth"]
+        _birth_date = request.POST["dateOfBirth"]
         try:
-            birth_date = datetime.date.fromisoformat(_date_of_birth)
+            birth_date = datetime.date.fromisoformat(_birth_date)
         except ValueError:
             return render(request, "account-settings.html", {'initial': user, 'status': 'Invalid birth date'})
 
@@ -42,7 +43,8 @@ class AccountSettings(View):
                  EMAIL=email,
                  PHONE_NUMBER=phone_number,
                  ADDRESS=address,
-                 BIRTH_DATE=birth_date)
+                 BIRTH_DATE=birth_date,
+                 SKILLS=skills)
         except Exception as e:
             return render(request, "account-settings.html", {'initial': user, 'status': e})
 
@@ -53,6 +55,7 @@ class AccountSettings(View):
         user.setPhoneNumber(phone_number)
         user.setAddress(address)
         user.setBirthDate(birth_date)
+        user.setSkills(skills)
         user.save()
 
         updated = "Your profile changes have been saved."
