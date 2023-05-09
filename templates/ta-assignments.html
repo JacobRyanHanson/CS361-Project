@@ -210,9 +210,11 @@
                                                 <td>
                                                    <form class="input-group" name="assignment-ta" action="" method="post">
                                                         {% csrf_token %}
+                                                        <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
+                                                        <input type="hidden" name="section_id" value="{{ section.SECTION_ID }}">
                                                         <span class="t-label">TA:</span>
-                                                        <select name="section_ta_email" class="form-control" required>
-                                                            <option value="">None</option>
+                                                        <select name="section_ta_id" class="form-control" required>
+                                                            <option value="Null">None</option>
                                                             {% for assignment in course.assigned_tas %}
                                                                 {# If the current user is the TA assigned to the section select them. #}
                                                                 {% if section.assigned_ta.USER == assignment.USER %}
@@ -351,7 +353,7 @@
                                     {% csrf_token %}
                                     <span class="t-label">Instructor:</span>
                                     <select name="course_instructor_id" class="form-control" required>
-                                        <option>None</option>
+                                        <option value="Null">None</option>
                                         {% for user in instructors %}
                                             {# If the current user is the instructor assigned to the course then select them. #}
                                             {% if course.assigned_instructor.USER == user %}
@@ -476,9 +478,11 @@
                                             <td>
                                                <form class="input-group" name="assignment-ta" action="" method="post">
                                                     {% csrf_token %}
+                                                    <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
+                                                    <input type="hidden" name="section_id" value="{{ section.SECTION_ID }}">
                                                     <span class="t-label">TA:</span>
-                                                    <select name="section_ta_email" class="form-control ta-select" required>
-                                                        <option value="">None</option>
+                                                    <select name="section_ta_id" class="form-control ta-select" required>
+                                                        <option value="Null">None</option>
                                                         {% for assignment in course.assigned_tas %}
                                                             {# If the current user is the TA assigned to the section select them. #}
                                                             {% if section.assigned_ta.USER == assignment.USER %}
@@ -527,7 +531,7 @@
                                                     {% csrf_token %}
                                                     <span class="t-label">Instructor:</span>
                                                     <select name="section_instructor_email" class="form-control" required>
-                                                        <option value="">None</option>
+                                                        <option value="Null">None</option>
                                                         {% if course.assigned_instructor %}
                                                             <option title="{{ course.assigned_instructor.USER.EMAIL }}" value="{{ course.assigned_instructor.USER.USER_ID }}" selected="selected">
                                                                 {{ course.assigned_instructor.USER.FIRST_NAME }} {{ course.assigned_instructor.USER.LAST_NAME }}

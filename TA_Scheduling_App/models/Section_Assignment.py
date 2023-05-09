@@ -21,7 +21,7 @@ class SectionAssignment(IVerification):
         courseAssignment = kwargs.get('COURSE_ASSIGNMENT', Null())
 
         if courseAssignment is None or (not isinstance(courseAssignment, CourseAssignment) and not Null()):
-            raise ValueError("Invalid course assignment")
+            raise ValueError("Invalid course assignment.")
 
         if courseAssignment is not Null():
             self.COURSE_ASSIGNMENT = courseAssignment
@@ -29,26 +29,26 @@ class SectionAssignment(IVerification):
         section = kwargs.get('SECTION', Null())
 
         if section is None or (not isinstance(section, Section) and not Null()):
-            raise ValueError("Invalid course assignment")
+            raise ValueError("Invalid course assignment.")
 
         if section is not Null():
             self.SECTION = section
 
         if section is not Null() and courseAssignment is not Null():
             if section.COURSE != courseAssignment.COURSE:
-                raise ValueError("Section is not for the same course as the course assignment")
+                raise ValueError("Section is not for the same course as the course assignment.")
 
             # Check if instructor is assigned to a lab section
             if section.SECTION_TYPE == 'LAB' and courseAssignment.USER.ROLE == 'INSTRUCTOR':
-                raise ValueError("Instructors cannot be assigned to lab sections")
+                raise ValueError("Instructors cannot be assigned to lab sections.")
 
             # Check if ta is assigned to a lecture section
             if section.SECTION_TYPE == 'LECTURE' and courseAssignment.USER.ROLE == 'TA':
-                raise ValueError("TAs cannot be assigned to lecture sections")
+                raise ValueError("TAs cannot be assigned to lecture sections.")
 
         # Check for duplicate assignment
         if self.checkDuplicate(courseAssignment, section):
-            raise ValueError("Duplicate assignment of TA to section failed")
+            raise ValueError("Duplicate assignment of TA to section failed.")
 
     def checkDuplicate(self, courseAssignment, section):
         if courseAssignment is Null() or section is Null():
