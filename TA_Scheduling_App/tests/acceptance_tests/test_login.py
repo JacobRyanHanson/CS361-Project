@@ -46,7 +46,7 @@ class UserLoginSuccessTest(TestCase):
 
         self.assertTrue(is_authenticated)
 
-    def test_user_redirected_to_home(self):
+    def test_user_redirected_to_dashboard(self):
         credentials = {
             "email": "test@example.com",
             "password": "test_password"
@@ -54,7 +54,7 @@ class UserLoginSuccessTest(TestCase):
 
         response = self.client.post("/", credentials, follow=True)
 
-        self.assertRedirects(response, '/home/')
+        self.assertRedirects(response, '/dashboard/')
 
     def test_user_information_in_session(self):
         credentials = {
@@ -82,8 +82,8 @@ class UserLoginSuccessTest(TestCase):
         # Try to access the login page again
         response = self.client.get("/")
 
-        # Assert that the user is redirected to the home page
-        self.assertRedirects(response, "/home/")
+        # Assert that the user is redirected to the dadhboard page
+        self.assertRedirects(response, "/dashboard/")
 
     def test_user_can_logout(self):
         credentials = {
