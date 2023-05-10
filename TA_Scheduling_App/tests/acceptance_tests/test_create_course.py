@@ -54,11 +54,11 @@ class AddCourseTestSuccess(TestCase):
         self.client.post("/", self.credentials, follow=True)
 
     def test_create_course_in_system(self):
-        self.client.post("/course-creation/", self.course_form_data)
+        self.client.post("/course-creation/", self.course_form_data, follow=True)
         self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.course_form_data["course_number"])), 1)
 
     def test_success_message_displayed(self):
-        response = self.client.post("/course-creation/", self.course_form_data)
+        response = self.client.post("/course-creation/", self.course_form_data, follow=True)
         self.assertEqual(str(response.context['status']), f'Successfully created course { self.course_form_data["course_name"]}.')
 
 
@@ -126,7 +126,7 @@ class InvalidInputTest(TestCase):
 
     def test_invalid_course_number(self):
         self.course_form_data['course_number'] = "$%^&*("
-        response = self.client.post("/course-creation/", self.course_form_data)
+        response = self.client.post("/course-creation/", self.course_form_data, follow=True)
         self.assertEqual(str(response.context['status']), 'Invalid course number.')
 
     def test_invalid_course_name(self):
@@ -224,7 +224,7 @@ class DuplicateCreationFailTest(TestCase):
             "department": 'Computer Science'
         }
 
-        response = self.client.post("/course-creation/", course_data_2)
+        response = self.client.post("/course-creation/", course_data_2, follow=True)
         self.assertEqual(str(response.context['status']), "Duplicate course number assignment failed.")
 
     def test_duplicate_course_not_in_system(self):

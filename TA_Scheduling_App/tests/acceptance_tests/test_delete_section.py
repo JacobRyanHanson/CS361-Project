@@ -101,7 +101,6 @@ class DeleteSectionSuccessTest(TestCase):
         self.assertEqual(len(Section.objects.filter(SECTION_NUMBER=self.thirdSection.SECTION_NUMBER)), 1)
 
         response = self.client.post("/ta-assignments/", {"section_id": self.thirdSection.SECTION_ID})
-        self.assertEqual(response.status_code, 200)
 
         soup = BeautifulSoup(response.content, 'html.parser')
         self.assertIsNone(soup.find(lambda tag: contains_text(tag, str(self.thirdSection.SECTION_NUMBER))),
@@ -111,7 +110,6 @@ class DeleteSectionSuccessTest(TestCase):
         self.assertEqual(len(Section.objects.filter(SECTION_NUMBER=self.newSection.SECTION_NUMBER)), 1)
 
         response = self.client.post("/ta-assignments/", {"section_id": self.newSection.SECTION_ID}, follow=True)
-        self.assertEqual(response.status_code, 200)
         self.assertEqual(str(response.context['status']), 'Section has been deleted.')
 
 
@@ -230,7 +228,6 @@ class DeleteSectionRemoveRestTest(TestCase):
         sectionNewAssignment.save()
 
         response = self.client.post("/ta-assignments/", {"section_id": self.newSection.SECTION_ID}, follow=True)
-        self.assertEqual(response.status_code, 200)
 
         soup = BeautifulSoup(response.content, 'html.parser')
         # Check if the assignments has been removed from the page

@@ -48,11 +48,11 @@ class CreationSuccess(TestCase):
         }
 
     def test_add_new_ta(self):
-        response = self.client.post('/user-creation/', self.ta_form_data)
+        response = self.client.post('/user-creation/', self.ta_form_data, follow=True)
         self.assertEqual(response.context['status'], 'Successfully created the user.')
 
     def test_add_new_instructor(self):
-        response = self.client.post('/user-creation/', self.instructor_form_data)
+        response = self.client.post('/user-creation/', self.instructor_form_data, follow=True)
         self.assertEqual(response.context['status'], 'Successfully created the user.')
 
 
@@ -82,11 +82,11 @@ class CreationFail(TestCase):
         }
 
     def test_invalid_email(self):
-        response = self.client.post('/user-creation/', self.ta_form_data)
-        response = self.client.post('/user-creation/', self.instructor_form_data)
+        response = self.client.post('/user-creation/', self.ta_form_data, follow=True)
+        response = self.client.post('/user-creation/', self.instructor_form_data, follow=True)
         self.assertEqual(response.context['status'], 'Users with duplicate emails are not allowed.')
 
     def test_invalid_role(self):
         self.ta_form_data['role'] = ''
-        response = self.client.post('/user-creation/', self.ta_form_data)
+        response = self.client.post('/user-creation/', self.ta_form_data, follow=True)
         self.assertEqual(str(response.context['status']), 'Invalid role.')

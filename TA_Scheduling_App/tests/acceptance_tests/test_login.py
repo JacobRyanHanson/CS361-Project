@@ -16,6 +16,7 @@ class UserLoginSuccessTest(TestCase):
                          PHONE_NUMBER='555-123-4567',
                          ADDRESS='1234 Elm St',
                          BIRTH_DATE=datetime.date(1995, 8, 30))
+
         self.user.save()
 
     def test_user_credentials_valid(self):
@@ -115,6 +116,7 @@ class UserLoginFailTest(TestCase):
                          PHONE_NUMBER='555-123-4567',
                          ADDRESS='1234 Elm St',
                          BIRTH_DATE=datetime.date(1995, 8, 30))
+
         self.user.save()
 
     def test_invalid_email(self):

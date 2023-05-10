@@ -25,12 +25,12 @@ class AccountSettings(View):
         user = User.objects.get(USER_ID=request.session["user_id"])
 
         # validate information provided by user
-        first_name = request.POST["firstName"]
-        last_name = request.POST["lastName"]
+        first_name = request.POST["first_name"]
+        last_name = request.POST["last_name"]
         email = request.POST["email"]
-        phone_number = request.POST["phoneNumber"]
+        phone_number = request.POST["phone_number"]
         address = request.POST["address"]
-        birth_date = request.POST["dateOfBirth"]
+        birth_date = request.POST["birth_date"]
         skills = request.POST["skills"]
 
         if skills == "":

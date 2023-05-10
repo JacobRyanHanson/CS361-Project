@@ -19,13 +19,13 @@
         <form class="d-flex flex-column" name="updateProfileForm" action="" method="post">
             {% csrf_token %}
             <div class="d-flex form-div">
-                <label class="profile-form-label" for="firstName">First Name:</label>
-                <input class="form-control" type="text" name="firstName" id="firstName" value="{{ user.FIRST_NAME }}" required>
+                <label class="profile-form-label" for="_n">First Name:</label>
+                <input class="form-control" type="text" name="first_name" id="first_name" value="{{ user.FIRST_NAME }}" required>
             </div>
 
             <div class="d-flex form-div">
-                <label class="profile-form-label" for="lastName">Last Name: </label>
-                <input class="form-control" type="text" name="lastName" id="lastName" value="{{ user.LAST_NAME }}" required>
+                <label class="profile-form-label" for="last_name">Last Name: </label>
+                <input class="form-control" type="text" name="last_name" id="last_name" value="{{ user.LAST_NAME }}" required>
             </div>
 
             <div class="d-flex form-div">
@@ -34,8 +34,8 @@
             </div>
 
             <div class="d-flex form-div">
-                <label class="profile-form-label" for="phoneNumber">Phone Number:</label>
-                <input class="form-control" type="tel" name="phoneNumber" id="phoneNumber" value="{{ user.PHONE_NUMBER }}" required>
+                <label class="profile-form-label" for="phone_number">Phone Number:</label>
+                <input class="form-control" type="tel" name="phone_number" id="phone_number" value="{{ user.PHONE_NUMBER }}" required>
             </div>
 
             <div class="d-flex form-div">
@@ -45,7 +45,7 @@
 
             <div class="d-flex form-div">
                 <label class="profile-form-label" for="dateOfBirth">Date of Birth:</label>
-                <input class="form-control" type="date" name="dateOfBirth" id="dateOfBirth" value="{{ user.BIRTH_DATE|html_date }}" required>
+                <input class="form-control" type="date" name="birth_date" id="birth_date" value="{{ user.BIRTH_DATE|html_date }}" required>
             </div>
 
             {% if user.ROLE == 'TA' %}
