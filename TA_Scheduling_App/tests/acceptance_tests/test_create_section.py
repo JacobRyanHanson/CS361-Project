@@ -13,36 +13,13 @@ def login_as_admin(client: Client):
                  PHONE_NUMBER='555-123-4567',
                  ADDRESS='123 Main St',
                  BIRTH_DATE=datetime.date(1990, 1, 1))
+
     admin.save()
+
     client.post("/", {
         "email": admin.EMAIL,
         "password": admin.PASSWORD_HASH
     })
-
-
-def create_test_objects(test_case):
-    test_case.user = User.objects.create(
-        ROLE='INSTRUCTOR',
-        FIRST_NAME='Alice',
-        LAST_NAME='Smith',
-        EMAIL='alice.smith@example.com',
-        PASSWORD_HASH='<hashed_password>',
-        PHONE_NUMBER='555-987-6543',
-        ADDRESS='456 Elm St',
-        BIRTH_DATE=datetime.date(1985, 6, 15)
-    )
-    test_case.user.save()
-
-    test_case.course = Course.objects.create(
-        COURSE_NUMBER=101,
-        INSTRUCTOR=test_case.user,
-        COURSE_NAME='Introduction to Computer Science',
-        COURSE_DESCRIPTION='An introductory course to the world of computer science.',
-        SEMESTER='Fall 2023',
-        PREREQUISITES='',
-        DEPARTMENT='Computer Science'
-    )
-    test_case.course.save()
 
 
 class CreationSuccess(TestCase):
@@ -50,30 +27,34 @@ class CreationSuccess(TestCase):
     course = None
 
     def setUp(self):
-        self.monkey = Client()
-        login_as_admin(self.monkey)
-        create_test_objects(self)
+        self.client = Client()
+        login_as_admin(self.client)
+
+        self.course = Course.objects.create(
+            COURSE_NUMBER=101,
+            COURSE_NAME='Introduction to Computer Science',
+            COURSE_DESCRIPTION='An introductory course to the world of computer science.',
+            SEMESTER='Fall 2023',
+            PREREQUISITES='',
+            DEPARTMENT='Computer Science'
+        )
+
+        self.section_form_data = {
+            "section_type": "LAB",
+            "section_number": 901,
+            "course_id": self.course.COURSE_ID,
+            "building": 'Chemistry Building',
+            "room_number": '190',
+            "start_time": '13:00',
+            "end_time": '14:00',
+        }
 
     def test_created_updates_status(self):
-        response = self.monkey.post("/section-creation/", {"sectionNumber": 901,
-                                                           "courseID": self.course.COURSE_ID,
-                                                           "building": 'Chemistry Building',
-                                                           "roomNumber": '190',
-                                                           "startTimeH": '9',
-                                                           "startTimeM": '30',
-                                                           "endTimeH": '10',
-                                                           "endTimeM": '20'}, follow=True)
+        response = self.client.post("/section-creation/", self.section_form_data, follow=True)
         self.assertEqual(response.context['status'], 'Successfully created the section.')
 
     def test_created_updates_database(self):
-        self.monkey.post("/section-creation/", {"sectionNumber": 901,
-                                                "courseID": self.course.COURSE_ID,
-                                                "building": 'Chemistry Building',
-                                                "roomNumber": '190',
-                                                "startTimeH": '9',
-                                                "startTimeM": '30',
-                                                "endTimeH": '10',
-                                                "endTimeM": '20'}, follow=True)
+        self.client.post("/section-creation/", self.section_form_data, follow=True)
         section = Section.objects.get(SECTION_NUMBER=901)
         self.assertEqual(section.COURSE_id, self.course.COURSE_ID)
 
@@ -83,31 +64,37 @@ class InvalidSection(TestCase):
     course = None
 
     def setUp(self):
-        self.monkey = Client()
-        login_as_admin(self.monkey)
-        create_test_objects(self)
+        self.client = Client()
+        login_as_admin(self.client)
+
+        self.course = Course.objects.create(
+            COURSE_NUMBER=101,
+            COURSE_NAME='Introduction to Computer Science',
+            COURSE_DESCRIPTION='An introductory course to the world of computer science.',
+            SEMESTER='Fall 2023',
+            PREREQUISITES='',
+            DEPARTMENT='Computer Science'
+        )
+
+        self.section_form_data = {
+            "section_type": "LAB",
+            "section_number": 901,
+            "course_id": self.course.COURSE_ID,
+            "building": 'Chemistry Building',
+            "room_number": '190',
+            "start_time": '13:00',
+            "end_time": '14:00',
+        }
 
     def test_missing_info(self):
-        response = self.monkey.post("/section-creation/", {"sectionNumber": 901,
-                                                           "courseID": self.course.COURSE_ID,
-                                                           "building": '',
-                                                           "roomNumber": '190',
-                                                           "startTimeH": '9',
-                                                           "startTimeM": '30',
-                                                           "endTimeH": '10',
-                                                           "endTimeM": '20'}, follow=True)
-        self.assertEqual(str(response.context['status']), 'Invalid building')
+        self.section_form_data['building'] = ""
+        response = self.client.post("/section-creation/", self.section_form_data, follow=True)
+        self.assertEqual(str(response.context['status']), 'Invalid building.')
 
     def test_invalid_section(self):
-        response = self.monkey.post("/section-creation/", {"sectionNumber": '',
-                                                           "courseID": self.course.COURSE_ID,
-                                                           "building": 'Chemistry Building',
-                                                           "roomNumber": '190',
-                                                           "startTimeH": '9',
-                                                           "startTimeM": '30',
-                                                           "endTimeH": '10',
-                                                           "endTimeM": '20'}, follow=True)
-        self.assertEqual(str(response.context['status']), 'Invalid section number')
+        self.section_form_data['section_number'] = ""
+        response = self.client.post("/section-creation/", self.section_form_data, follow=True)
+        self.assertEqual(str(response.context['status']), 'Invalid section number.')
 
 
 class InvalidAssociatedCourse(TestCase):
@@ -115,28 +102,34 @@ class InvalidAssociatedCourse(TestCase):
     course = None
 
     def setUp(self):
-        self.monkey = Client()
-        login_as_admin(self.monkey)
-        create_test_objects(self)
+        self.client = Client()
+        login_as_admin(self.client)
+
+        self.course = Course.objects.create(
+            COURSE_NUMBER=101,
+            COURSE_NAME='Introduction to Computer Science',
+            COURSE_DESCRIPTION='An introductory course to the world of computer science.',
+            SEMESTER='Fall 2023',
+            PREREQUISITES='',
+            DEPARTMENT='Computer Science'
+        )
+
+        self.section_form_data = {
+            "section_type": "LAB",
+            "section_number": 901,
+            "course_id": self.course.COURSE_ID,
+            "building": 'Chemistry Building',
+            "room_number": '190',
+            "start_time": '13:00',
+            "end_time": '14:00',
+        }
 
     def test_bad_course_id(self):
-        response = self.monkey.post("/section-creation/", {"sectionNumber": 901,
-                                                           "courseID": '-2',
-                                                           "building": 'Chemistry Building',
-                                                           "roomNumber": '190',
-                                                           "startTimeH": '9',
-                                                           "startTimeM": '30',
-                                                           "endTimeH": '10',
-                                                           "endTimeM": '20'}, follow=True)
-        self.assertEqual(response.context['status'], 'The course with id -2 does not exist.')
+        self.section_form_data['course_id'] = "-2"
+        response = self.client.post("/section-creation/", self.section_form_data, follow=True)
+        self.assertEqual(response.context['status'], 'The course does not exist.')
 
     def test_empty_course_id(self):
-        response = self.monkey.post("/section-creation/", {"sectionNumber": 901,
-                                                           "courseID": '',
-                                                           "building": 'Chemistry Building',
-                                                           "roomNumber": '190',
-                                                           "startTimeH": '9',
-                                                           "startTimeM": '30',
-                                                           "endTimeH": '10',
-                                                           "endTimeM": '20'}, follow=True)
+        self.section_form_data['course_id'] = ""
+        response = self.client.post("/section-creation/", self.section_form_data, follow=True)
         self.assertEqual(str(response.context['status']), "Field 'COURSE_ID' expected a number but got ''.")
