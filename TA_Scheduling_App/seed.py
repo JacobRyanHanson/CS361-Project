@@ -163,6 +163,16 @@ def insert_data():
         SECTION_END=time(15, 15)
     )
 
+    section_5 = Section.objects.create(
+        SECTION_TYPE="LAB",
+        SECTION_NUMBER=5,
+        COURSE=course_4,
+        BUILDING='Science Building',
+        ROOM_NUMBER='107',
+        SECTION_START=time(12, 0),
+        SECTION_END=time(13, 15)
+    )
+
     # Assign an instructor to course 1
     course_assignment_1 = CourseAssignment.objects.create(
         COURSE=course_1,

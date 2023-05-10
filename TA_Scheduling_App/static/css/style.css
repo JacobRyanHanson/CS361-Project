@@ -254,7 +254,11 @@ form[name="user-id"],
   width: 100% !important;
 }
 
-/* ------------------------ Account User Management Page ------------------------*/
+#skills {
+  min-height: 100px;
+}
+
+/* ------------------------ User Management Page ------------------------*/
 
 #user-management-header {
   font-size: 24pt;

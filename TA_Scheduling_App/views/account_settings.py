@@ -1,5 +1,6 @@
 import datetime
 from django.core.exceptions import PermissionDenied
+from django.db import IntegrityError
 from django.shortcuts import render, redirect
 from django.views import View
 from TA_Scheduling_App.models import User
@@ -13,7 +14,7 @@ class AccountSettings(View):
 
         # get known profile information for user
         user = User.objects.get(USER_ID=request.session["user_id"])
-        return render(request, "account-settings.html", {'initial': user})
+        return render(request, "account-settings.html", {'user': user})
 
     def post(self, request):
         # user has requested a profile update
@@ -24,20 +25,22 @@ class AccountSettings(View):
         user = User.objects.get(USER_ID=request.session["user_id"])
 
         # validate information provided by user
-        first_name = request.POST["firstName"]
-        last_name = request.POST["lastName"]
+        first_name = request.POST["first_name"]
+        last_name = request.POST["last_name"]
         email = request.POST["email"]
-        phone_number = request.POST["phoneNumber"]
+        phone_number = request.POST["phone_number"]
         address = request.POST["address"]
+        birth_date = request.POST["birth_date"]
         skills = request.POST["skills"]
 
-        _birth_date = request.POST["dateOfBirth"]
-        try:
-            birth_date = datetime.date.fromisoformat(_birth_date)
-        except ValueError:
-            return render(request, "account-settings.html", {'initial': user, 'status': 'Invalid birth date'})
+        if skills == "":
+            skills = None
+
+        status = ""
 
         try:
+            birth_date = datetime.date.fromisoformat(birth_date)
+
             User(FIRST_NAME=first_name,
                  LAST_NAME=last_name,
                  EMAIL=email,
@@ -45,18 +48,22 @@ class AccountSettings(View):
                  ADDRESS=address,
                  BIRTH_DATE=birth_date,
                  SKILLS=skills)
+
+            # Information has been validated --> update object.
+            user.setFirstName(first_name)
+            user.setLastName(last_name)
+            user.setEmail(email)
+            user.setPhoneNumber(phone_number)
+            user.setAddress(address)
+            user.setBirthDate(birth_date)
+            user.setSkills(skills)
+
+            user.save()
+
+            status = "Your profile changes have been saved."
+        except IntegrityError:
+            status = "The email is already taken."
         except Exception as e:
-            return render(request, "account-settings.html", {'initial': user, 'status': e})
+            status = e
 
-        # information has been validated, update object
-        user.setFirstName(first_name)
-        user.setLastName(last_name)
-        user.setEmail(email)
-        user.setPhoneNumber(phone_number)
-        user.setAddress(address)
-        user.setBirthDate(birth_date)
-        user.setSkills(skills)
-        user.save()
-
-        updated = "Your profile changes have been successfully saved."
-        return render(request, "account-settings.html", {'initial': user, 'status': updated})
+        return render(request, "account-settings.html", {'user': user, 'status': status})

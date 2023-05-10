@@ -110,8 +110,7 @@ class ViewAllSuccess(TestCase):
     def test_all_users_are_visible(self):
         for user in self.expected_users:
             for key, value in user.items():
-                self.assertIsNotNone(self.soup.find(lambda tag: contains_text(tag, value)),
-                                     f"{key} {value} not found")
+                self.assertIsNotNone(self.soup.find(lambda tag: contains_text(tag, value)), f"{key} {value} not found")
 
     def test_no_extra_users_exist(self):
         # Check for any unexpected users

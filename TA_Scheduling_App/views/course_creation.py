@@ -25,13 +25,15 @@ class CourseCreation(View):
         if request.session.get("user_role") != "ADMIN":
             raise PermissionDenied("You are not permitted to create courses.")
 
-        course_number = request.POST['courseNumber']
-        instructor_id = request.POST['instructorID']
-        course_name = request.POST['courseName']
-        course_description = request.POST['courseDescription']
+        course_number = request.POST['course_number']
+        instructor_id = request.POST['instructor_id']
+        course_name = request.POST['course_name']
+        course_description = request.POST['course_description']
         semester = request.POST['semester']
         prerequisites = request.POST['prerequisites']
         department = request.POST['department']
+
+        status = ""
 
         try:
             course = Course(COURSE_NUMBER=course_number,
@@ -42,14 +44,13 @@ class CourseCreation(View):
                             DEPARTMENT=department)
             course.save()
 
-            if instructor_id != 'None':
-                instructor = User.objects.get(USER_ID=instructor_id)
-                course_assignment = CourseAssignment(COURSE=course, USER=instructor)
-                course_assignment.save()
+            instructor = User.objects.get(USER_ID=instructor_id)
+            course_assignment = CourseAssignment(COURSE=course, USER=instructor)
+            course_assignment.save()
 
-            status = "Successfully created the course."
+            status = f"Successfully created course {course.COURSE_NAME}."
         except User.DoesNotExist:
-            status = f'The instructor with id {instructor_id} does not exist.'
+            status = f'The instructor does not exist.'
         except Exception as e:
             status = e
 

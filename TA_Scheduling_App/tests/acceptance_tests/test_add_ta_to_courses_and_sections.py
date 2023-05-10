@@ -1,9 +1,9 @@
 from datetime import date, time
 
 from django.test import TestCase, Client
-from TA_Scheduling_App.models import Course, Section, User, CourseAssignment, SectionAssignment
+from TA_Scheduling_App.models import Course, Section, User, CourseAssignment
 
-class AddSuccess(TestCase):
+class AddTASuccess(TestCase):
     def setUp(self):
         self.client = Client()
 
@@ -47,7 +47,6 @@ class AddSuccess(TestCase):
 
         self.course = Course(
             COURSE_NUMBER=151,
-            INSTRUCTOR=self.instructor,
             COURSE_NAME='Introduction to Computer Science',
             COURSE_DESCRIPTION='An introductory course to the world of computer science.',
             SEMESTER='Fall 2023',
@@ -70,19 +69,18 @@ class AddSuccess(TestCase):
 
         self.course_assignment_form_data = {
             'course_id': 1,
-            'course_ta_email': 'ta@example.com',
-            'course_ta_select': 'true'
+            'course_ta_id': 3,
+            'course_ta_grader_status': 'True'
         }
 
         self.section_assignment_form_data = {
             'course_id': 1,
-            'section_ta_email': 'ta@example.com',
-            'section_id': 1
+            'section_id': 1,
+            'section_ta_id': 3
         }
 
         self.other_course = Course(
             COURSE_NUMBER=178,
-            INSTRUCTOR=self.instructor,
             COURSE_NAME='New Introduction to Computer Science',
             COURSE_DESCRIPTION='An introductory course to the world of computer science.',
             SEMESTER='Fall 2023',
@@ -117,20 +115,19 @@ class AddSuccess(TestCase):
     def test_assign_ta_to_section(self):
         response = self.client.post("/ta-assignments/", self.course_assignment_form_data, follow=True)
         response = self.client.post("/ta-assignments/", self.section_assignment_form_data, follow=True)
-        self.assertEqual(response.context['status'], f'TA {self.ta.FIRST_NAME} {self.ta.LAST_NAME} assigned to section {self.section.SECTION_NUMBER}.')
+        self.assertEqual(response.context['status'], f'TA {self.ta.FIRST_NAME} {self.ta.LAST_NAME} assigned to section.')
 
     def test_assign_ta_to_multiple_courses(self):
         response = self.client.post("/ta-assignments/", self.course_assignment_form_data, follow=True)
 
         other_course_assignment_form_data = {
             'course_id': 2,
-            'course_ta_email': 'ta@example.com',
-            'course_ta_select': 'true'
+            'course_ta_id': 3,
+            'course_ta_grader_status': 'True'
         }
 
         response = self.client.post("/ta-assignments/", other_course_assignment_form_data, follow=True)
         self.assertEqual(response.context['status'], f'TA {self.ta.FIRST_NAME} {self.ta.LAST_NAME} assigned to course {self.other_course.COURSE_NAME}.')
-
 
     def test_assign_ta_to_multiple_sections(self):
         response = self.client.post("/ta-assignments/", self.course_assignment_form_data, follow=True)
@@ -138,13 +135,15 @@ class AddSuccess(TestCase):
 
         other_section_assignment_form_data = {
             'course_id': 1,
-            'section_ta_email': 'ta@example.com',
-            'section_id': 2
+            'section_id': 2,
+            'section_ta_id': 3
         }
 
         response = self.client.post("/ta-assignments/", other_section_assignment_form_data, follow=True)
-        self.assertEqual(response.context['status'], f'TA {self.ta.FIRST_NAME} {self.ta.LAST_NAME} assigned to section {self.other_section.SECTION_NUMBER}.')
-class AddWithBadInput(TestCase):
+        self.assertEqual(response.context['status'], f'TA {self.ta.FIRST_NAME} {self.ta.LAST_NAME} assigned to section.')
+
+
+class AddTAWithBadInput(TestCase):
     def setUp(self):
         self.client = Client()
 
@@ -188,7 +187,6 @@ class AddWithBadInput(TestCase):
 
         self.course = Course(
             COURSE_NUMBER=151,
-            INSTRUCTOR=self.instructor,
             COURSE_NAME='Introduction to Computer Science',
             COURSE_DESCRIPTION='An introductory course to the world of computer science.',
             SEMESTER='Fall 2023',
@@ -209,10 +207,10 @@ class AddWithBadInput(TestCase):
 
         self.section.save()
 
-        self.invalid_ta_email_course_form_data = {
+        self.invalid_ta_course_form_data = {
             'course_id': 1,
-            'course_ta_email': 'wrongta@example.com',
-            'course_ta_select': 'true'
+            'course_ta_id': -1,
+            'course_ta_grader_status': 'True'
         }
 
         self.credentials = {
@@ -225,8 +223,8 @@ class AddWithBadInput(TestCase):
     def test_blank_fields(self):
         blank_form_data = {
             'course_id': '',
-            'course_ta_email': '',
-            'course_ta_select': 'true'
+            'course_ta_id': '',
+            'course_ta_grader_status': 'True'
         }
 
         response = self.client.post("/ta-assignments/", blank_form_data, follow=True)
@@ -234,31 +232,32 @@ class AddWithBadInput(TestCase):
         self.assertEqual(response.context['status'], "An unexpected error occurred.")
 
     def test_invalid_ta_email_for_course_assignment(self):
-        response = self.client.post("/ta-assignments/", self.invalid_ta_email_course_form_data, follow=True)
-        self.assertEqual(response.context['status'], f'TA with email wrongta@example.com does not exist.')
+        response = self.client.post("/ta-assignments/", self.invalid_ta_course_form_data, follow=True)
+        self.assertEqual(response.context['status'], f'TA does not exist.')
 
     def test_invalid_ta_email_for_section_assignment(self):
-        invalid_ta_email_section_form_data = {
+        invalid_ta_section_form_data = {
             'course_id': 1,
-            'section_ta_email': 'wrongta@example.com',
-            'section_id': 1
+            'section_id': 1,
+            'section_ta_id': -1
         }
 
-        response = self.client.post("/ta-assignments/", self.invalid_ta_email_course_form_data, follow=True)
-        response = self.client.post("/ta-assignments/", invalid_ta_email_section_form_data, follow=True)
-        self.assertEqual(response.context['status'], f'TA with email wrongta@example.com does not exist.')
+        response = self.client.post("/ta-assignments/", self.invalid_ta_course_form_data, follow=True)
+        response = self.client.post("/ta-assignments/", invalid_ta_section_form_data, follow=True)
+        self.assertEqual(response.context['status'], f'TA does not exist.')
 
     def test_invalid_ta_grader_status(self):
-        invalid_ta_grader_status_form_data = {
+        invalid_ta_section_form_data = {
             'course_id': 1,
-            'course_ta_email': self.ta.EMAIL,
-            'course_ta_select': "aaaa"
+            'course_ta_id': 3,
+            'course_ta_grader_status': "aaaa"
         }
 
-        response = self.client.post("/ta-assignments/", invalid_ta_grader_status_form_data, follow=True)
+        response = self.client.post("/ta-assignments/", invalid_ta_section_form_data, follow=True)
         # Allow assignment but set grader status to false.
         self.assertEqual(response.context['status'], f'TA {self.ta.FIRST_NAME} {self.ta.LAST_NAME} assigned to course {self.course.COURSE_NAME}.')
-        self.assertEqual(False, CourseAssignment.objects.get(TA=self.ta).IS_GRADER)
+        self.assertEqual(False, CourseAssignment.objects.get(USER=self.ta).IS_GRADER)
+
 
 class InvalidSectionAssignment(TestCase):
     def setUp(self):
@@ -304,7 +303,6 @@ class InvalidSectionAssignment(TestCase):
 
         self.course = Course(
             COURSE_NUMBER=151,
-            INSTRUCTOR=self.instructor,
             COURSE_NAME='Introduction to Computer Science',
             COURSE_DESCRIPTION='An introductory course to the world of computer science.',
             SEMESTER='Fall 2023',
@@ -316,7 +314,6 @@ class InvalidSectionAssignment(TestCase):
 
         self.other_course = Course(
             COURSE_NUMBER=760,
-            INSTRUCTOR=self.instructor,
             COURSE_NAME='Introduction to Computer Science',
             COURSE_DESCRIPTION='An introductory course to the world of computer science.',
             SEMESTER='Fall 2023',
@@ -339,20 +336,20 @@ class InvalidSectionAssignment(TestCase):
 
         self.course_assignment_form_data = {
             'course_id': 1,
-            'course_ta_email': 'ta@example.com',
-            'course_ta_select': 'true'
+            'course_ta_id': 3,
+            'course_ta_grader_status': 'True'
         }
 
         self.other_course_assignment_form_data = {
             'course_id': 2,
-            'course_ta_email': 'ta@example.com',
-            'course_ta_select': 'true'
+            'course_ta_id': 3,
+            'course_ta_grader_status': 'True'
         }
 
         self.section_assignment_form_data = {
             'course_id': 1,
-            'section_ta_email': 'ta@example.com',
-            'section_id': 1
+            'section_id': 1,
+            'section_ta_id': 3,
         }
 
         self.credentials = {
@@ -376,15 +373,13 @@ class InvalidSectionAssignment(TestCase):
     def test_assign_ta_to_unrelated_section_and_section_does_not_exist(self):
         section_assignment_form_data = {
             'course_id': 1,
-            'section_ta_email': 'ta@example.com',
-            'section_id': 99
+            'section_id': 99,
+            'section_ta_id': 3,
         }
 
-        # Assign TA to a course.
         response = self.client.post("/ta-assignments/", self.course_assignment_form_data, follow=True)
-
-        with self.assertRaises(UnboundLocalError, msg="Section does not exist."):
-            response = self.client.post("/ta-assignments/", section_assignment_form_data, follow=True)
+        response = self.client.post("/ta-assignments/", section_assignment_form_data, follow=True)
+        self.assertEqual(response.context['status'], f'Section does not exist.')
 
 class InvalidDuplicateAssignment(TestCase):
     def setUp(self):
@@ -430,7 +425,6 @@ class InvalidDuplicateAssignment(TestCase):
 
         self.course = Course(
             COURSE_NUMBER=151,
-            INSTRUCTOR=self.instructor,
             COURSE_NAME='Introduction to Computer Science',
             COURSE_DESCRIPTION='An introductory course to the world of computer science.',
             SEMESTER='Fall 2023',
@@ -453,14 +447,14 @@ class InvalidDuplicateAssignment(TestCase):
 
         self.course_assignment_form_data = {
             'course_id': 1,
-            'course_ta_email': 'ta@example.com',
-            'course_ta_select': 'true'
+            'course_ta_id': 3,
+            'course_ta_grader_status': 'True'
         }
 
         self.section_assignment_form_data = {
             'course_id': 1,
-            'section_ta_email': 'ta@example.com',
-            'section_id': 1
+            'section_id': 1,
+            'section_ta_id': 3,
         }
 
         self.credentials = {
@@ -473,15 +467,14 @@ class InvalidDuplicateAssignment(TestCase):
     def test_duplicate_ta_assignment_to_course(self):
         response = self.client.post("/ta-assignments/", self.course_assignment_form_data, follow=True)
         response = self.client.post("/ta-assignments/", self.course_assignment_form_data, follow=True)
-        self.assertEqual(str(response.context['status']), "Duplicate assignment of TA to course failed")
+        self.assertEqual(str(response.context['status']), "Duplicate assignment of user to course failed.")
 
     def test_duplicate_ta_assignment_to_section(self):
-        # Assign TA to course
         response = self.client.post("/ta-assignments/", self.course_assignment_form_data, follow=True)
         # Duplicate section assignments
         response = self.client.post("/ta-assignments/", self.section_assignment_form_data, follow=True)
         response = self.client.post("/ta-assignments/", self.section_assignment_form_data, follow=True)
-        self.assertEqual(str(response.context['status']), "Duplicate assignment of TA to section failed")
+        self.assertEqual(str(response.context['status']), "Duplicate assignment of user to section failed.")
 
 
 

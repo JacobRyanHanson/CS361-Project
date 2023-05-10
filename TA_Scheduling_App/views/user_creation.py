@@ -22,28 +22,29 @@ class UserCreation(View):
             raise PermissionDenied("You are not permitted to create users.")
 
         role = request.POST['role']
-        first_name = request.POST['firstName']
-        last_name = request.POST['lastName']
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
         email = request.POST['email']
-        phone_number = request.POST['phoneNumber']
+        phone_number = request.POST['phone_number']
         address = request.POST['address']
+        birth_date = request.POST['birth_date']
 
-        birth_date = request.POST['birthDate']
-        birth_date = datetime.date.fromisoformat(birth_date)
+        status = ""
 
         try:
+            birth_date = datetime.date.fromisoformat(birth_date)
+
             user = User(ROLE=role,
                         FIRST_NAME=first_name,
                         LAST_NAME=last_name,
                         EMAIL=email,
-                        PASSWORD_HASH="<hashed_password>",
+                        PASSWORD_HASH="test",
                         PHONE_NUMBER=phone_number,
                         ADDRESS=address,
                         BIRTH_DATE=birth_date)
             user.save()
             status = "Successfully created the user."
-
-        except IntegrityError as e:
+        except IntegrityError:
             status = "Users with duplicate emails are not allowed."
         except Exception as e:
             status = e

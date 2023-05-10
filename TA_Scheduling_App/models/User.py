@@ -30,34 +30,34 @@ class User(IString):
         passwordHash = kwargs.get('PASSWORD_HASH', Null())
 
         if passwordHash is None or (not isinstance(passwordHash, str) and not Null()):
-            raise ValueError("Invalid password")
+            raise ValueError("Invalid password.")
 
         if passwordHash is not Null():
             self.PASSWORD_HASH = passwordHash
 
         if not self.setRole(kwargs.get('ROLE', Null())):
-            raise ValueError("Invalid role")
+            raise ValueError("Invalid role.")
 
         if not self.setFirstName(kwargs.get('FIRST_NAME', Null())):
-            raise ValueError("Invalid first name")
+            raise ValueError("Invalid first name.")
 
         if not self.setLastName(kwargs.get('LAST_NAME', Null())):
-            raise ValueError("Invalid last name")
+            raise ValueError("Invalid last name.")
 
         if not self.setEmail(kwargs.get('EMAIL', Null())):
-            raise ValueError("Invalid email")
+            raise ValueError("Invalid email.")
 
         if not self.setPhoneNumber(kwargs.get('PHONE_NUMBER', Null())):
-            raise ValueError("Invalid phone number")
+            raise ValueError("Invalid phone number.")
 
         if not self.setAddress(kwargs.get('ADDRESS', Null())):
-            raise ValueError("Invalid address")
+            raise ValueError("Invalid address.")
 
         if not self.setBirthDate(kwargs.get('BIRTH_DATE', Null())):
-            raise ValueError("Invalid birth date")
+            raise ValueError("Invalid birth date.")
 
         if not self.setSkills(kwargs.get('SKILLS', Null())):
-            raise ValueError("Invalid list of skills")
+            raise ValueError("Invalid list of skills.")
 
     def setRole(self, role):
         if role is Null():

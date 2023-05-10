@@ -22,7 +22,7 @@ class CourseAssignment(IVerification):
         course = kwargs.get('COURSE', Null())
 
         if course is None or (not isinstance(course, Course) and not Null()):
-            raise ValueError("Invalid course")
+            raise ValueError("Invalid course.")
 
         if course is not Null():
             self.COURSE = course
@@ -30,17 +30,17 @@ class CourseAssignment(IVerification):
         user = kwargs.get('USER', Null())
 
         if (user is None) or (user is not Null() and user.ROLE == "ADMIN") or (not isinstance(user, User) and not Null()):
-            raise ValueError("Invalid User")
+            raise ValueError("Invalid User.")
 
         if user is not Null():
             self.USER = user
 
         if not self.setGrader(kwargs.get('IS_GRADER', Null())):
-            raise ValueError("Invalid isGrader")
+            raise ValueError("Invalid isGrader.")
 
         # Check for duplicate assignment
         if self.checkDuplicate(course, user):
-            raise ValueError("Duplicate assignment of TA to course failed")
+            raise ValueError("Duplicate assignment of user to course failed.")
 
     def setGrader(self, isGrader):
         if isGrader is Null():
