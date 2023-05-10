@@ -1,8 +1,8 @@
-from datetime import date, time
+from datetime import date
 
 from bs4 import BeautifulSoup
 from django.test import TestCase, Client
-from TA_Scheduling_App.models import Course, Section, User
+from TA_Scheduling_App.models import User
 
 def contains_text(tag, text):
     return tag.string is not None and text.strip() in tag.string.strip()
