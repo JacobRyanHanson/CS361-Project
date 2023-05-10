@@ -209,3 +209,123 @@ class InstructorAssignTADuplicateFail(TestCase):
         )
 
         self.assertTrue(all_ta_assignments.exists() and len(all_ta_assignments) == 1)
+
+class InstructorAssignImpossibleTA(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+        self.instructor = User(
+            ROLE='INSTRUCTOR',
+            FIRST_NAME='John',
+            LAST_NAME='Doe',
+            EMAIL='instructor@example.com',
+            PASSWORD_HASH='instructor_password',
+            PHONE_NUMBER='555-123-4567',
+            ADDRESS='1234 Elm St',
+            BIRTH_DATE=date(1970, 1, 1)
+        )
+
+        self.instructor.save()
+
+        self.credentials = {
+            "email": "instructor@example.com",
+            "password": "instructor_password"
+        }
+
+        self.ta_1 = User(
+            ROLE='TA',
+            FIRST_NAME='Jane',
+            LAST_NAME='Doe',
+            EMAIL='ta@example.com',
+            PASSWORD_HASH='ta_password',
+            PHONE_NUMBER='555-123-4567',
+            ADDRESS='1234 Elm St',
+            BIRTH_DATE=date(1995, 8, 30)
+        )
+
+        self.ta_1.save()
+
+        self.ta_2 = User(
+            ROLE='TA',
+            FIRST_NAME='James',
+            LAST_NAME='Smith',
+            EMAIL='ta_2@example.com',
+            PASSWORD_HASH='ta_password',
+            PHONE_NUMBER='555-123-4567',
+            ADDRESS='1234 Elm St',
+            BIRTH_DATE=date(1995, 8, 30)
+        )
+
+        self.ta_2.save()
+
+        self.course = Course.objects.create(
+            COURSE_NUMBER=648,
+            COURSE_NAME='Test Course',
+            COURSE_DESCRIPTION='A test course.',
+            SEMESTER='Fall 2023',
+            PREREQUISITES='',
+            DEPARTMENT='Computer Science'
+        )
+
+        self.course.save()
+
+        self.section = Section.objects.create(
+            SECTION_TYPE="LAB",
+            SECTION_NUMBER=894,
+            COURSE=self.course,
+            BUILDING='Tech Building',
+            ROOM_NUMBER='999',
+            SECTION_START=time(9, 30),
+            SECTION_END=time(10, 20)
+        )
+
+        self.section.save()
+
+        self.instructor_course_assignment = CourseAssignment.objects.create(
+            COURSE=self.course,
+            USER=self.instructor
+        )
+
+        self.instructor_course_assignment.save()
+
+        self.ta_course_assignment = CourseAssignment.objects.create(
+            COURSE=self.course,
+            USER=self.ta_1,
+            IS_GRADER=True
+        )
+
+        self.ta_course_assignment.save()
+
+        self.section_assignment_form_data = {
+            'course_id': 1,
+            'section_id': 1,
+            'section_ta_id': 3,
+        }
+
+        # Login as an instructor.
+        self.client.post("/", self.credentials, follow=True)
+
+    def test_check_ta_not_in_dropdown(self):
+        self.client.get("/ta-assignments/", follow=True)
+        response = self.client.post("/ta-assignments/", self.section_assignment_form_data, follow=True)
+        soup = BeautifulSoup(response.content, 'html.parser')
+        self.assertEqual(response.context['status'], 'The TA is not assigned to the course.')
+        self.assertIsNone(soup.find(lambda tag: contains_text(tag, f'{self.ta_2.FIRST_NAME} {self.ta_2.LAST_NAME}')), f'{self.ta_2.FIRST_NAME} {self.ta_2.LAST_NAME} was unexpectedly found')
+
+    def test_assign_nonexistent_ta(self):
+        nonexistent_ta_id = 999
+        self.section_assignment_form_data['section_ta_id'] = nonexistent_ta_id
+        response = self.client.post("/ta-assignments/", self.section_assignment_form_data, follow=True)
+        self.assertEqual(str(response.context['status']), 'TA does not exist.')
+
+    def test_no_new_ta_assignments_created(self):
+        nonexistent_ta_id = 999
+        self.section_assignment_form_data['section_ta_id'] = nonexistent_ta_id
+        response = self.client.post("/ta-assignments/", self.section_assignment_form_data, follow=True)
+        all_ta_assignments = SectionAssignment.objects.filter(
+            COURSE_ASSIGNMENT__USER__USER_ID=nonexistent_ta_id,
+            SECTION=self.section
+        )
+
+        self.assertFalse(all_ta_assignments.exists())
+
