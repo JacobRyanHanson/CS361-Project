@@ -29,32 +29,32 @@ class Section(IString, IVerification):
         course = kwargs.get('COURSE', Null())
 
         if course is None or (not isinstance(course, Course) and not Null()):
-            raise ValueError("Invalid course")
+            raise ValueError("Invalid course.")
 
         if course is not Null():
             self.COURSE = course
 
         if not self.setSectionType(kwargs.get('SECTION_TYPE', Null())):
-            raise ValueError("Invalid section type")
+            raise ValueError("Invalid section type.")
 
         result = self.setSectionNumber(kwargs.get('SECTION_NUMBER', Null()))
 
         if result == False:
-            raise ValueError("Invalid section number")
+            raise ValueError("Invalid section number.")
         elif result == None:
-            raise ValueError("Deplicate section number assignment failed")
+            raise ValueError("Deplicate section number assignment failed.")
 
         if not self.setBuilding(kwargs.get('BUILDING', Null())):
-            raise ValueError("Invalid building")
+            raise ValueError("Invalid building.")
 
         if not self.setRoomNumber(kwargs.get('ROOM_NUMBER', Null())):
-            raise ValueError("Invalid room number")
+            raise ValueError("Invalid room number.")
 
         if not self.setSectionStart(kwargs.get('SECTION_START', Null())):
-            raise ValueError("Invalid section start time")
+            raise ValueError("Invalid section start time.")
 
         if not self.setSectionEnd(kwargs.get('SECTION_END', Null())):
-            raise ValueError("Invalid section end time")
+            raise ValueError("Invalid section end time.")
 
     def setSectionType(self, sectionType):
         if sectionType is Null():

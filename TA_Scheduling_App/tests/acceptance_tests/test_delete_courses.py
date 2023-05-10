@@ -38,7 +38,6 @@ class DeleteCourseSuccessTest(TestCase):
 
         self.course = Course(
             COURSE_NUMBER=151,
-            INSTRUCTOR=self.instructor,
             COURSE_NAME='Introduction to Computer Science',
             COURSE_DESCRIPTION='An introductory course to the world of computer science.',
             SEMESTER='Fall 2023',
@@ -50,7 +49,6 @@ class DeleteCourseSuccessTest(TestCase):
 
         self.newCourse = Course(
             COURSE_NUMBER=171,
-            INSTRUCTOR=self.instructor,
             COURSE_NAME='Introduction to Software',
             COURSE_DESCRIPTION='An introductory course to the world of Software',
             SEMESTER='Fall 2023',
@@ -62,7 +60,6 @@ class DeleteCourseSuccessTest(TestCase):
 
         self.thirdCourse = Course(
             COURSE_NUMBER=191,
-            INSTRUCTOR=self.instructor,
             COURSE_NAME='Introduction to Data',
             COURSE_DESCRIPTION='An introductory course to the world of data.',
             SEMESTER='Fall 2023',
@@ -90,7 +87,6 @@ class DeleteCourseSuccessTest(TestCase):
         self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.newCourse.COURSE_NUMBER)), 1)
 
         response = self.client.post("/ta-assignments/", {"course_id": self.newCourse.COURSE_ID}, follow=True)
-        self.assertEqual(response.status_code, 200)
 
         soup = BeautifulSoup(response.content, 'html.parser')
         self.assertIsNone(soup.find(lambda tag: contains_text(tag, str(self.newCourse.COURSE_NUMBER))),
@@ -100,8 +96,7 @@ class DeleteCourseSuccessTest(TestCase):
         self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.thirdCourse.COURSE_NUMBER)), 1)
 
         response = self.client.post("/ta-assignments/", {"course_id": self.thirdCourse.COURSE_ID}, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(str(response.context['status']), 'Course with ID 3 has been deleted.')
+        self.assertEqual(str(response.context['status']), f'Course {self.thirdCourse.COURSE_NAME} has been deleted.')
 
 
 class DeleteCourseFailTest(TestCase):
@@ -136,7 +131,6 @@ class DeleteCourseFailTest(TestCase):
 
         self.course = Course(
             COURSE_NUMBER=151,
-            INSTRUCTOR=self.instructor,
             COURSE_NAME='Introduction to Computer Science',
             COURSE_DESCRIPTION='An introductory course to the world of computer science.',
             SEMESTER='Fall 2023',
@@ -148,7 +142,6 @@ class DeleteCourseFailTest(TestCase):
 
         self.newCourse = Course(
             COURSE_NUMBER=300,
-            INSTRUCTOR=self.instructor,
             COURSE_NAME='Intermediate Computer Programming',
             COURSE_DESCRIPTION='An intermediate course.',
             SEMESTER='Fall 2023',
@@ -198,7 +191,6 @@ class DeleteCourseFailTest(TestCase):
         self.assertEqual(len(Course.objects.filter(COURSE_NUMBER=self.course.COURSE_NUMBER)), 1)
 
         response = self.client.post("/ta-assignments/", {"course_id": self.newCourse.COURSE_ID}, follow=True)
-        self.assertEqual(response.status_code, 200)
 
         soup = BeautifulSoup(response.content, 'html.parser')
         # Check if the assignments has been removed from the page

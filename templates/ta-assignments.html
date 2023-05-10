@@ -14,258 +14,319 @@
     {% include 'partials/header.html' %}
 
     {# TA View #}
-    {% if role == 'TA' %}
-        <div class="main-container flex-column align-items-center">
+    {% if user.ROLE == 'TA' %}
+        <div class="main-container">
             <div class="status-message">{{ status }}</div>
 
-            {# TODO - Iterate through sections this TA is assigned to #}
-            {% for _ in "*" %}
-                <div class="table-container">
-                    <table class="table table-striped">
-                        <tr>
-                            <td>
-                                <h5 class="table-header">Section</h5>
-                            </td>
-                        </tr>
+            {% for course in courses %}
+                {% for section in course.sections %}
+                    {# Only show sections to which the TA is assigned. #}
+                    {% if section.assigned_ta.USER == user %}
+                        <div class="table-container">
+                            <table class="table table-striped">
+                                <tr>
+                                    <td>
+                                        <h5 class="table-header">Section</h5>
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                {# TODO - Get attributes of associated course #}
-                                Course Name:
-                                {{ course.DEPARTMENT }} {{ course.COURSE_NUMBER }} - {{ course.COURSE_NAME }}
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>
+                                        Course Name:
+                                        {{ course.DEPARTMENT }} {{ course.COURSE_NUMBER }} - {{ course.COURSE_NAME }}
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                Section Number:
-                                {{ section.SECTION_NUMBER }}
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>
+                                        Section Number:
+                                        {{ section.SECTION_NUMBER }}
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                Section Type:
-                                {{ section.SECTION_TYPE }}
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>
+                                        Section Type:
+                                        {{ section.SECTION_TYPE }}
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                TA Name:
-                                 {# TODO - Get name of TA #}
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>
+                                        TA Name:
+                                        {% if section.assigned_ta %}
+                                            {{ section.assigned_ta.USER.FIRST_NAME }}
+                                            {{ section.assigned_ta.USER.LAST_NAME }}
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                TA Email:
-                                 {# TODO - Get email of TA #}
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>
+                                        TA Email:
+                                        {% if section.assigned_ta %}
+                                            {{ section.assigned_ta.USER.EMAIL }}
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                Grader Status:
-                                {# TODO - Get grader status of current TA assigned to section #}
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>
+                                        Grader Status:
+                                        {% if section.assigned_ta %}
+                                            {{ section.assigned_ta.IS_GRADER }}
+                                        {% else %}
+                                            N/A
+                                        {% endif %}
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                Building:
-                                {{ section.BUILDING }}
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>
+                                        Building:
+                                        {{ section.BUILDING }}
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                Room Number:
-                                {{ section.ROOM_NUMBER }}
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>
+                                        Room Number:
+                                        {{ section.ROOM_NUMBER }}
+                                    </td>
+                                </tr>
 
-                        <tr>
-                            <td>
-                                Time:
-                                {{ section.SECTION_START }} - {{ section.SECTION_END }}
-                            </td>
-                        </tr>
-                    </table>
-                </div>
+                                <tr>
+                                    <td>
+                                        Time:
+                                        {{ section.SECTION_START }} - {{ section.SECTION_END }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
         </div>
     {% endif %}
 
     {# Instructor View #}
-    {% if role == 'INSTRUCTOR' %}
+    {% if user.ROLE == 'INSTRUCTOR' %}
         <div class="main-container">
             <div class="status-message">{{ status }}</div>
 
             {% for course in courses %}
-                <div class="table-container">
-                    <table class="table table-striped">
-                        <tr>
-                            <td>
-                                <h5 class="table-header">Course</h5>
-                            </td>
-                        </tr>
+                {# Only show courses to which the instructor is assigned. #}
+                {% if course.assigned_instructor.USER == user %}
+                    <div class="table-container">
+                        <table class="table table-striped">
+                            <tr>
+                                <td>
+                                    <h5 class="table-header">Course</h5>
+                                </td>
+                            </tr>
 
-                        <tr>
-                            <td>
-                                Course Name:
-                                {{ course.DEPARTMENT }} {{ course.COURSE_NUMBER }} - {{ course.COURSE_NAME }}
-                            </td>
-                        </tr>
+                            <tr>
+                                <td>
+                                    Course Name:
+                                    {{ course.DEPARTMENT }} {{ course.COURSE_NUMBER }} - {{ course.COURSE_NAME }}
+                                </td>
+                            </tr>
 
-                        <tr>
-                            <td>
-                                Instructor:
-                                {# TODO - Get from Course Assignment #}
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                Instructor Email:
-                                {# TODO - Get from Course Assignment #}
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                Description:
-                                {{ course.COURSE_DESCRIPTION }}
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                Semester:
-                                {{ course.SEMESTER }}
-                            </td>
-                        </tr>
-
-                        <tr class="b-last">
-                            <td>
-                                Prerequisites:
-                                {{ course.PREREQUISITES }}
-                            </td>
-                        </tr>
-                    </table>
-
-                    <div class="sub-wrapper">
-                        {% for section in course.section_set.all %}
-                            <div class="nested-table-container">
-                                <table class="table table-striped">
-                                    <tr>
-                                        <td>
-                                            <h5 class="table-header">Section</h5>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            Section Number:
-                                            {{ section.SECTION_NUMBER }}
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            Section Type:
-                                            {{ section.SECTION_TYPE }}
-                                        </td>
-                                    </tr>
-
-                                    {% if section.SECTION_TYPE == 'LAB' %}
-                                        <tr>
-                                            <td>
-                                               <form class="input-group" name="assignment-ta" action="" method="post">
-                                                    {% csrf_token %}
-                                                    <span class="t-label">TA:</span>
-                                                    <select name="section_ta_email" class="form-control" required>
-                                                        <option value="">Select</option>
-                                                        {# TODO - Get TAs assigned to course #}
-                                                    </select>
-                                                    <span class="input-group-btn">
-                                                        <button class="btn btn-primary form-btn" type="submit">Update</button>
-                                                    </span>
-                                                </form>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>
-                                                TA Email:
-                                                {# TODO - Get email of current TA assigned to section #}
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>
-                                                Grader Status:
-                                                {# TODO - Get grader status of current TA assigned to section #}
-                                            </td>
-                                        </tr>
+                            <tr>
+                                <td>
+                                    Instructor:
+                                    {% if course.assigned_instructor %}
+                                        {{ course.assigned_instructor.USER.FIRST_NAME }}
+                                        {{ course.assigned_instructor.USER.LAST_NAME }}
+                                    {% else %}
+                                        N/A
                                     {% endif %}
+                                </td>
+                            </tr>
 
-                                    {% if section.SECTION_TYPE == 'LECTURE' %}
-                                        <tr>
-                                            <td>
-                                               <form class="input-group" name="assignment-instructor" action="" method="post">
-                                                    {% csrf_token %}
-                                                    <span class="t-label">Instructor:</span>
-                                                    <select name="section_instructor_email" class="form-control" required>
-                                                        <option value="">Select</option>
-                                                        {# TODO - Get instructor assigned to section #}
-                                                    </select>
-                                                    <span class="input-group-btn">
-                                                        <button class="btn btn-primary form-btn" type="submit">Update</button>
-                                                    </span>
-                                                </form>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>
-                                                Instructor Email:
-                                                {# TODO - Get email of current instructor assigned to section #}
-                                            </td>
-                                        </tr>
+                            <tr>
+                                <td>
+                                    Instructor Email:
+                                    {% if course.assigned_instructor %}
+                                        {{ course.assigned_instructor.USER.EMAIL }}
+                                    {% else %}
+                                        N/A
                                     {% endif %}
+                                </td>
+                            </tr>
 
-                                    <tr>
-                                        <td>
-                                            Building:
-                                            {{ section.BUILDING }}
-                                        </td>
-                                    </tr>
+                            <tr>
+                                <td>
+                                    Description:
+                                    {{ course.COURSE_DESCRIPTION }}
+                                </td>
+                            </tr>
 
-                                    <tr>
-                                        <td>
-                                            Room Number:
-                                            {{ section.ROOM_NUMBER }}
-                                        </td>
-                                    </tr>
+                            <tr>
+                                <td>
+                                    Semester:
+                                    {{ course.SEMESTER }}
+                                </td>
+                            </tr>
 
-                                    <tr>
-                                        <td>
-                                            Time:
-                                            {{ section.SECTION_START }} - {{ section.SECTION_END }}
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        {% endfor %}
+                            <tr class="b-last">
+                                <td>
+                                    Prerequisites:
+                                    {{ course.PREREQUISITES }}
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div class="sub-wrapper">
+                            {% for section in course.sections %}
+                                <div class="nested-table-container">
+                                    <table class="table table-striped">
+                                        <tr>
+                                            <td>
+                                                <h5 class="table-header">Section</h5>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                Section Number:
+                                                {{ section.SECTION_NUMBER }}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                Section Type:
+                                                {{ section.SECTION_TYPE }}
+                                            </td>
+                                        </tr>
+
+                                        {% if section.SECTION_TYPE == 'LAB' %}
+                                            <tr>
+                                                <td>
+                                                   <form class="input-group" name="assignment-ta" action="" method="post">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
+                                                        <input type="hidden" name="section_id" value="{{ section.SECTION_ID }}">
+                                                        <span class="t-label">TA:</span>
+                                                        <select name="section_ta_id" class="form-control" required>
+                                                            <option value="None">None</option>
+                                                            {% for assignment in course.assigned_tas %}
+                                                                {# If the current user is the TA assigned to the section select them. #}
+                                                                {% if section.assigned_ta.USER == assignment.USER %}
+                                                                    <option title="{{ assignment.USER.EMAIL }}" value="{{ assignment.USER.USER_ID }}" selected="selected">
+                                                                {% else %}
+                                                                    <option title="{{ assignment.USER.EMAIL }}" value="{{ assignment.USER.USER_ID }}" >
+                                                                {% endif %}
+                                                                        {{ assignment.USER.FIRST_NAME }} {{ assignment.USER.LAST_NAME }}
+                                                                    </option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-primary form-btn" type="submit">Update</button>
+                                                        </span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    TA Email:
+                                                    {% if section.assigned_ta %}
+                                                        {{ section.assigned_ta.USER.EMAIL }}
+                                                    {% else %}
+                                                        N/A
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    Grader Status:
+                                                    {% if section.assigned_ta %}
+                                                        {{ section.assigned_ta.IS_GRADER }}
+                                                    {% else %}
+                                                        N/A
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+
+                                        {% if section.SECTION_TYPE == 'LECTURE' %}
+                                            <tr>
+                                                <td>
+                                                   <form class="input-group" name="assignment-instructor" action="" method="post">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
+                                                        <input type="hidden" name="section_id" value="{{ section.SECTION_ID }}">
+                                                        <span class="t-label">Instructor:</span>
+                                                        <select name="section_instructor_id" class="form-control" required>
+                                                            <option value="None">None</option>
+                                                            {% if section.assigned_instructor %}
+                                                                <option title="{{ section.assigned_instructor.USER.EMAIL }}" value="{{ section.assigned_instructor.USER.USER_ID }}" selected="selected">
+                                                                    {{ section.assigned_instructor.USER.FIRST_NAME }} {{ section.assigned_instructor.USER.LAST_NAME }}
+                                                                </option>
+                                                            {% else %}
+                                                                <option title="{{ course.assigned_instructor.USER.EMAIL }}" value="{{ course.assigned_instructor.USER.USER_ID }}">
+                                                                    {{ course.assigned_instructor.USER.FIRST_NAME }} {{ course.assigned_instructor.USER.LAST_NAME }}
+                                                                </option>
+                                                            {% endif %}
+                                                        </select>
+                                                        <span class="input-group-btn">
+                                                            <button class="btn btn-primary form-btn" type="submit">Update</button>
+                                                        </span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td>
+                                                    Instructor Email:
+                                                    {% if section.assigned_instructor %}
+                                                        {{ section.assigned_instructor.USER.EMAIL }}
+                                                    {% else %}
+                                                        N/A
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+
+                                        <tr>
+                                            <td>
+                                                Building:
+                                                {{ section.BUILDING }}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                Room Number:
+                                                {{ section.ROOM_NUMBER }}
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>
+                                                Time:
+                                                {{ section.SECTION_START }} - {{ section.SECTION_END }}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
+                {% endif %}
             {% endfor %}
         </div>
     {% endif %}
 
     {# Admin View #}
-    {% if role == 'ADMIN' %}
+    {% if user.ROLE == 'ADMIN' %}
         <div class="main-container">
             <div class="status-message">{{ status }}</div>
 
@@ -298,10 +359,17 @@
                                     {% csrf_token %}
                                     <span class="t-label">Instructor:</span>
                                     <select name="course_instructor_id" class="form-control" required>
-                                        <option>None</option>
-                                            {% for user in instructors %}
-                                                <option value="{{ user.USER_ID }}">{{ user.FIRST_NAME }} {{ user.LAST_NAME }}</option>
-                                            {% endfor %}
+                                        <option value="None">None</option>
+                                        {% for user in instructors %}
+                                            {# If the current user is the instructor assigned to the course then select them. #}
+                                            {% if course.assigned_instructor.USER == user %}
+                                                <option title="{{ user.EMAIL }}" value="{{ user.USER_ID }}"selected="selected">
+                                            {% else %}
+                                                <option title="{{ user.EMAIL }}" value="{{ user.USER_ID }}">
+                                            {% endif %}
+                                                {{ user.FIRST_NAME }} {{ user.LAST_NAME }}
+                                            </option>
+                                        {% endfor %}
                                     </select>
                                     <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
                                     <span class="input-group-btn">
@@ -314,13 +382,11 @@
                         <tr>
                             <td>
                                 Instructor Email:
-                                {% for assignment in course_assignments %}
-                                    {% if assignment.COURSE == course %}
-                                        {% if assignment.USER.ROLE == 'INSTRUCTOR' %}
-                                            {{ assignment.USER.EMAIL }}
-                                        {% endif %}
-                                    {% endif %}
-                                {% endfor %}
+                                {% if course.assigned_instructor %}
+                                    {{ course.assigned_instructor.USER.EMAIL }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
                             </td>
                         </tr>
 
@@ -353,9 +419,13 @@
                                 <tr>
                                     <td class="d-flex">
                                         <span class="t-label">TA:</span>
-                                        <select name="course_ta_email" class="form-control multi-row-input-1" required>
+                                        <select name="course_ta_id" class="form-control multi-row-input-1" required>
                                             <option value="">Select</option>
-                                            {# TODO - Get TAs not assigned to course #}
+                                            {% for user in course.unassigned_tas %}
+                                                <option title="{{ user.EMAIL }} &middot; {{ user.SKILLS }}" value="{{ user.USER_ID }}" >
+                                                    {{ user.FIRST_NAME }} {{ user.LAST_NAME }}
+                                                </option>
+                                            {% endfor %}
                                         </select>
                                         <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
                                     </td>
@@ -366,8 +436,8 @@
                                         <span class="t-label">Grader Status:</span>
                                         <select name="course_ta_grader_status" class="form-control multi-row-input-2" required>
                                             <option value="">Select</option>
-                                            <option value="true">True</option>
-                                            <option value="false">False</option>
+                                            <option value="True">True</option>
+                                            <option value="False">False</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -379,7 +449,7 @@
                     </div>
 
                     <div class="sub-wrapper">
-                        {% for section in course.section_set.all %}
+                        {% for section in course.sections %}
                             <div class="nested-table-container">
                                 <table class="table table-striped">
                                     <tr>
@@ -414,13 +484,20 @@
                                             <td>
                                                <form class="input-group" name="assignment-ta" action="" method="post">
                                                     {% csrf_token %}
+                                                    <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
+                                                    <input type="hidden" name="section_id" value="{{ section.SECTION_ID }}">
                                                     <span class="t-label">TA:</span>
-                                                    <select name="section_ta_email" class="form-control ta-select" required>
-                                                        <option value="">Select</option>
+                                                    <select name="section_ta_id" class="form-control ta-select" required>
+                                                        <option value="None">None</option>
                                                         {% for assignment in course.assigned_tas %}
-                                                            <option title="{{ assignment.USER.EMAIL }} &middot; {{ assignment.USER.SKILLS }}" value="{{ assignment.USER.EMAIL }}" >
-                                                                {{ assignment.USER.FIRST_NAME }} {{ assignment.USER.LAST_NAME }}
-                                                            </option>
+                                                            {# If the current user is the TA assigned to the section select them. #}
+                                                            {% if section.assigned_ta.USER == assignment.USER %}
+                                                                <option title="{{ assignment.USER.EMAIL }}" value="{{ assignment.USER.USER_ID }}" selected="selected">
+                                                            {% else %}
+                                                                <option title="{{ assignment.USER.EMAIL }}" value="{{ assignment.USER.USER_ID }}" >
+                                                            {% endif %}
+                                                                    {{ assignment.USER.FIRST_NAME }} {{ assignment.USER.LAST_NAME }}
+                                                                </option>
                                                         {% endfor %}
                                                     </select>
                                                     <span class="input-group-btn">
@@ -433,14 +510,22 @@
                                         <tr>
                                             <td>
                                                 TA Email:
-                                                {# TODO - Get email of current TA assigned to section #}
+                                                {% if section.assigned_ta %}
+                                                    {{ section.assigned_ta.USER.EMAIL }}
+                                                {% else %}
+                                                    N/A
+                                                {% endif %}
                                             </td>
                                         </tr>
 
                                         <tr>
                                             <td>
                                                 Grader Status:
-                                                {# TODO - Get grader status of current TA assigned to section #}
+                                                {% if section.assigned_ta %}
+                                                    {{ section.assigned_ta.IS_GRADER }}
+                                                {% else %}
+                                                    N/A
+                                                {% endif %}
                                             </td>
                                         </tr>
                                     {% endif %}
@@ -450,10 +535,20 @@
                                             <td>
                                                <form class="input-group" name="assignment-instructor" action="" method="post">
                                                     {% csrf_token %}
+                                                    <input type="hidden" name="course_id" value="{{ course.COURSE_ID }}">
+                                                    <input type="hidden" name="section_id" value="{{ section.SECTION_ID }}">
                                                     <span class="t-label">Instructor:</span>
-                                                    <select name="section_instructor_email" class="form-control" required>
-                                                        <option value="">Select</option>
-                                                        {# TODO - Get instructor assigned to section #}
+                                                    <select name="section_instructor_id" class="form-control" required>
+                                                        <option value="None">None</option>
+                                                        {% if section.assigned_instructor %}
+                                                            <option title="{{ section.assigned_instructor.USER.EMAIL }}" value="{{ section.assigned_instructor.USER.USER_ID }}" selected="selected">
+                                                                {{ section.assigned_instructor.USER.FIRST_NAME }} {{ section.assigned_instructor.USER.LAST_NAME }}
+                                                            </option>
+                                                        {% elif course.assigned_instructor %}
+                                                            <option title="{{ course.assigned_instructor.USER.EMAIL }}" value="{{ course.assigned_instructor.USER.USER_ID }}">
+                                                                {{ course.assigned_instructor.USER.FIRST_NAME }} {{ course.assigned_instructor.USER.LAST_NAME }}
+                                                            </option>
+                                                        {% endif %}
                                                     </select>
                                                     <span class="input-group-btn">
                                                         <button class="btn btn-primary form-btn" type="submit">Update</button>
@@ -465,7 +560,11 @@
                                         <tr>
                                             <td>
                                                 Instructor Email:
-                                                {# TODO - Get email of current instructor assigned to section #}
+                                                {% if section.assigned_instructor %}
+                                                    {{ section.assigned_instructor.USER.EMAIL }}
+                                                {% else %}
+                                                    N/A
+                                                {% endif %}
                                             </td>
                                         </tr>
                                     {% endif %}

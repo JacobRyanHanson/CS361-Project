@@ -107,9 +107,9 @@ class DeleteUserSuccess(TestCase):
         ]
 
     def test_delete_users(self):
-        for i, user in enumerate(self.deletable_users, 1):
+        for i, user in enumerate(self.deletable_users, 2):
             response = self.client.post("/user-management/", {'delete_user_id': i}, follow=True)
-            self.assertEqual(response.context['status'], f'User with ID {i} has been deleted.')
+            self.assertEqual(response.context['status'], f'User {user["FIRST_NAME"]} {user["LAST_NAME"]} has been deleted.')
 
     def test_user_count_after_deletion(self):
         initial_user_count = User.objects.count()
@@ -257,7 +257,7 @@ class AdminNotAbleToDeleteSelf(TestCase):
         # Send a request to delete the current admin user (who is currently logged-in)
         response = self.client.post("/user-management/", {'delete_user_id': 1}, follow=True)
         # Current expected behavior although ideally an error would be thrown.
-        self.assertEqual(response.context['status'], f'User with ID 1 has been deleted.')
+        self.assertEqual(response.context['status'], f'User {self.admin.FIRST_NAME} {self.admin.LAST_NAME} has been deleted.')
 
 class TestUserDeletionSideEffects(TestCase):
     def setUp(self):
@@ -303,7 +303,6 @@ class TestUserDeletionSideEffects(TestCase):
 
         self.course = Course(
             COURSE_NUMBER=151,
-            INSTRUCTOR=self.instructor,
             COURSE_NAME='Introduction to Computer Science',
             COURSE_DESCRIPTION='An introductory course to the world of computer science.',
             SEMESTER='Fall 2023',
@@ -324,16 +323,16 @@ class TestUserDeletionSideEffects(TestCase):
 
         self.section.save()
 
-        self.course_assignment_form_data = {
+        self.course_assignment_ta_form_data = {
             'course_id': 1,
-            'course_ta_email': 'ta@example.com',
-            'course_ta_select': 'true'
+            'course_ta_id': 3,
+            'course_ta_grader_status': 'True'
         }
 
-        self.section_assignment_form_data = {
+        self.section_assignment_ta_form_data = {
             'course_id': 1,
-            'section_ta_email': 'ta@example.com',
-            'section_id': 1
+            'section_id': 1,
+            'section_ta_id': 3,
         }
 
         self.credentials = {
@@ -345,10 +344,10 @@ class TestUserDeletionSideEffects(TestCase):
 
     def test_remove_assigned_ta(self):
         # Assign TA to a course and section
-        response = self.client.post("/ta-assignments/", self.course_assignment_form_data, follow=True)
-        response = self.client.post("/ta-assignments/", self.section_assignment_form_data, follow=True)
+        response = self.client.post("/ta-assignments/", self.course_assignment_ta_form_data, follow=True)
+        response = self.client.post("/ta-assignments/", self.section_assignment_ta_form_data, follow=True)
 
-        course_assignment = CourseAssignment.objects.get(TA=self.ta)
+        course_assignment = CourseAssignment.objects.get(USER=self.ta)
         section_assignment = SectionAssignment.objects.get(COURSE_ASSIGNMENT=course_assignment)
         self.assertIsNotNone(section_assignment)
 
@@ -361,7 +360,7 @@ class TestUserDeletionSideEffects(TestCase):
     def test_remove_assigned_instructor(self):
         instructor_assignment_form_data = {
             'course_id': 1,
-            'course_instructor': 'instructor@example.com',
+            'course_instructor_id': 2,
         }
 
         # Assign instructor to course
@@ -369,8 +368,8 @@ class TestUserDeletionSideEffects(TestCase):
 
         self.instructor.delete()
 
-        # Check if the course instructor was set to None
-        course = Course.objects.get(COURSE_ID=1)
-        self.assertEqual(None, course.INSTRUCTOR)
+        # Check if there is no CourseAssignment with an instructor for that course
+        instructor_assignment_exists = CourseAssignment.objects.filter(COURSE__COURSE_ID=1, USER__ROLE="INSTRUCTOR").exists()
+        self.assertFalse(instructor_assignment_exists)
 
 
