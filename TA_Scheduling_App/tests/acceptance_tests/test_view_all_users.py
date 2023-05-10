@@ -4,8 +4,10 @@ from bs4 import BeautifulSoup
 from django.test import TestCase, Client
 from TA_Scheduling_App.models import Course, Section, User
 
+
 def contains_text(tag, text):
     return tag.string is not None and text.strip() in tag.string.strip()
+
 
 class ViewAllSuccess(TestCase):
     def setUp(self):
@@ -123,6 +125,7 @@ class ViewAllSuccess(TestCase):
             }
             self.assertIn(user_data, self.expected_users, f"Unexpected user found: {user_data}")
 
+
 class ViewAllFail(TestCase):
     def setUp(self):
         self.client = Client()
@@ -225,7 +228,8 @@ class ViewAllFail(TestCase):
         users = User.objects.all()
 
         if len(users) == 1:  # Only the admin user exists
-            self.assertIsNone(self.soup.find(lambda tag: tag.name == "h5" and contains_text(tag, "User")), "A user was found")
+            self.assertIsNone(self.soup.find(lambda tag: tag.name == "h5" and contains_text(tag, "User")),
+                              "A user was found")
 
     def test_user_not_visible_when_deleted(self):
         self.admin.delete()
@@ -237,8 +241,5 @@ class ViewAllFail(TestCase):
         self.soup = BeautifulSoup(self.response.content, 'html.parser')
 
         for user in self.expected_users:
-            self.assertIsNone(self.soup.find(lambda tag: contains_text(tag, user['FIRST_NAME'])), "Deleted user was found")
-
-
-
-
+            self.assertIsNone(self.soup.find(lambda tag: contains_text(tag, user['FIRST_NAME'])),
+                              "Deleted user was found")
