@@ -1,5 +1,5 @@
 from django.test import TestCase, Client
-from TA_Scheduling_App.models import Course, Section, User, SectionAssignment, CourseAssignment
+from TA_Scheduling_App.models import Course, Section, User, CourseAssignment
 from bs4 import BeautifulSoup
 from datetime import date, time
 
