@@ -62,7 +62,7 @@ class LoadSuccess(TestCase):
 
         self.response = self.client.get("/account-settings/", follow=True)
 
-        self.soup = BeautifulSoup(self.response.content)
+        self.soup = BeautifulSoup(self.response.content, 'html.parser')
 
     def test_auth_success(self):
         # is the account settings page viewable for a logged in user?
@@ -106,7 +106,7 @@ class UpdateFail(TestCase):
 
         self.response = self.client.get("/account-settings/", follow=True)
 
-        self.soup = BeautifulSoup(self.response.content)
+        self.soup = BeautifulSoup(self.response.content, 'html.parser')
 
     def test_invalid_first_name(self):
         self.ta_form_data["first_name"] = "1234"
@@ -165,10 +165,6 @@ class UpdateSuccess(TestCase):
         }
 
         login_user(self.client, self.ta)
-        #
-        # self.response = self.client.get("/account-settings/", follow=True)
-        #
-        # self.soup = BeautifulSoup(self.response.content)
 
     def test_valid_submission(self):
         response = self.client.post("/account-settings/", self.ta_form_data, follow=True)
@@ -187,7 +183,7 @@ class UpdateSuccess(TestCase):
 
         response = self.client.post("/account-settings/", new_ta_form_data, follow=True)
 
-        soup = BeautifulSoup(response.content)
+        soup = BeautifulSoup(response.content, 'html.parser')
 
         for key, value in new_ta_form_data.items():
             if key is not "skills":
