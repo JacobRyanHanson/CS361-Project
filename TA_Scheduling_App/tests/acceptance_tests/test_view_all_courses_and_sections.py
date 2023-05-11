@@ -56,6 +56,7 @@ class ViewAllSuccess(TestCase):
         self.courses = [course_1, course_2]
 
         section1 = Section.objects.create(
+            SECTION_TYPE="LAB",
             SECTION_NUMBER=1,
             COURSE=course_1,
             BUILDING='Tech Building',
@@ -65,6 +66,7 @@ class ViewAllSuccess(TestCase):
         )
 
         section2 = Section.objects.create(
+            SECTION_TYPE="LAB",
             SECTION_NUMBER=2,
             COURSE=course_1,
             BUILDING='Tech Building',
@@ -208,6 +210,7 @@ class ViewAllFail(TestCase):
         self.course.save()
 
         self.section = Section.objects.create(
+            SECTION_TYPE="LAB",
             SECTION_NUMBER=894,
             COURSE=self.course,
             BUILDING='Tech Building',

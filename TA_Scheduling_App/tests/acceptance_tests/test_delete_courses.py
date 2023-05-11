@@ -152,6 +152,7 @@ class DeleteCourseFailTest(TestCase):
         self.newCourse.save()
 
         self.section = Section(
+            SECTION_TYPE="LAB",
             SECTION_NUMBER=1,
             COURSE=self.course,
             BUILDING='Tech Building',
@@ -163,6 +164,7 @@ class DeleteCourseFailTest(TestCase):
         self.section.save()
 
         self.newSection = Section(
+            SECTION_TYPE="LAB",
             SECTION_NUMBER=32,
             COURSE=self.newCourse,
             BUILDING='Tech Building',

@@ -313,6 +313,7 @@ class TestUserDeletionSideEffects(TestCase):
         self.course.save()
 
         self.section = Section(
+            SECTION_TYPE="LAB",
             SECTION_NUMBER=1,
             COURSE=self.course,
             BUILDING='Tech Building',

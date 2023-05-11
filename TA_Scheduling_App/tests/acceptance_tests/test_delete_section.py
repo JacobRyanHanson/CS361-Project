@@ -51,6 +51,7 @@ class DeleteSectionSuccessTest(TestCase):
         self.course.save()
 
         self.section = Section(
+            SECTION_TYPE="LAB",
             SECTION_NUMBER=1,
             COURSE=self.course,
             BUILDING='Tech Building',
@@ -62,6 +63,7 @@ class DeleteSectionSuccessTest(TestCase):
         self.section.save()
 
         self.newSection = Section(
+            SECTION_TYPE="LAB",
             SECTION_NUMBER=7,
             COURSE=self.course,
             BUILDING='Tech',
@@ -73,6 +75,7 @@ class DeleteSectionSuccessTest(TestCase):
         self.newSection.save()
 
         self.thirdSection = Section(
+            SECTION_TYPE="LAB",
             SECTION_NUMBER=11,
             COURSE=self.course,
             BUILDING='Tech',
@@ -168,6 +171,7 @@ class DeleteSectionRemoveRestTest(TestCase):
         self.course.save()
 
         self.section = Section(
+            SECTION_TYPE="LAB",
             SECTION_NUMBER=1,
             COURSE=self.course,
             BUILDING='Tech Building',
@@ -179,6 +183,7 @@ class DeleteSectionRemoveRestTest(TestCase):
         self.section.save()
 
         self.newSection = Section(
+            SECTION_TYPE="LAB",
             SECTION_NUMBER=7,
             COURSE=self.course,
             BUILDING='Tech Building',
