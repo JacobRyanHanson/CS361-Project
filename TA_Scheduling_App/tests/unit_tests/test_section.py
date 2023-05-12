@@ -22,7 +22,8 @@ class TestSectionInit(unittest.TestCase):
         try:
             # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
             with patch.object(Section, 'checkDuplicate', return_value=False):
-                Section(SECTION_NUMBER=901,
+                Section(SECTION_TYPE="LAB",
+                        SECTION_NUMBER=901,
                         COURSE=self.course,
                         BUILDING='Chemistry Building',
                         ROOM_NUMBER='190',
@@ -35,7 +36,8 @@ class TestSectionInit(unittest.TestCase):
         with self.assertRaises(ValueError, msg="Section init did not raise ValueError for invalid COURSE"):
             # Mock the checkDuplicate method for the instantiation, so we don't actually access the DB
             with patch.object(Section, 'checkDuplicate', return_value=False):
-                Section(SECTION_NUMBER=901,
+                Section(SECTION_TYPE="LAB",
+                        SECTION_NUMBER=901,
                         COURSE=None,
                         BUILDING='Chemistry Building',
                         ROOM_NUMBER='190',
@@ -57,6 +59,7 @@ class TestSetSectionType(unittest.TestCase):
         with patch.object(Section, 'checkDuplicate', return_value=False):
             # Create valid section
             self.section = Section(
+                SECTION_TYPE="LAB",
                 SECTION_NUMBER=901,
                 COURSE=self.course,
                 BUILDING='Chemistry Building',
@@ -121,6 +124,7 @@ class TestSetSectionNumber(unittest.TestCase):
         with patch.object(Section, 'checkDuplicate', return_value=False):
             # Create valid section
             self.section = Section(
+                SECTION_TYPE="LAB",
                 SECTION_NUMBER=901,
                 COURSE=self.course,
                 BUILDING='Chemistry Building',
@@ -182,6 +186,7 @@ class TestSetBuilding(unittest.TestCase):
         with patch.object(Section, 'checkDuplicate', return_value=False):
             # Create valid section
             self.section = Section(
+                SECTION_TYPE="LAB",
                 SECTION_NUMBER=901,
                 COURSE=self.course,
                 BUILDING='Chemistry Building',
@@ -241,6 +246,7 @@ class TestSetRoomNumber(unittest.TestCase):
         with patch.object(Section, 'checkDuplicate', return_value=False):
             # Create valid section
             self.section = Section(
+                SECTION_TYPE="LAB",
                 SECTION_NUMBER=901,
                 COURSE=self.course,
                 BUILDING='Chemistry Building',
@@ -292,6 +298,7 @@ class TestSetSectionStart(unittest.TestCase):
         with patch.object(Section, 'checkDuplicate', return_value=False):
             # Create valid section
             self.section = Section(
+                SECTION_TYPE="LAB",
                 SECTION_NUMBER=901,
                 COURSE=self.course,
                 BUILDING='Chemistry Building',
@@ -340,6 +347,7 @@ class TestSetSectionEnd(unittest.TestCase):
         with patch.object(Section, 'checkDuplicate', return_value=False):
             # Create valid section
             self.section = Section(
+                SECTION_TYPE="LAB",
                 SECTION_NUMBER=901,
                 COURSE=self.course,
                 BUILDING='Chemistry Building',

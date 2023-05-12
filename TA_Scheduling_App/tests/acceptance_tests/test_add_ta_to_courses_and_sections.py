@@ -57,6 +57,7 @@ class AddTASuccess(TestCase):
         self.course.save()
 
         self.section = Section(
+            SECTION_TYPE="LAB",
             SECTION_NUMBER=1,
             COURSE=self.course,
             BUILDING='Tech Building',
@@ -91,6 +92,7 @@ class AddTASuccess(TestCase):
         self.other_course.save()
 
         self.other_section = Section(
+            SECTION_TYPE="LAB",
             SECTION_NUMBER=76,
             COURSE=self.course,
             BUILDING='Tech Building',
@@ -197,6 +199,7 @@ class AddTAWithBadInput(TestCase):
         self.course.save()
 
         self.section = Section(
+            SECTION_TYPE="LAB",
             SECTION_NUMBER=1,
             COURSE=self.course,
             BUILDING='Tech Building',
@@ -324,6 +327,7 @@ class InvalidSectionAssignment(TestCase):
         self.other_course.save()
 
         self.section = Section(
+            SECTION_TYPE="LAB",
             SECTION_NUMBER=1,
             COURSE=self.course,
             BUILDING='Tech Building',
@@ -435,6 +439,7 @@ class InvalidDuplicateAssignment(TestCase):
         self.course.save()
 
         self.section = Section(
+            SECTION_TYPE="LAB",
             SECTION_NUMBER=1,
             COURSE=self.course,
             BUILDING='Tech Building',
